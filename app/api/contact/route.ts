@@ -29,8 +29,8 @@ export async function POST(request: NextRequest) {
       process.env.NEXT_PUBLIC_SUPABASE_URL &&
       !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
     ) {
-      const { createClient } = await import("@/lib/supabase/server");
-      const supabase = await createClient();
+      const { createServiceClient } = await import("@/lib/supabase/server");
+      const supabase = await createServiceClient();
 
       await Promise.allSettled([
         supabase.from("contact_submissions").insert({
