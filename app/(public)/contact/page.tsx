@@ -92,11 +92,11 @@ export default function ContactPage() {
                   Direct email
                 </p>
                 <a
-                  href="mailto:hello@narendrapandriniki.com"
+                  href="mailto:hello@narendrapandrinki.com"
                   style={{ color: "#5c3d1e" }}
                   className="text-sm font-medium hover:opacity-80"
                 >
-                  hello@narendrapandriniki.com
+                  hello@narendrapandrinki.com
                 </a>
               </div>
             </div>

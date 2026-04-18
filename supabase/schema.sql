@@ -1,5 +1,5 @@
 -- ===========================================
--- narendrapandriniki.com — Supabase Schema
+-- narendrapandrinki.com — Supabase Schema
 -- ===========================================
 
 -- Enable necessary extensions
@@ -224,7 +224,7 @@ CREATE INDEX IF NOT EXISTS idx_payments_invoice_id ON payments(invoice_id);
 -- Initial settings
 -- =====================
 INSERT INTO site_settings (key, value) VALUES
-  ('site_name', 'Narendra Pandriniki'),
+  ('site_name', 'Narendra Pandrinki'),
   ('site_tagline', 'Platform & Cloud Engineer'),
-  ('contact_email', 'hello@narendrapandriniki.com')
+  ('contact_email', 'hello@narendrapandrinki.com')
 ON CONFLICT (key) DO NOTHING;

@@ -9,24 +9,24 @@ export function getResend(): Resend {
 }
 export const resend = { emails: { send: (...args: Parameters<Resend["emails"]["send"]>) => getResend().emails.send(...args) } };
 
-export const FROM_EMAIL = "hello@narendrapandriniki.com";
+export const FROM_EMAIL = "hello@narendrapandrinki.com";
 export const ADMIN_EMAIL = "emailme0666@yahoo.com";
-export const DOMAIN = "narendrapandriniki.com";
+export const DOMAIN = "narendrapandrinki.com";
 
 export async function sendContactAcknowledgement(
   toEmail: string,
   toName: string
 ) {
   return resend.emails.send({
-    from: `Narendra Pandriniki <${FROM_EMAIL}>`,
+    from: `Narendra Pandrinki <${FROM_EMAIL}>`,
     to: toEmail,
     subject: "Thanks for getting in touch",
     html: `
       <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; color: #1e1208;">
         <h2 style="color: #5c3d1e;">Thanks, ${toName}</h2>
         <p>I've received your message and will get back to you within 1–2 business days.</p>
-        <p>In the meantime, feel free to review my services at <a href="https://${DOMAIN}/services" style="color:#7d5c3a;">narendrapandriniki.com/services</a>.</p>
-        <p style="margin-top: 2rem;">Best,<br/>Narendra Pandriniki<br/>Independent Platform & Cloud Engineer</p>
+        <p>In the meantime, feel free to review my services at <a href="https://${DOMAIN}/services" style="color:#7d5c3a;">narendrapandrinki.com/services</a>.</p>
+        <p style="margin-top: 2rem;">Best,<br/>Narendra Pandrinki<br/>Independent Platform & Cloud Engineer</p>
       </div>
     `,
   });
@@ -67,9 +67,9 @@ export async function sendInvoiceEmail(data: {
   dueDate: string;
 }) {
   return resend.emails.send({
-    from: `Narendra Pandriniki <${FROM_EMAIL}>`,
+    from: `Narendra Pandrinki <${FROM_EMAIL}>`,
     to: data.toEmail,
-    subject: `Invoice ${data.invoiceNumber} — Narendra Pandriniki`,
+    subject: `Invoice ${data.invoiceNumber} — Narendra Pandrinki`,
     html: `
       <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; color: #1e1208;">
         <h2 style="color: #5c3d1e;">Invoice ${data.invoiceNumber}</h2>
@@ -81,7 +81,7 @@ export async function sendInvoiceEmail(data: {
           <tr><td style="padding: 8px 0; font-weight: bold;">Due Date</td><td>${data.dueDate}</td></tr>
         </table>
         <p>Please arrange payment by the due date. If you have any questions, reply to this email.</p>
-        <p style="margin-top: 2rem;">Best regards,<br/>Narendra Pandriniki</p>
+        <p style="margin-top: 2rem;">Best regards,<br/>Narendra Pandrinki</p>
       </div>
     `,
   });

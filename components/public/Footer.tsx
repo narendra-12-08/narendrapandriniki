@@ -18,7 +18,7 @@ export default function Footer() {
               style={{ color: "#faf7f2" }}
               className="text-xl font-semibold mb-4"
             >
-              Narendra Pandriniki
+              Narendra Pandrinki
             </div>
             <p style={{ color: "#9b7653" }} className="text-sm leading-relaxed max-w-sm">
               Independent platform and cloud engineer. I build cloud
@@ -90,10 +90,10 @@ export default function Footer() {
           className="mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4"
         >
           <p style={{ color: "#7d5c3a" }} className="text-xs">
-            © {year} Narendra Pandriniki. All rights reserved.
+            © {year} Narendra Pandrinki. All rights reserved.
           </p>
           <p style={{ color: "#7d5c3a" }} className="text-xs">
-            narendrapandriniki.com
+            narendrapandrinki.com
           </p>
         </div>
       </div>

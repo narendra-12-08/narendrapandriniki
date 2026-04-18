@@ -32,8 +32,8 @@ export default async function SettingsPage() {
           <h2 style={{ color: "#faf7f2" }} className="font-semibold mb-4">Site</h2>
           <div className="space-y-3 text-sm">
             {[
-              ["Domain", "narendrapandriniki.com"],
-              ["Email", "hello@narendrapandriniki.com"],
+              ["Domain", "narendrapandrinki.com"],
+              ["Email", "hello@narendrapandrinki.com"],
               ["Admin", "/control/dashboard"],
             ].map(([label, value]) => (
               <div key={label} className="flex items-center justify-between">

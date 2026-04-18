@@ -5,7 +5,7 @@ import { solutions } from "@/lib/content/solutions";
 import { caseStudies } from "@/lib/content/work";
 
 export const metadata: Metadata = {
-  title: "Narendra Pandriniki — Platform & Cloud Engineer",
+  title: "Narendra Pandrinki — Platform & Cloud Engineer",
   description:
     "Independent platform and cloud engineer. Cloud infrastructure, backend systems, internal tools, and workflow automation for businesses.",
 };

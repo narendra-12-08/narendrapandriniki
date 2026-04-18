@@ -1,4 +1,4 @@
-# Production Setup — narendrapandriniki.com
+# Production Setup — narendrapandrinki.com
 
 ## 1. Supabase
 
@@ -26,20 +26,20 @@
 2. Copy the key (starts with `re_`)
 
 ### Verify domain
-1. Resend → Domains → Add domain → `narendrapandriniki.com`
+1. Resend → Domains → Add domain → `narendrapandrinki.com`
 2. Add the DNS records shown (SPF, DKIM, DMARC)
 3. Wait for verification
 
 ### Configure inbound email (optional)
 1. Resend → Inbound → Add inbound address
-2. Point to: `https://narendrapandriniki.com/api/email/inbound`
-3. This routes email sent to `hello@narendrapandriniki.com` into your admin inbox
+2. Point to: `https://narendrapandrinki.com/api/email/inbound`
+3. This routes email sent to `hello@narendrapandrinki.com` into your admin inbox
 
 ---
 
 ## 3. Update Vercel env vars
 
-Go to vercel.com → narendrapandriniki project → Settings → Environment Variables
+Go to vercel.com → narendrapandrinki project → Settings → Environment Variables
 
 Replace the placeholder values:
 
@@ -53,7 +53,7 @@ Redeploy after updating.
 
 ---
 
-## 4. DNS — narendrapandriniki.com
+## 4. DNS — narendrapandrinki.com
 
 Point your domain to Vercel:
 
@@ -69,14 +69,14 @@ After DNS propagates, Vercel automatically provisions SSL.
 ## 5. Vercel–GitHub CI/CD (optional)
 
 To auto-deploy on push:
-1. vercel.com → narendrapandriniki → Settings → Git
-2. Connect GitHub → narendra-12-08/narendrapandriniki
+1. vercel.com → narendrapandrinki → Settings → Git
+2. Connect GitHub → narendra-12-08/narendrapandrinki
 
 ---
 
 ## Current live URLs
 
-- **Production (Vercel):** https://narendrapandriniki.vercel.app
-- **GitHub:** https://github.com/narendra-12-08/narendrapandriniki
-- **Admin:** https://narendrapandriniki.vercel.app/control/login
-- **Target domain:** https://narendrapandriniki.com (after DNS)
+- **Production (Vercel):** https://narendrapandrinki.vercel.app
+- **GitHub:** https://github.com/narendra-12-08/narendrapandrinki
+- **Admin:** https://narendrapandrinki.vercel.app/control/login
+- **Target domain:** https://narendrapandrinki.com (after DNS)

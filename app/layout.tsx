@@ -14,24 +14,24 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Narendra Pandriniki — Platform & Cloud Engineer",
-    template: "%s | Narendra Pandriniki",
+    default: "Narendra Pandrinki — Platform & Cloud Engineer",
+    template: "%s | Narendra Pandrinki",
   },
   description:
     "Independent platform and cloud engineer. I build cloud infrastructure, backend systems, internal tools, and workflow automation for businesses.",
-  metadataBase: new URL("https://narendrapandriniki.com"),
+  metadataBase: new URL("https://narendrapandrinki.com"),
   openGraph: {
     type: "website",
     locale: "en_GB",
-    url: "https://narendrapandriniki.com",
-    siteName: "Narendra Pandriniki",
-    title: "Narendra Pandriniki — Platform & Cloud Engineer",
+    url: "https://narendrapandrinki.com",
+    siteName: "Narendra Pandrinki",
+    title: "Narendra Pandrinki — Platform & Cloud Engineer",
     description:
       "Independent platform and cloud engineer specialising in cloud infrastructure, backend systems, and internal tools.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Narendra Pandriniki — Platform & Cloud Engineer",
+    title: "Narendra Pandrinki — Platform & Cloud Engineer",
     description:
       "Independent platform and cloud engineer specialising in cloud infrastructure, backend systems, and internal tools.",
   },
