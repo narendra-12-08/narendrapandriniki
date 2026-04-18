@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,19 +12,27 @@ export async function POST(request: NextRequest) {
     const fromName = payload.fromName || payload.headers?.fromName || null;
     const body =
       payload.text ||
-      payload.html?.replace(/<[^>]*>/g, "") ||
+      (typeof payload.html === "string"
+        ? payload.html.replace(/<[^>]*>/g, "")
+        : "") ||
       "";
 
-    const supabase = await createClient();
+    if (
+      process.env.NEXT_PUBLIC_SUPABASE_URL &&
+      !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
+    ) {
+      const { createClient } = await import("@/lib/supabase/server");
+      const supabase = await createClient();
 
-    await supabase.from("inbox_messages").insert({
-      subject,
-      sender_name: fromName,
-      sender_email: fromEmail,
-      body,
-      source: "inbound_email",
-      status: "unread",
-    });
+      await supabase.from("inbox_messages").insert({
+        subject,
+        sender_name: fromName,
+        sender_email: fromEmail,
+        body,
+        source: "inbound_email",
+        status: "unread",
+      });
+    }
 
     return NextResponse.json({ received: true }, { status: 200 });
   } catch (error) {

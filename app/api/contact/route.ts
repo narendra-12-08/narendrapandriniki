@@ -1,10 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { createClient } from "@/lib/supabase/server";
-import {
-  sendContactAcknowledgement,
-  sendAdminNotification,
-} from "@/lib/resend";
+
+export const dynamic = "force-dynamic";
 
 const schema = z.object({
   name: z.string().min(2).max(100),
@@ -28,45 +25,43 @@ export async function POST(request: NextRequest) {
 
     const { name, email, company, service, message } = parsed.data;
 
-    const supabase = await createClient();
+    if (
+      process.env.NEXT_PUBLIC_SUPABASE_URL &&
+      !process.env.NEXT_PUBLIC_SUPABASE_URL.includes("placeholder")
+    ) {
+      const { createClient } = await import("@/lib/supabase/server");
+      const supabase = await createClient();
 
-    const { error: dbError } = await supabase
-      .from("contact_submissions")
-      .insert({
-        name,
-        email,
-        company: company || null,
-        service_interest: service || null,
-        message,
-        status: "new",
-      });
-
-    if (dbError) {
-      console.error("DB error saving contact:", dbError);
+      await Promise.allSettled([
+        supabase.from("contact_submissions").insert({
+          name,
+          email,
+          company: company || null,
+          service_interest: service || null,
+          message,
+          status: "new",
+        }),
+        supabase.from("inbox_messages").insert({
+          subject: `Enquiry from ${name}${company ? ` at ${company}` : ""}`,
+          sender_name: name,
+          sender_email: email,
+          body: message,
+          source: "contact_form",
+          status: "unread",
+        }),
+      ]);
     }
 
-    const { error: inboxError } = await supabase
-      .from("inbox_messages")
-      .insert({
-        subject: `Enquiry from ${name}${company ? ` at ${company}` : ""}`,
-        sender_name: name,
-        sender_email: email,
-        body: message,
-        source: "contact_form",
-        status: "unread",
-      });
-
-    if (inboxError) {
-      console.error("DB error saving inbox:", inboxError);
-    }
-
-    try {
+    if (
+      process.env.RESEND_API_KEY &&
+      !process.env.RESEND_API_KEY.includes("placeholder")
+    ) {
+      const { sendContactAcknowledgement, sendAdminNotification } =
+        await import("@/lib/resend");
       await Promise.allSettled([
         sendContactAcknowledgement(email, name),
         sendAdminNotification({ name, email, company, message, service }),
       ]);
-    } catch (emailError) {
-      console.error("Email error:", emailError);
     }
 
     return NextResponse.json({ success: true }, { status: 200 });
