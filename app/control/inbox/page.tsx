@@ -175,6 +175,8 @@ export default async function InboxPage({
                       currentStatus={msg.status}
                       senderEmail={msg.sender_email}
                       senderName={msg.sender_name}
+                      subject={msg.subject}
+                      body={msg.body}
                     />
                   </div>
                 </div>

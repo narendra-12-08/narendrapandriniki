@@ -147,9 +147,17 @@ function relativeTime(iso: string): string {
 export default async function ComposeEmailPage({
   searchParams,
 }: {
-  searchParams: Promise<{ sent?: string; err?: string }>;
+  searchParams: Promise<{
+    sent?: string;
+    err?: string;
+    to?: string;
+    subject?: string;
+    body?: string;
+    reply_to?: string;
+  }>;
 }) {
-  const { sent, err } = await searchParams;
+  const { sent, err, to: prefillTo, subject: prefillSubject, body: prefillBody } =
+    await searchParams;
 
   const supabase = await createClient();
   const { data: rows } = await supabase
@@ -198,6 +206,7 @@ export default async function ComposeEmailPage({
                 type="email"
                 required
                 placeholder="recipient@example.com"
+                defaultValue={prefillTo ?? ""}
               />
             </Field>
             <Field label="Subject" htmlFor="subject">
@@ -207,6 +216,7 @@ export default async function ComposeEmailPage({
                 type="text"
                 required
                 placeholder="Subject line"
+                defaultValue={prefillSubject ?? ""}
               />
             </Field>
           </div>
@@ -222,6 +232,7 @@ export default async function ComposeEmailPage({
               rows={14}
               className="min-h-[280px]"
               placeholder="Write your message…"
+              defaultValue={prefillBody ?? ""}
             />
           </Field>
           <div className="flex items-center justify-end pt-2 border-t border-[var(--border)]">

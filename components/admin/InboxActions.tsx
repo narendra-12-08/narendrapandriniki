@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Archive, Check, MailOpen, NotebookPen, UserPlus, X } from "lucide-react";
+import Link from "next/link";
+import { Archive, Check, MailOpen, NotebookPen, Reply, Trash2, UserPlus, X } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 interface Props {
@@ -10,6 +11,8 @@ interface Props {
   currentStatus: string;
   senderEmail: string;
   senderName: string | null;
+  subject?: string;
+  body?: string | null;
 }
 
 export default function InboxActions({
@@ -17,11 +20,41 @@ export default function InboxActions({
   currentStatus,
   senderEmail,
   senderName,
+  subject,
+  body,
 }: Props) {
   const router = useRouter();
   const [loading, setLoading] = useState<string | null>(null);
   const [showNoteInput, setShowNoteInput] = useState(false);
   const [note, setNote] = useState("");
+
+  async function deleteMessage() {
+    if (!confirm("Permanently delete this message? This cannot be undone.")) return;
+    setLoading("delete");
+    const supabase = createClient();
+    await supabase.from("inbox_messages").delete().eq("id", messageId);
+    router.refresh();
+    setLoading(null);
+  }
+
+  const replyHref = (() => {
+    const replySubject =
+      subject && subject.toLowerCase().startsWith("re:")
+        ? subject
+        : `Re: ${subject ?? ""}`;
+    const quoted = body
+      ? `\n\n\n---\nOn ${new Date().toLocaleDateString()}, ${
+          senderName ?? senderEmail
+        } wrote:\n` + body.split("\n").map((l) => `> ${l}`).join("\n")
+      : "";
+    const params = new URLSearchParams({
+      to: senderEmail,
+      subject: replySubject,
+      body: quoted,
+      reply_to: messageId,
+    });
+    return `/control/email?${params.toString()}`;
+  })();
 
   async function updateStatus(status: string) {
     setLoading(status);
@@ -100,6 +133,12 @@ export default function InboxActions({
         </div>
       )}
       <div className="flex gap-1.5 flex-wrap justify-end">
+        <Link
+          href={replyHref}
+          className={`${btn} bg-[var(--accent)]/15 border-[var(--accent)]/40 text-[var(--accent)] hover:bg-[var(--accent)]/25`}
+        >
+          <Reply size={12} /> Reply
+        </Link>
         {currentStatus === "unread" ? (
           <button
             onClick={() => updateStatus("read")}
@@ -143,6 +182,13 @@ export default function InboxActions({
           className={`${btn} bg-[var(--surface-2)] border-[var(--border)] text-[var(--text-3)] hover:text-[var(--text)] hover:border-[var(--border-2)]`}
         >
           <Archive size={12} /> Archive
+        </button>
+        <button
+          onClick={deleteMessage}
+          disabled={loading === "delete"}
+          className={`${btn} bg-[var(--rose)]/10 border-[var(--rose)]/30 text-[var(--rose)] hover:bg-[var(--rose)]/20`}
+        >
+          <Trash2 size={12} /> Delete
         </button>
       </div>
     </div>
