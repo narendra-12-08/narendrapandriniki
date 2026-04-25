@@ -8,20 +8,22 @@ function TechIcon({ name }: { name: string }) {
   const url = getLogoUrl(name);
   const initials = getInitials(name);
   return (
-    <span className="relative inline-flex items-center justify-center w-11 h-11 rounded-xl bg-white/95 border border-[var(--border)] overflow-hidden shrink-0 shadow-[0_4px_20px_-8px_rgba(34,211,238,0.4)]">
-      <span className="absolute inset-0 flex items-center justify-center font-mono text-[11px] text-[var(--bg)] font-semibold">
-        {initials}
-      </span>
-      {url && (
+    <span className="relative inline-flex items-center justify-center w-10 h-10 rounded-lg bg-[var(--surface-2)] border border-[var(--border)] shrink-0 overflow-hidden">
+      {url ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img
           src={url}
           alt={name}
           loading="lazy"
-          width={28}
-          height={28}
-          className="relative z-10"
+          width={26}
+          height={26}
+          className="object-contain"
+          style={{ filter: "drop-shadow(0 0 6px rgba(34,211,238,0.15))" }}
         />
+      ) : (
+        <span className="font-mono text-[11px] text-[var(--text-2)] font-semibold">
+          {initials}
+        </span>
       )}
     </span>
   );
