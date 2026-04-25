@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { caseStudies, getCaseStudy } from "@/lib/content/work";
+import {
+  getCaseStudyBySlug,
+  getPublishedCaseStudies,
+} from "@/lib/db/content";
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const caseStudies = await getPublishedCaseStudies();
   return caseStudies.map((c) => ({ slug: c.slug }));
 }
 
@@ -11,11 +15,11 @@ export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
   const { slug } = await params;
-  const cs = getCaseStudy(slug);
+  const cs = await getCaseStudyBySlug(slug);
   if (!cs) return { title: "Case Study" };
   return {
     title: cs.title,
-    description: cs.outcome,
+    description: cs.outcome ?? undefined,
   };
 }
 
@@ -23,10 +27,11 @@ export default async function CaseStudyDetailPage(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
-  const cs = getCaseStudy(slug);
+  const cs = await getCaseStudyBySlug(slug);
   if (!cs) notFound();
 
-  const related = caseStudies.filter((c) => c.slug !== cs.slug).slice(0, 3);
+  const all = await getPublishedCaseStudies();
+  const related = all.filter((c) => c.slug !== cs.slug).slice(0, 3);
 
   return (
     <div className="bg-grid">

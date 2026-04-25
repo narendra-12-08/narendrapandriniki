@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import JsonLd from "@/components/seo/JsonLd";
 import { personSchema, breadcrumbSchema } from "@/lib/seo/schema";
-import { certifications, issuerInitials } from "@/lib/content/certifications";
+import { getCertifications } from "@/lib/db/content-extra";
+import { issuerInitials } from "@/lib/content/certifications";
 
 export const metadata: Metadata = {
   title: "Certifications — Narendra Pandrinki",
@@ -10,7 +11,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/certifications" },
 };
 
-export default function CertificationsPage() {
+export default async function CertificationsPage() {
+  const certifications = await getCertifications();
   return (
     <div>
       <JsonLd
@@ -45,7 +47,7 @@ export default function CertificationsPage() {
             {certifications.map((c) => (
               <a
                 key={c.id}
-                href={c.url}
+                href={c.url ?? "#"}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="surface-card p-6 flex flex-col hover:border-[var(--accent)] transition-colors"

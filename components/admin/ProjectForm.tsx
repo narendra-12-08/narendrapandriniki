@@ -136,7 +136,7 @@ export default function ProjectForm({ clients }: Props) {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-medium text-[var(--text-2)] mb-1.5">
-                Agreed amount (£)
+                Agreed amount ($)
               </label>
               <input
                 type="number"

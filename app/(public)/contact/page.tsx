@@ -4,7 +4,7 @@ import ContactForm from "@/components/public/ContactForm";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Tell me about your project. Independent DevOps and platform engineer, UK-based, taking on a small number of engagements at a time.",
+    "Tell me about your project. Independent DevOps and platform engineer based in Hyderabad, India. Taking on a small number of engagements at a time across India, UK, US, Singapore, and Dubai.",
 };
 
 const faq = [
@@ -22,7 +22,7 @@ const faq = [
   },
   {
     q: "Where are you based?",
-    a: "United Kingdom. I work with teams across UK and EU timezones natively, and US East coast comfortably for half-day overlap.",
+    a: "Hyderabad, India (IST). I work with teams across India, UK, EU, Singapore, Dubai, and US East timezones with comfortable overlap. US West and Australia work with explicit async expectations.",
   },
   {
     q: "What if it isn't a fit?",
@@ -61,9 +61,9 @@ export default function ContactPage() {
                   </span>
                 </div>
                 <p className="mt-4 text-[var(--text-2)] leading-relaxed">
-                  Independent DevOps engineer based in the UK. Taking on a
-                  small number of engagements at any one time, with one
-                  full-time-equivalent capped across all clients.
+                  Independent DevOps engineer based in Hyderabad, India.
+                  Working with teams across India, UK, US, Singapore, and Dubai.
+                  Small number of concurrent engagements, capped at one FTE.
                 </p>
                 <a
                   href="mailto:hello@narendrapandrinki.com"

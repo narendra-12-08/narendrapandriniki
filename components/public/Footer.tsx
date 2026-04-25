@@ -58,7 +58,7 @@ export default function Footer() {
             <Link href="/" className="inline-flex items-center gap-2">
               <span className="relative inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--border-2)] bg-[var(--surface)]">
                 <span className="absolute inset-0 rounded-lg opacity-70 blur-md bg-[radial-gradient(circle,var(--accent),transparent_70%)]" />
-                <span className="relative font-mono text-sm gradient-text">np</span>
+                <span className="relative font-mono text-sm gradient-text">Np</span>
               </span>
               <span className="text-base font-semibold text-[var(--text)]">Narendra Pandrinki</span>
             </Link>
@@ -68,7 +68,7 @@ export default function Footer() {
               actually want to use.
             </p>
             <p className="mt-4 text-sm text-[var(--text-3)] leading-relaxed max-w-sm">
-              Working remotely with clients across the UK, EU, US, and APAC.
+              Based in Hyderabad, India. Working with teams across India, UK, US, Singapore, and Dubai.
             </p>
             <div className="mt-6 flex items-center gap-3">
               <span className="live-dot" />

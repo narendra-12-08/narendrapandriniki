@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { caseStudies } from "@/lib/content/work";
+import { getPublishedCaseStudies } from "@/lib/db/content";
 
 export const metadata: Metadata = {
   title: "Case Studies",
@@ -8,7 +8,8 @@ export const metadata: Metadata = {
     "Selected engagements across fintech, healthtech, AI/ML infra, marketplaces, and SaaS — what was hired, what got delivered, and what changed.",
 };
 
-export default function WorkPage() {
+export default async function WorkPage() {
+  const caseStudies = await getPublishedCaseStudies();
   return (
     <div className="bg-grid">
       <section className="section pb-12">

@@ -78,7 +78,7 @@ export async function sendInvoiceEmail(data: {
         <p>Please find your invoice details below:</p>
         <table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
           <tr><td style="padding: 8px 0; font-weight: bold; width: 140px;">Invoice Number</td><td>${data.invoiceNumber}</td></tr>
-          <tr><td style="padding: 8px 0; font-weight: bold;">Amount Due</td><td style="font-size: 1.1em; font-weight: bold; color: #5c3d1e;">£${data.total.toLocaleString()}</td></tr>
+          <tr><td style="padding: 8px 0; font-weight: bold;">Amount Due</td><td style="font-size: 1.1em; font-weight: bold; color: #5c3d1e;">$${data.total.toLocaleString()}</td></tr>
           <tr><td style="padding: 8px 0; font-weight: bold;">Due Date</td><td>${data.dueDate}</td></tr>
         </table>
         <p>Please arrange payment by the due date. If you have any questions, reply to this email.</p>
@@ -86,6 +86,34 @@ export async function sendInvoiceEmail(data: {
       </div>
     `,
   });
+}
+
+export async function sendCustomEmail({
+  to,
+  subject,
+  html,
+  text,
+}: {
+  to: string;
+  subject: string;
+  html?: string;
+  text?: string;
+}): Promise<{ id: string }> {
+  const result = await resend.emails.send({
+    from: FROM_EMAIL,
+    to,
+    subject,
+    html: html ?? `<pre style="font-family: ui-monospace, monospace; white-space: pre-wrap;">${(text ?? "").replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c] ?? c))}</pre>`,
+    text: text ?? undefined,
+  });
+  if (result.error) {
+    throw new Error(result.error.message ?? "Resend send failed");
+  }
+  const id = result.data?.id;
+  if (!id) {
+    throw new Error("Resend returned no message id");
+  }
+  return { id };
 }
 
 export async function sendWelcomeEmail({

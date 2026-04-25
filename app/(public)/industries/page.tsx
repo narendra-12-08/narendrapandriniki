@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { industries } from "@/lib/content/industries";
+import { getPublishedIndustries } from "@/lib/db/content";
 
 export const metadata: Metadata = {
   title: "Industries",
@@ -8,7 +8,8 @@ export const metadata: Metadata = {
     "Sectors I work in most often — fintech, healthtech, e-commerce, B2B SaaS, AI/ML infrastructure, marketplaces, media, and edtech.",
 };
 
-export default function IndustriesPage() {
+export default async function IndustriesPage() {
+  const industries = await getPublishedIndustries();
   return (
     <div>
       <section className="section bg-grid">
@@ -40,10 +41,10 @@ export default function IndustriesPage() {
                   {industry.title}
                 </h2>
                 <p className="text-sm leading-relaxed text-[var(--text-2)]">
-                  {industry.shortDescription}
+                  {industry.short_description}
                 </p>
                 <div className="flex flex-wrap gap-1.5 mt-auto pt-4">
-                  {industry.commonStack.slice(0, 5).map((tech) => (
+                  {industry.common_stack.slice(0, 5).map((tech) => (
                     <span key={tech} className="tag font-mono text-xs">
                       {tech}
                     </span>

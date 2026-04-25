@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { solutions } from "@/lib/content/solutions";
+import { getPublishedSolutions } from "@/lib/db/content";
 
 export const metadata: Metadata = {
   title: "Solutions",
@@ -8,7 +8,8 @@ export const metadata: Metadata = {
     "Outcome-shaped engagements: cloud migrations, cost optimisation, zero-downtime deploys, compliance, DR, internal developer platforms, observability overhauls.",
 };
 
-export default function SolutionsPage() {
+export default async function SolutionsPage() {
+  const solutions = await getPublishedSolutions();
   return (
     <div className="bg-grid">
       <section className="section pb-12">
@@ -42,7 +43,7 @@ export default function SolutionsPage() {
                   {sol.title}
                 </h2>
                 <p className="mt-3 text-sm leading-relaxed text-[var(--text-3)]">
-                  {sol.shortDescription}
+                  {sol.short_description}
                 </p>
                 <ul className="mt-5 space-y-1.5 pt-5 border-t border-[var(--border)]">
                   {sol.outcomes.map((o) => (

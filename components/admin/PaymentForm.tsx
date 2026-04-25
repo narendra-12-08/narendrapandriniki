@@ -79,7 +79,7 @@ export default function PaymentForm({ invoices }: Props) {
               <option value="">Select invoice</option>
               {invoices.map((i) => (
                 <option key={i.id} value={i.id}>
-                  {i.invoice_number} (£{i.total.toLocaleString()})
+                  {i.invoice_number} (${i.total.toLocaleString()})
                 </option>
               ))}
             </select>
@@ -87,7 +87,7 @@ export default function PaymentForm({ invoices }: Props) {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-medium text-[var(--text-2)] mb-1.5">
-                Amount (£) *
+                Amount ($) *
               </label>
               <input
                 type="number"

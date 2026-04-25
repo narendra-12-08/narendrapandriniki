@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { services } from "@/lib/content/services";
+import { getPublishedServices } from "@/lib/db/content";
 
 export const metadata: Metadata = {
   title: "Services",
@@ -8,7 +8,8 @@ export const metadata: Metadata = {
     "Cloud, platform, Kubernetes, CI/CD, IaC, SRE, DevSecOps, databases, migrations, and fractional DevOps leadership.",
 };
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const services = await getPublishedServices();
   return (
     <div className="bg-grid">
       <section className="section pb-12">
@@ -51,7 +52,7 @@ export default function ServicesPage() {
                   {s.title}
                 </h2>
                 <p className="mt-3 text-sm leading-relaxed text-[var(--text-3)]">
-                  {s.shortDescription}
+                  {s.short_description}
                 </p>
                 <div className="mt-5 flex flex-wrap gap-1.5">
                   {s.stack.slice(0, 5).map((t) => (

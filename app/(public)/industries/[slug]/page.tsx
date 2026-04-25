@@ -1,32 +1,37 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { industries, getIndustry } from "@/lib/content/industries";
+import {
+  getIndustryBySlug,
+  getPublishedIndustries,
+} from "@/lib/db/content";
 
 interface Props {
   params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
+  const industries = await getPublishedIndustries();
   return industries.map((i) => ({ slug: i.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const industry = getIndustry(slug);
+  const industry = await getIndustryBySlug(slug);
   if (!industry) return {};
   return {
     title: industry.title,
-    description: industry.shortDescription,
+    description: industry.short_description ?? undefined,
   };
 }
 
 export default async function IndustryDetailPage({ params }: Props) {
   const { slug } = await params;
-  const industry = getIndustry(slug);
+  const industry = await getIndustryBySlug(slug);
   if (!industry) notFound();
 
-  const related = industries.filter((i) => i.slug !== slug).slice(0, 3);
+  const all = await getPublishedIndustries();
+  const related = all.filter((i) => i.slug !== slug).slice(0, 3);
 
   return (
     <div>
@@ -43,7 +48,7 @@ export default async function IndustryDetailPage({ params }: Props) {
             <span className="gradient-text">{industry.title}</span>
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--text-2)]">
-            {industry.shortDescription}
+            {industry.short_description}
           </p>
         </div>
       </section>
@@ -52,7 +57,7 @@ export default async function IndustryDetailPage({ params }: Props) {
         <div className="container-page">
           <p className="eyebrow">Pain points I tend to see</p>
           <div className="mt-8 grid md:grid-cols-2 gap-5">
-            {industry.painPoints.map((point, i) => (
+            {industry.pain_points.map((point, i) => (
               <div key={i} className="surface-card p-6 flex gap-4">
                 <span className="font-mono text-sm text-[var(--accent)] flex-shrink-0">
                   {String(i + 1).padStart(2, "0")}
@@ -71,13 +76,13 @@ export default async function IndustryDetailPage({ params }: Props) {
           <div className="md:col-span-2">
             <p className="eyebrow">How I help</p>
             <p className="mt-6 text-lg leading-relaxed text-[var(--text-2)]">
-              {industry.howIHelp}
+              {industry.how_i_help}
             </p>
           </div>
           <div className="surface-card p-6">
             <p className="eyebrow">Typical engagement</p>
             <p className="mt-4 text-[var(--text)] leading-relaxed">
-              {industry.typicalEngagement}
+              {industry.typical_engagement}
             </p>
             <Link href="/contact" className="btn-primary mt-6 w-full justify-center">
               Discuss a project
@@ -90,7 +95,7 @@ export default async function IndustryDetailPage({ params }: Props) {
         <div className="container-page">
           <p className="eyebrow">Common stack</p>
           <div className="mt-6 flex flex-wrap gap-2">
-            {industry.commonStack.map((tech) => (
+            {industry.common_stack.map((tech) => (
               <span key={tech} className="tag font-mono">
                 {tech}
               </span>
@@ -103,7 +108,7 @@ export default async function IndustryDetailPage({ params }: Props) {
         <div className="container-page">
           <div className="hairline mb-16" />
           <div className="prose-dark max-w-3xl">
-            {industry.content.trim().split("\n\n").map((para, i) => {
+            {(industry.content ?? "").trim().split("\n\n").map((para, i) => {
               if (para.startsWith("## ")) {
                 return <h2 key={i}>{para.replace("## ", "")}</h2>;
               }
@@ -149,7 +154,7 @@ export default async function IndustryDetailPage({ params }: Props) {
                     {r.title}
                   </h3>
                   <p className="mt-3 text-sm text-[var(--text-2)] leading-relaxed">
-                    {r.shortDescription}
+                    {r.short_description}
                   </p>
                 </Link>
               ))}

@@ -434,6 +434,129 @@ I cover that gap.
 10–60 engineer companies, post product-market-fit, where infrastructure is becoming a real constraint and full-time hiring is in flight or 6+ months out.
     `,
   },
+  {
+    slug: "full-stack-development",
+    title: "Full-stack Web Development",
+    tagline: "Next.js · React · Node · Postgres",
+    shortDescription:
+      "Custom web apps and websites built with Next.js, React, Tailwind, and Postgres. Fast, owned by you, and deployable anywhere.",
+    description:
+      "End-to-end product engineering: marketing sites, web apps, dashboards, internal tools, and customer portals. Built on a stack that's fast in production and easy to extend.",
+    icon: "code-2",
+    benefits: [
+      "Modern Next.js 16 + Tailwind v4 stack — same one this site is built on",
+      "Lighthouse 95+ on every page out of the box",
+      "Authentication, payments, file storage, transactional email — wired in properly",
+      "You own the code, the database, the deployment",
+    ],
+    deliverables: [
+      "Next.js application with typed API routes and server components",
+      "Postgres / Supabase schema with migrations",
+      "Auth (Supabase, Clerk, or custom) with role-based access",
+      "CI/CD on Vercel, Cloudflare, or AWS",
+      "Admin panel for non-technical content edits",
+    ],
+    stack: ["Next.js", "React", "TypeScript", "Tailwind", "Postgres", "Supabase", "Stripe"],
+    content: `
+Most "web app" projects fail at the boring middle. The marketing page ships fast, the auth-and-billing layer drags for weeks, and the admin panel never gets built so the team is editing JSON in the database. I do the whole arc — landing page, product, admin, billing, integrations — on a stack that doesn't fight you in year two.
+
+## What I build
+
+**Marketing & content sites** — Next.js + Tailwind, headless CMS or markdown-in-repo, hosted on Vercel or Cloudflare. Edge-cached, accessible, indexable, and editable by non-technical team members through a simple CMS.
+
+**SaaS web apps** — multi-tenant data model, auth with role-based access, Stripe billing (subscriptions, metered, or usage-based), customer portal, transactional email, and admin dashboard. Production-ready, not a demo.
+
+**Internal tools and admin panels** — operational dashboards, CRUD interfaces, custom CRMs, workflow systems. The unglamorous software your team actually uses.
+
+**Custom integrations** — webhooks, third-party APIs, ETL between systems, scheduled jobs. Idempotent, retried, audit-logged.
+
+## How this differs from agency work
+
+I work like an engineer, not a project manager. You talk directly to the person writing the code. Decisions get made in the same conversation. Documentation lives next to the code. The handover is real — your team can pick up exactly where I leave.
+    `,
+  },
+  {
+    slug: "ai-integration",
+    title: "AI Integration & RAG",
+    tagline: "OpenAI · Anthropic · Gemini · self-hosted",
+    shortDescription:
+      "Production AI features for your product or internal tools — RAG pipelines, agents, copilots, evals, and the cost discipline to keep them sustainable.",
+    description:
+      "Real AI features: customer support copilots, document RAG, contract analysis, internal agents that automate work. With proper evals, fallback strategies, observability, and per-tenant cost guardrails.",
+    icon: "sparkles",
+    benefits: [
+      "Use-case shaping and eval design before any code",
+      "Multi-model orchestration with cost-aware fallback",
+      "RAG pipelines with proper ingestion, chunking, and refresh",
+      "Per-tenant cost dashboards and rate limits",
+    ],
+    deliverables: [
+      "Eval harness and regression suite",
+      "RAG pipeline with vector store, ingestion jobs, refresh strategy",
+      "Streaming, retries, graceful degradation",
+      "Cost attribution dashboard per tenant / feature",
+      "Production deployment with observability",
+    ],
+    stack: ["OpenAI", "Anthropic", "Gemini", "pgvector", "Pinecone", "LangChain", "Vercel AI SDK", "OpenTelemetry"],
+    content: `
+The hard part of AI features in production is not the model call. It's everything around it — the eval suite that tells you when output quality regresses, the cost dashboard that catches the request loop spending $80/hour, the fallback when the upstream model is down, the structured retry on rate limits.
+
+## What I build
+
+**Customer-facing copilots** — chat interfaces grounded in your product's docs and data, with streaming UI, retries, citations, and refusal patterns that don't embarrass you.
+
+**Document RAG** — ingestion pipeline (PDFs, HTML, source-of-truth APIs), chunking strategy, embedding store (pgvector for most cases, Pinecone for scale), retrieval with reranking, evals on retrieval quality.
+
+**Internal agents** — workflow automation backed by tool-using LLMs. Triage, summarisation, document drafting, customer-support classification. With logged decisions, human-in-the-loop checkpoints, and rollback discipline.
+
+**Eval infrastructure** — golden sets, model-graded evals, regression detection. The thing that distinguishes "we're using AI" from "our AI quality is improving over time".
+
+## What I steer you away from
+
+A 47-tool LangChain Frankenstein when a 200-line script would do. Vector DBs when full-text search would have worked. Custom fine-tunes before you've nailed the prompt and retrieval layer. The AI feature gold-rush is full of ten-figure mistakes; my job is to make sure you don't ship one.
+    `,
+  },
+  {
+    slug: "custom-crm",
+    title: "Custom CRM & Internal Systems",
+    tagline: "Built around how your team actually works",
+    shortDescription:
+      "Custom CRMs, deal pipelines, and ops platforms that fit your process — not Salesforce trying to fit your process into theirs.",
+    description:
+      "When off-the-shelf SaaS becomes the bottleneck, a custom-built CRM or operations platform gives your team the workflows they actually need without the per-seat tax.",
+    icon: "kanban",
+    benefits: [
+      "Built around your real process, not a vendor's template",
+      "No per-seat licensing tax",
+      "Owns your data and integration story",
+      "Extensible — your engineers can keep building on it",
+    ],
+    deliverables: [
+      "Multi-stage pipeline with custom fields per stage",
+      "Email integration (send/receive, threaded)",
+      "Calendar and meeting integration",
+      "Reporting dashboards",
+      "Integrations with billing, support, marketing tools",
+    ],
+    stack: ["Next.js", "Postgres", "Supabase", "Stripe", "Resend", "Google APIs"],
+    content: `
+Salesforce, HubSpot, and the others are excellent until they aren't. The point at which you're paying $90/seat for software your team uses 8% of, while routing critical workflows through a sea of Zapier glue, is the point where a custom CRM starts to make sense.
+
+## What I build
+
+**Deal / pipeline systems** — multi-stage flows with custom fields, automated routing, ownership rules, activity history.
+
+**Customer success ops** — onboarding workflows, health scoring, escalation paths, account-based views.
+
+**Internal operations** — order management, vendor management, content workflows, approval chains. The boring high-leverage software.
+
+**Integration hub** — bidirectional sync with billing, support, marketing, and analytics tools. Idempotent webhooks, retry queues, audit logs.
+
+## When it makes sense
+
+When your team has outgrown a SaaS template and the cost of working around it (in time, in opportunity cost, in monthly fees) is comparable to a one-time engineering investment. That tipping point arrives sooner than most teams expect.
+    `,
+  },
 ];
 
 export function getService(slug: string) {

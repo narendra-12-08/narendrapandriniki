@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { services, getService } from "@/lib/content/services";
+import { getPublishedServices, getServiceBySlug } from "@/lib/db/content";
 import Markdown from "@/components/public/Markdown";
 import JsonLd from "@/components/seo/JsonLd";
 import { serviceSchema, breadcrumbSchema } from "@/lib/seo/schema";
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const services = await getPublishedServices();
   return services.map((s) => ({ slug: s.slug }));
 }
 
@@ -14,11 +15,11 @@ export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
   const { slug } = await params;
-  const service = getService(slug);
+  const service = await getServiceBySlug(slug);
   if (!service) return { title: "Service" };
   return {
     title: service.title,
-    description: service.shortDescription,
+    description: service.short_description ?? undefined,
     alternates: { canonical: `/services/${service.slug}` },
   };
 }
@@ -27,10 +28,11 @@ export default async function ServiceDetailPage(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
-  const service = getService(slug);
+  const service = await getServiceBySlug(slug);
   if (!service) notFound();
 
-  const related = services.filter((s) => s.slug !== service.slug).slice(0, 3);
+  const all = await getPublishedServices();
+  const related = all.filter((s) => s.slug !== service.slug).slice(0, 3);
 
   return (
     <div className="bg-grid">
@@ -38,7 +40,7 @@ export default async function ServiceDetailPage(
         id={`ld-service-${service.slug}`}
         data={serviceSchema({
           name: service.title,
-          description: service.shortDescription,
+          description: service.short_description ?? "",
           slug: service.slug,
         })}
       />
@@ -64,7 +66,7 @@ export default async function ServiceDetailPage(
               {service.title}
             </h1>
             <p className="mt-8 text-lg md:text-xl text-[var(--text-2)] leading-relaxed">
-              {service.description}
+              {service.description ?? service.short_description}
             </p>
             <div className="mt-8 flex flex-wrap gap-1.5">
               {service.stack.map((t) => (
@@ -81,7 +83,7 @@ export default async function ServiceDetailPage(
         <div className="container-page">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
             <div className="lg:col-span-8">
-              <Markdown source={service.content} />
+              <Markdown source={service.content ?? ""} />
             </div>
 
             <aside className="lg:col-span-4 space-y-5">
@@ -161,7 +163,7 @@ export default async function ServiceDetailPage(
                   {r.title}
                 </h3>
                 <p className="mt-3 text-sm text-[var(--text-3)]">
-                  {r.shortDescription}
+                  {r.short_description}
                 </p>
               </Link>
             ))}

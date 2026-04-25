@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { process } from "@/lib/content/process";
+import { getProcessSteps } from "@/lib/db/content-extra";
 
 export const metadata: Metadata = {
   title: "Process",
@@ -8,7 +8,8 @@ export const metadata: Metadata = {
     "How an engagement runs end to end — discovery, architecture, implementation, validation, and handover.",
 };
 
-export default function ProcessPage() {
+export default async function ProcessPage() {
+  const process = await getProcessSteps();
   return (
     <div>
       <section className="section bg-grid">
@@ -35,10 +36,10 @@ export default function ProcessPage() {
             />
             <ol className="space-y-12 md:space-y-16">
               {process.map((step) => (
-                <li key={step.number} className="relative pl-20 md:pl-28">
+                <li key={step.id} className="relative pl-20 md:pl-28">
                   <div className="absolute left-0 top-0 flex items-center justify-center w-12 h-12 md:w-20 md:h-20 rounded-full bg-[var(--surface)] border border-[var(--border-2)]">
                     <span className="font-mono text-lg md:text-2xl font-semibold gradient-text">
-                      {String(step.number).padStart(2, "0")}
+                      {String(step.step_number).padStart(2, "0")}
                     </span>
                   </div>
                   <div className="surface-card p-6 md:p-8">

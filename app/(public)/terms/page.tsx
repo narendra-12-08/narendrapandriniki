@@ -102,9 +102,9 @@ export default function TermsPage() {
 
             <h2>Governing law</h2>
             <p>
-              These terms are governed by the laws of England and Wales. Any
+              These terms are governed by the laws of India. Any
               dispute arising from your use of the site is subject to the
-              exclusive jurisdiction of the courts of England and Wales.
+              exclusive jurisdiction of the courts of Hyderabad, Telangana, India.
             </p>
 
             <h2>Contact</h2>

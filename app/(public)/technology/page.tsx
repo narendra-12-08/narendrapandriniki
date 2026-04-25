@@ -1,6 +1,31 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { technology } from "@/lib/content/technology";
+import { getTechnologyStack } from "@/lib/db/content";
+import { technology as staticTechnology } from "@/lib/content/technology";
+import { getLogoUrl, getInitials } from "@/lib/content/tech-logos";
+
+function TechIcon({ name }: { name: string }) {
+  const url = getLogoUrl(name);
+  const initials = getInitials(name);
+  return (
+    <span className="relative inline-flex items-center justify-center w-9 h-9 rounded-md bg-[var(--surface-2)] border border-[var(--border)] overflow-hidden shrink-0">
+      <span className="absolute inset-0 flex items-center justify-center font-mono text-[10px] text-[var(--text-4)]">
+        {initials}
+      </span>
+      {url && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={url}
+          alt={name}
+          loading="lazy"
+          width={22}
+          height={22}
+          className="relative opacity-90"
+        />
+      )}
+    </span>
+  );
+}
 
 export const metadata: Metadata = {
   title: "Technology",
@@ -14,7 +39,24 @@ const roleLabel: Record<string, string> = {
   familiar: "Familiar",
 };
 
-export default function TechnologyPage() {
+export default async function TechnologyPage() {
+  // DB-first; fall back to the curated static list when the DB is empty
+  // (e.g. before the seed has been run).
+  const fromDb = await getTechnologyStack();
+  const technology =
+    fromDb.length > 0
+      ? fromDb.map((c) => ({
+          slug: c.slug,
+          name: c.name,
+          description: c.description ?? "",
+          items: c.items.map((it) => ({
+            name: it.name,
+            role: it.role,
+            note: it.note ?? undefined,
+          })),
+        }))
+      : staticTechnology;
+
   return (
     <div>
       <section className="section bg-grid">
@@ -60,7 +102,10 @@ export default function TechnologyPage() {
                         className="glow-ring surface-card p-5"
                       >
                         <div className="flex items-center justify-between gap-3">
-                          <h3 className="font-semibold text-[var(--text)]">{item.name}</h3>
+                          <div className="flex items-center gap-3">
+                            <TechIcon name={item.name} />
+                            <h3 className="font-semibold text-[var(--text)]">{item.name}</h3>
+                          </div>
                           <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--accent)]">
                             {roleLabel[item.role]}
                           </span>
@@ -77,7 +122,10 @@ export default function TechnologyPage() {
                     return (
                       <div key={item.name} className="surface-card p-5">
                         <div className="flex items-center justify-between gap-3">
-                          <h3 className="font-medium text-[var(--text)]">{item.name}</h3>
+                          <div className="flex items-center gap-3">
+                            <TechIcon name={item.name} />
+                            <h3 className="font-medium text-[var(--text)]">{item.name}</h3>
+                          </div>
                           <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--violet)]">
                             {roleLabel[item.role]}
                           </span>
@@ -93,15 +141,18 @@ export default function TechnologyPage() {
                   return (
                     <div
                       key={item.name}
-                      className="flex items-baseline justify-between gap-3 px-2 py-3 border-b border-[var(--border)]"
+                      className="flex items-center justify-between gap-3 px-2 py-3 border-b border-[var(--border)]"
                     >
-                      <div>
-                        <span className="text-[var(--text-3)]">{item.name}</span>
-                        {item.note && (
-                          <p className="mt-1 text-xs text-[var(--text-3)] leading-relaxed">
-                            {item.note}
-                          </p>
-                        )}
+                      <div className="flex items-center gap-3">
+                        <TechIcon name={item.name} />
+                        <div>
+                          <span className="text-[var(--text-3)]">{item.name}</span>
+                          {item.note && (
+                            <p className="mt-1 text-xs text-[var(--text-3)] leading-relaxed">
+                              {item.note}
+                            </p>
+                          )}
+                        </div>
                       </div>
                       <span className="font-mono text-[10px] uppercase tracking-widest text-[var(--text-3)]">
                         {roleLabel[item.role]}

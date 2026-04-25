@@ -46,7 +46,7 @@ export const faqs: FAQ[] = [
     category: "pricing",
     question: "How is pricing structured?",
     answer:
-      "Project work is usually fixed-fee with milestones, scoped after a paid discovery week. Retainers are a flat monthly fee for a defined number of days. Fractional engagements are billed monthly based on the agreed days per week. All fees are in GBP, exclusive of VAT, and invoiced monthly with 14-day terms.",
+      "Project work is usually fixed-fee with milestones, scoped after a paid discovery week. Retainers are a flat monthly fee for a defined number of days. Fractional engagements are billed monthly based on the agreed days per week. All fees are quoted in USD for international clients and INR for India clients, exclusive of taxes, and invoiced monthly with 14-day terms.",
   },
   {
     id: "7",
@@ -88,7 +88,7 @@ export const faqs: FAQ[] = [
     category: "general",
     question: "Where are you based and where do you work?",
     answer:
-      "Based in the UK, working with teams globally. Most of my work is remote, with occasional on-site sessions when they meaningfully help — usually for discovery weeks, game days, or significant launches. I overlap comfortably with European, UK, and US East Coast working hours; for teams further west, we agree a sustainable schedule rather than pretending timezone doesn't matter.",
+      "Based in Hyderabad, India, working with teams globally. Most of my work is remote, with occasional on-site sessions when they meaningfully help — usually for discovery weeks, game days, or significant launches. I overlap comfortably with India, UK, EU, Singapore, Dubai, and US East Coast working hours; for teams further west, we agree a sustainable schedule rather than pretending timezone doesn't matter.",
   },
   {
     id: "13",

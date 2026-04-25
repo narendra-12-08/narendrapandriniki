@@ -1,13 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { allPosts, findPost } from "@/lib/content/blog-adapter";
+import {
+  getBlogPostBySlug,
+  getPublishedBlogPosts,
+} from "@/lib/db/content";
 import { formatDate } from "@/lib/utils";
 import Markdown from "@/components/public/Markdown";
 import JsonLd from "@/components/seo/JsonLd";
 import { articleSchema, breadcrumbSchema } from "@/lib/seo/schema";
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const allPosts = await getPublishedBlogPosts();
   return allPosts.map((p) => ({ slug: p.slug }));
 }
 
@@ -15,24 +19,24 @@ export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
   const { slug } = await params;
-  const post = findPost(slug);
+  const post = await getBlogPostBySlug(slug);
   if (!post) return { title: "Post" };
   return {
     title: post.title,
-    description: post.description,
+    description: post.description ?? undefined,
     alternates: { canonical: `/blog/${post.slug}` },
     openGraph: {
       type: "article",
       title: post.title,
-      description: post.description,
+      description: post.description ?? undefined,
       url: `/blog/${post.slug}`,
-      publishedTime: post.publishedAt,
+      publishedTime: post.published_at ?? undefined,
       tags: post.tags,
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
-      description: post.description,
+      description: post.description ?? undefined,
     },
   };
 }
@@ -41,17 +45,16 @@ export default async function BlogPostPage(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
-  const post = findPost(slug);
+  const post = await getBlogPostBySlug(slug);
   if (!post) notFound();
 
   // Strip leading "# Title" if duplicated in content
-  const content = post.content
+  const content = (post.content ?? "")
     .replace(/\r\n/g, "\n")
     .replace(/^\s*#\s+.+\n+/, "");
 
-  const more = allPosts
-    .filter((p) => p.slug !== post.slug)
-    .slice(0, 3);
+  const all = await getPublishedBlogPosts();
+  const more = all.filter((p) => p.slug !== post.slug).slice(0, 3);
 
   return (
     <div className="bg-grid">
@@ -59,8 +62,8 @@ export default async function BlogPostPage(
         id={`ld-article-${post.slug}`}
         data={articleSchema({
           title: post.title,
-          description: post.description,
-          datePublished: post.publishedAt,
+          description: post.description ?? "",
+          datePublished: post.published_at ?? new Date().toISOString(),
           slug: post.slug,
         })}
       />
@@ -97,13 +100,13 @@ export default async function BlogPostPage(
                 {post.description}
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3 font-mono text-xs uppercase tracking-[0.15em] text-[var(--text-4)]">
-                <span>{formatDate(post.publishedAt)}</span>
-                <span>·</span>
-                <span>{post.readingTime} min read</span>
-                {post.category && (
+                {post.published_at && (
+                  <span>{formatDate(post.published_at)}</span>
+                )}
+                {post.reading_time != null && (
                   <>
                     <span>·</span>
-                    <span className="text-[var(--accent)]">{post.category}</span>
+                    <span>{post.reading_time} min read</span>
                   </>
                 )}
               </div>
@@ -117,28 +120,9 @@ export default async function BlogPostPage(
               <span className="hairline block mb-10" />
               <Markdown source={content} />
 
-              {post.references && post.references.length > 0 && (
-                <div className="mt-16 pt-10 border-t border-[var(--border)]">
-                  <span className="eyebrow">References</span>
-                  <ol className="mt-5 space-y-2.5 list-decimal pl-5 marker:text-[var(--text-4)] marker:font-mono">
-                    {post.references.map((r) => (
-                      <li
-                        key={r.url}
-                        className="text-sm text-[var(--text-2)] pl-2"
-                      >
-                        <a
-                          href={r.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-[var(--accent)] underline underline-offset-4 hover:opacity-80"
-                        >
-                          {r.label}
-                        </a>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-              )}
+              {/* References were attached to legacy static posts; the
+                  managed blog_posts table doesn't carry them. If we
+                  bring them back, add a JSONB column + render here. */}
             </div>
           </div>
         </section>
@@ -161,13 +145,14 @@ export default async function BlogPostPage(
                   className="surface-card p-6 block group transition-transform hover:-translate-y-0.5"
                 >
                   <div className="font-mono text-[0.65rem] uppercase tracking-[0.18em] text-[var(--accent)]">
-                    {p.category ?? p.tags[0] ?? "Notes"}
+                    {p.tags[0] ?? "Notes"}
                   </div>
                   <h3 className="mt-3 text-base font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors leading-snug">
                     {p.title}
                   </h3>
                   <div className="mt-4 font-mono text-[0.65rem] uppercase tracking-[0.15em] text-[var(--text-4)]">
-                    {formatDate(p.publishedAt)} · {p.readingTime}m
+                    {p.published_at ? formatDate(p.published_at) : ""}
+                    {p.reading_time != null ? ` · ${p.reading_time}m` : ""}
                   </div>
                 </Link>
               ))}

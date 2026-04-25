@@ -169,7 +169,7 @@ export default function InvoiceForm({ clients, projects }: Props) {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-medium text-[var(--text-2)] mb-1.5">
-                Subtotal (£) *
+                Subtotal ($) *
               </label>
               <input
                 type="number"
@@ -200,19 +200,19 @@ export default function InvoiceForm({ clients, projects }: Props) {
               <div className="flex justify-between text-[var(--text-3)]">
                 <span>Subtotal</span>
                 <span className="font-mono text-[var(--text)]">
-                  £{subtotal.toFixed(2)}
+                  ${subtotal.toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between text-[var(--text-3)]">
                 <span>Tax ({taxRate}%)</span>
                 <span className="font-mono text-[var(--text)]">
-                  £{taxAmount.toFixed(2)}
+                  ${taxAmount.toFixed(2)}
                 </span>
               </div>
               <div className="flex justify-between font-semibold pt-1.5 border-t border-[var(--border)]">
                 <span className="text-[var(--accent)]">Total</span>
                 <span className="font-mono text-[var(--accent)]">
-                  £{total.toFixed(2)}
+                  ${total.toFixed(2)}
                 </span>
               </div>
             </div>

@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { solutions, getSolution } from "@/lib/content/solutions";
+import { getPublishedSolutions, getSolutionBySlug } from "@/lib/db/content";
 import Markdown from "@/components/public/Markdown";
 
-export function generateStaticParams() {
+export async function generateStaticParams() {
+  const solutions = await getPublishedSolutions();
   return solutions.map((s) => ({ slug: s.slug }));
 }
 
@@ -12,11 +13,11 @@ export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
   const { slug } = await params;
-  const sol = getSolution(slug);
+  const sol = await getSolutionBySlug(slug);
   if (!sol) return { title: "Solution" };
   return {
     title: sol.title,
-    description: sol.shortDescription,
+    description: sol.short_description ?? undefined,
   };
 }
 
@@ -24,7 +25,7 @@ export default async function SolutionDetailPage(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
-  const sol = getSolution(slug);
+  const sol = await getSolutionBySlug(slug);
   if (!sol) notFound();
 
   return (
@@ -43,7 +44,7 @@ export default async function SolutionDetailPage(
               {sol.title}
             </h1>
             <p className="mt-8 text-lg md:text-xl text-[var(--text-2)] leading-relaxed">
-              {sol.shortDescription}
+              {sol.short_description}
             </p>
           </div>
         </div>
@@ -91,7 +92,7 @@ export default async function SolutionDetailPage(
       <section className="pb-24">
         <div className="container-page">
           <div className="max-w-3xl">
-            <Markdown source={sol.content} />
+            <Markdown source={sol.content ?? ""} />
           </div>
         </div>
       </section>

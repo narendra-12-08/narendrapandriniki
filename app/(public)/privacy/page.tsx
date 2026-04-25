@@ -4,7 +4,7 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Privacy Policy",
   description:
-    "How Narendra Pandrinki handles personal data on narendrapandrinki.com — what is collected, why, and your rights under UK GDPR.",
+    "How Narendra Pandrinki handles personal data on narendrapandrinki.com — what is collected, why, and your rights under India's Digital Personal Data Protection Act, 2023 (and the UK GDPR / EU GDPR for UK and EU clients).",
 };
 
 export default function PrivacyPage() {
@@ -28,7 +28,7 @@ export default function PrivacyPage() {
             <p>
               This privacy policy explains how I, Narendra Pandrinki, an
               independent freelance platform and DevOps engineer based in the
-              United Kingdom, handle personal data collected through
+              India, handle personal data collected through
               narendrapandrinki.com. I am the data controller for the personal
               data described below. The plain-English version: I don&rsquo;t want
               your data unless I need it to reply to you, I don&rsquo;t share it,
@@ -65,7 +65,7 @@ export default function PrivacyPage() {
             <p>
               The lawful basis for processing contact form submissions and
               direct emails is legitimate interest under Article 6(1)(f) of the
-              UK GDPR. The legitimate interest is replying to you and, if we
+              applicable data protection law (India DPDP Act 2023; UK / EU GDPR for UK and EU residents). The legitimate interest is replying to you and, if we
               decide to work together, scoping and delivering an engagement.
               You can object to this processing at any time by emailing me, and
               I will delete the data unless I have an overriding lawful reason
@@ -102,7 +102,7 @@ export default function PrivacyPage() {
             </p>
             <p>
               Where required by law — for example, in response to a valid legal
-              request from a UK authority — I may have to disclose information.
+              request from an Indian authority — I may have to disclose information.
               I will resist requests that appear overbroad and will inform you
               where I am legally able to.
             </p>
@@ -114,21 +114,21 @@ export default function PrivacyPage() {
               correspondence. After that, I delete them unless we have begun
               an engagement, in which case the relevant correspondence is
               retained for the duration of the engagement and for six years
-              afterwards to satisfy UK accounting and tax obligations. Aggregated
+              afterwards to satisfy Indian accounting and tax obligations. Aggregated
               analytics data is retained for up to 24 months.
             </p>
 
             <h2>Where the data is stored</h2>
             <p>
-              The data is processed in the United Kingdom and the European
+              The data is processed in India, with secure cross-border transfers to providers in the United States and the European
               Economic Area where possible. Some processors may transfer data
               to the United States or other jurisdictions; where they do, the
-              transfer is covered by appropriate safeguards such as the UK
+              transfer is covered by appropriate safeguards such as Standard Contractual Clauses or the UK
               International Data Transfer Addendum or Standard Contractual
               Clauses.
             </p>
 
-            <h2>Your rights under UK GDPR</h2>
+            <h2>Your rights</h2>
             <p>
               You have the right to ask me what personal data I hold about you,
               to ask me to correct it if it&rsquo;s wrong, to ask me to delete it,

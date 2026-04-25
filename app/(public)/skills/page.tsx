@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { ReactElement } from "react";
 import JsonLd from "@/components/seo/JsonLd";
 import { personSchema, breadcrumbSchema } from "@/lib/seo/schema";
-import { skillsMatrix, allSkillNames, type Skill } from "@/lib/content/skills";
+import { getSkillGroups, type SkillItemRow } from "@/lib/db/content-extra";
 
 export const metadata: Metadata = {
   title: "Skills — Narendra Pandrinki",
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/skills" },
 };
 
-function SkillRow({ skill }: { skill: Skill }): ReactElement {
+function SkillRow({ skill }: { skill: SkillItemRow }): ReactElement {
   const dots = [1, 2, 3, 4, 5].map((d) => (
     <span
       key={d}
@@ -45,8 +45,9 @@ function SkillRow({ skill }: { skill: Skill }): ReactElement {
   );
 }
 
-export default function SkillsPage() {
-  const knowsAbout = allSkillNames();
+export default async function SkillsPage() {
+  const skillsMatrix = await getSkillGroups();
+  const knowsAbout = skillsMatrix.flatMap((g) => g.items.map((i) => i.name));
   const person = personSchema();
   person.knowsAbout = knowsAbout;
 
@@ -87,14 +88,14 @@ export default function SkillsPage() {
         <div className="container-page">
           <div className="grid lg:grid-cols-2 gap-6">
             {skillsMatrix.map((g) => (
-              <div key={g.name} className="surface-card p-7">
+              <div key={g.id} className="surface-card p-7">
                 <p className="eyebrow">{g.name}</p>
                 <h2 className="mt-3 text-xl font-semibold tracking-tight text-[var(--text)]">
-                  {g.tagline}
+                  {g.description}
                 </h2>
                 <div className="mt-5 divide-y divide-[var(--border)]">
-                  {g.skills.map((s) => (
-                    <SkillRow key={s.name} skill={s} />
+                  {g.items.map((s) => (
+                    <SkillRow key={s.id} skill={s} />
                   ))}
                 </div>
               </div>

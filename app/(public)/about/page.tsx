@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { bio, principles, timeline, availability } from "@/lib/content/about";
+import {
+  getBioParagraphs,
+  getPrinciples,
+  getTimeline,
+  getAvailabilityText,
+} from "@/lib/db/content-extra";
 import JsonLd from "@/components/seo/JsonLd";
 import { personSchema, breadcrumbSchema } from "@/lib/seo/schema";
 
@@ -11,8 +16,13 @@ export const metadata: Metadata = {
   alternates: { canonical: "/about" },
 };
 
-export default function AboutPage() {
-  const bioParagraphs = bio.trim().split(/\n\n+/);
+export default async function AboutPage() {
+  const [bioParagraphs, principles, timeline, availability] = await Promise.all([
+    getBioParagraphs(),
+    getPrinciples(),
+    getTimeline(),
+    getAvailabilityText(),
+  ]);
   return (
     <div className="bg-grid">
       <JsonLd id="ld-about-person" data={personSchema()} />
@@ -28,7 +38,7 @@ export default function AboutPage() {
           <span className="eyebrow">About</span>
           <h1 className="mt-6 text-5xl md:text-7xl font-semibold tracking-tight leading-[1.05] text-[var(--text)] max-w-4xl">
             Independent DevOps engineer.{" "}
-            <span className="gradient-text">UK based.</span> Five years in.
+            <span className="gradient-text">Hyderabad based.</span> Five years in.
           </h1>
         </div>
       </section>
@@ -54,7 +64,7 @@ export default function AboutPage() {
                     <dt className="text-[var(--text-4)] font-mono text-xs uppercase tracking-wider">
                       Based
                     </dt>
-                    <dd className="text-[var(--text)] mt-1">United Kingdom</dd>
+                    <dd className="text-[var(--text)] mt-1">Hyderabad, India · Working globally</dd>
                   </div>
                   <div>
                     <dt className="text-[var(--text-4)] font-mono text-xs uppercase tracking-wider">
@@ -120,7 +130,7 @@ export default function AboutPage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {principles.map((p, i) => (
-              <article key={p.title} className="surface-card p-7">
+              <article key={p.id} className="surface-card p-7">
                 <div className="font-mono text-xs text-[var(--text-4)] mb-3">
                   {String(i + 1).padStart(2, "0")} /{" "}
                   {String(principles.length).padStart(2, "0")}
@@ -152,7 +162,7 @@ export default function AboutPage() {
               aria-hidden
             />
             {timeline.map((entry) => (
-              <li key={entry.year} className="relative pl-16 pb-10">
+              <li key={entry.id} className="relative pl-16 pb-10">
                 <span className="absolute left-0 top-0 inline-flex h-12 w-12 items-center justify-center rounded-full border border-[var(--border-2)] bg-[var(--surface)] font-mono text-xs text-[var(--accent)]">
                   {entry.year}
                 </span>

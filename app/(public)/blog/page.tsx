@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { allPosts } from "@/lib/content/blog-adapter";
+import { getPublishedBlogPosts } from "@/lib/db/content";
+import type { BlogPostRow } from "@/lib/types";
 import { formatDate } from "@/lib/utils";
 
 export const metadata: Metadata = {
@@ -9,18 +10,22 @@ export const metadata: Metadata = {
     "Notes on DevOps, platform engineering, Kubernetes operations, observability, and the boring infrastructure of running production systems.",
 };
 
-export default function BlogIndexPage() {
-  const sorted = [...allPosts].sort(
-    (a, b) =>
-      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
-  );
+export default async function BlogIndexPage() {
+  const all = await getPublishedBlogPosts();
+  const sorted = [...all].sort((a, b) => {
+    const at = a.published_at ? new Date(a.published_at).getTime() : 0;
+    const bt = b.published_at ? new Date(b.published_at).getTime() : 0;
+    return bt - at;
+  });
 
   // Group by year if more than 15 posts
   const groupByYear = sorted.length > 15;
-  const grouped: Record<string, typeof sorted> = {};
+  const grouped: Record<string, BlogPostRow[]> = {};
   if (groupByYear) {
     for (const p of sorted) {
-      const year = new Date(p.publishedAt).getFullYear().toString();
+      const year = p.published_at
+        ? new Date(p.published_at).getFullYear().toString()
+        : "—";
       (grouped[year] ??= []).push(p);
     }
   }
@@ -85,19 +90,7 @@ export default function BlogIndexPage() {
   );
 }
 
-function PostCard({
-  post,
-}: {
-  post: {
-    slug: string;
-    title: string;
-    description: string;
-    tags: string[];
-    category?: string;
-    publishedAt: string;
-    readingTime: number;
-  };
-}) {
+function PostCard({ post }: { post: BlogPostRow }) {
   return (
     <Link
       href={`/blog/${post.slug}`}
@@ -105,10 +98,10 @@ function PostCard({
     >
       <div className="flex items-center justify-between gap-3">
         <span className="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-[var(--accent)]">
-          {post.category ?? post.tags[0] ?? "Notes"}
+          {post.tags[0] ?? "Notes"}
         </span>
         <span className="font-mono text-[0.65rem] text-[var(--text-4)]">
-          {post.readingTime}m read
+          {post.reading_time ?? "—"}m read
         </span>
       </div>
       <h3 className="mt-4 text-lg font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors leading-snug">
@@ -119,7 +112,7 @@ function PostCard({
       </p>
       <div className="mt-5 pt-5 border-t border-[var(--border)] flex items-center justify-between">
         <span className="font-mono text-[0.65rem] uppercase tracking-[0.15em] text-[var(--text-4)]">
-          {formatDate(post.publishedAt)}
+          {post.published_at ? formatDate(post.published_at) : ""}
         </span>
         <span className="font-mono text-xs text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity">
           →

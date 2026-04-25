@@ -89,7 +89,7 @@ export default function HomePage() {
               </span>
               <span className="text-[var(--text-4)]">·</span>
               <span className="inline-flex items-center gap-2">
-                <span className="live-dot" /> UK based
+                <span className="live-dot" /> India based
               </span>
             </div>
           </div>

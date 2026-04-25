@@ -48,7 +48,7 @@ const hiringFaqs: { question: string; answer: string }[] = [
   {
     question: "What timezone do you work in?",
     answer:
-      "I'm based in the UK and prefer engagements with at least four hours of overlap with my working day. That covers UK, EU, US East, and most of APAC at the edges. I've worked with US West and AU teams comfortably; I structure those engagements with explicit async expectations.",
+      "Hyderabad, India (IST). I prefer engagements with at least four hours of overlap with my working day. That comfortably covers India, UK, EU, Singapore, Dubai, and US East. I've worked with US West and Australia teams; I structure those with explicit async expectations.",
   },
   {
     question: "What is the minimum contract length?",
@@ -61,9 +61,9 @@ const hiringFaqs: { question: string; answer: string }[] = [
       "Yes. I've completed BPSS-equivalent checks for regulated clients and standard background checks for fintech and healthtech engagements. Higher-clearance work is available on request, lead time depending.",
   },
   {
-    question: "How do you handle IR35 and contracting structure?",
+    question: "How do you handle invoicing and contracting?",
     answer:
-      "I work through a UK-registered Ltd company. For UK clients I prefer outside-IR35 engagements where the working pattern genuinely supports it. I'm comfortable reviewing SDS determinations and will walk away from inside-IR35 wrappers that don't reflect how the work runs.",
+      "I invoice in INR for India clients and in USD for international clients, against a master services agreement and per-engagement statements of work. Comfortable signing your paper or providing my own. ",
   },
   {
     question: "Will you sign an NDA before a deeper conversation?",

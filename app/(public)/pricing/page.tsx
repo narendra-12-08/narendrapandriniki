@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { pricingTiers } from "@/lib/content/pricing";
+import { getPricingTiers } from "@/lib/db/content-extra";
 
 export const metadata: Metadata = {
   title: "Pricing",
@@ -8,7 +8,8 @@ export const metadata: Metadata = {
     "Three engagement models — project, retainer, and fractional. Transparent pricing for senior platform and DevOps work.",
 };
 
-export default function PricingPage() {
+export default async function PricingPage() {
+  const pricingTiers = await getPricingTiers();
   const middleSlug = pricingTiers[1]?.slug;
 
   return (
@@ -22,7 +23,7 @@ export default function PricingPage() {
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--text-2)]">
             Project, retainer, or fractional. Each fits a different shape of need.
             Most engagements start as one and evolve into another. All fees are
-            in GBP, exclusive of VAT, invoiced monthly with 14-day terms.
+            in USD for international clients (INR for India), exclusive of taxes, invoiced monthly with 14-day terms.
           </p>
         </div>
       </section>
@@ -51,10 +52,10 @@ export default function PricingPage() {
 
                   <div className="mt-6 pb-6 border-b border-[var(--border)]">
                     <p className="text-3xl md:text-4xl font-semibold gradient-text">
-                      {tier.priceLabel}
+                      {tier.price_label}
                     </p>
                     <p className="mt-2 text-xs text-[var(--text-3)] leading-relaxed">
-                      {tier.priceNote}
+                      {tier.price_note}
                     </p>
                   </div>
 
@@ -65,7 +66,7 @@ export default function PricingPage() {
                   <div className="mt-6 pt-6 border-t border-[var(--border)]">
                     <p className="eyebrow text-xs">Ideal for</p>
                     <p className="mt-3 text-sm text-[var(--text-2)] leading-relaxed">
-                      {tier.idealFor}
+                      {tier.ideal_for}
                     </p>
                   </div>
 
@@ -81,11 +82,11 @@ export default function PricingPage() {
                     </ul>
                   </div>
 
-                  {tier.notIncluded && tier.notIncluded.length > 0 && (
+                  {tier.not_included && tier.not_included.length > 0 && (
                     <div className="mt-6 pt-6 border-t border-[var(--border)]">
                       <p className="eyebrow text-xs">Not included</p>
                       <ul className="mt-3 space-y-2">
-                        {tier.notIncluded.map((item, i) => (
+                        {tier.not_included.map((item, i) => (
                           <li
                             key={i}
                             className="flex gap-3 text-sm text-[var(--text-3)] leading-relaxed line-through"

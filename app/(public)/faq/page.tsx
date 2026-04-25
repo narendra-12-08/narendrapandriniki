@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { faqs, type FAQ } from "@/lib/content/faq";
+import { getFaqs, type FaqCategory, type FaqRow } from "@/lib/db/content-extra";
 import JsonLd from "@/components/seo/JsonLd";
 import { faqSchema, breadcrumbSchema } from "@/lib/seo/schema";
 
@@ -11,15 +11,16 @@ export const metadata: Metadata = {
   alternates: { canonical: "/faq" },
 };
 
-const categoryOrder: FAQ["category"][] = ["engagement", "pricing", "technical", "general"];
-const categoryLabels: Record<FAQ["category"], string> = {
+const categoryOrder: FaqCategory[] = ["engagement", "pricing", "technical", "general"];
+const categoryLabels: Record<FaqCategory, string> = {
   engagement: "Engagement",
   pricing: "Pricing",
   technical: "Technical",
   general: "General",
 };
 
-export default function FAQPage() {
+export default async function FAQPage() {
+  const faqs: FaqRow[] = await getFaqs();
   const grouped = categoryOrder.map((cat) => ({
     category: cat,
     items: faqs.filter((f) => f.category === cat),

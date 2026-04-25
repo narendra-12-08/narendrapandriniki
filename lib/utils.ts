@@ -13,7 +13,7 @@ export function formatDate(date: string | Date): string {
   });
 }
 
-export function formatCurrency(amount: number, currency = "GBP"): string {
+export function formatCurrency(amount: number, currency = "USD"): string {
   return new Intl.NumberFormat("en-GB", {
     style: "currency",
     currency,

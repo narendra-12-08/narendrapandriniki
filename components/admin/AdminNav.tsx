@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   Inbox,
+  Mail,
   Users,
   FolderKanban,
   FileText,
@@ -22,6 +23,14 @@ import {
   Menu,
   X,
   ExternalLink,
+  User,
+  Compass,
+  History,
+  BadgeIndianRupee,
+  HelpCircle,
+  ListOrdered,
+  TrendingUp,
+  Award,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
@@ -29,6 +38,7 @@ import { cn } from "@/lib/utils";
 const navItems = [
   { href: "/control/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/control/inbox", label: "Inbox", icon: Inbox },
+  { href: "/control/email", label: "Compose email", icon: Mail },
   { href: "/control/clients", label: "Clients", icon: Users },
   { href: "/control/projects", label: "Projects", icon: FolderKanban },
   { href: "/control/invoices", label: "Invoices", icon: FileText },
@@ -40,6 +50,14 @@ const navItems = [
   { href: "/control/technology", label: "Technology", icon: Cpu },
   { href: "/control/testimonials", label: "Testimonials", icon: Quote },
   { href: "/control/blog", label: "Blog", icon: PenLine },
+  { href: "/control/about", label: "About", icon: User },
+  { href: "/control/principles", label: "Principles", icon: Compass },
+  { href: "/control/timeline", label: "Timeline", icon: History },
+  { href: "/control/pricing", label: "Pricing", icon: BadgeIndianRupee },
+  { href: "/control/faqs", label: "FAQs", icon: HelpCircle },
+  { href: "/control/process", label: "Process", icon: ListOrdered },
+  { href: "/control/skills", label: "Skills", icon: TrendingUp },
+  { href: "/control/certifications", label: "Certifications", icon: Award },
   { href: "/control/settings", label: "Settings", icon: Settings },
 ] as const;
 

@@ -51,7 +51,7 @@ export default function CvPage() {
                   DevOps & Platform Engineer
                 </p>
                 <p className="mt-1 text-sm text-[var(--text-3)]">
-                  Remote — UK · Working globally
+                  Hyderabad, India · Working with teams in India, UK, US, Singapore, Dubai
                 </p>
               </div>
               <div className="text-sm font-mono text-[var(--text-2)] space-y-1">
@@ -151,9 +151,28 @@ export default function CvPage() {
 
             <div className="mt-10 pt-8 border-t border-[var(--border)]">
               <p className="eyebrow">Education</p>
-              <p className="mt-4 text-sm text-[var(--text-2)]">
-                BEng Computer Science — University of Hyderabad, 2018–2021
-              </p>
+              <ul className="mt-4 space-y-3 text-sm text-[var(--text-2)]">
+                <li className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+                  <span>
+                    <strong className="text-[var(--text)]">MSc Data Science</strong>{" "}
+                    — University of Hertfordshire
+                  </span>
+                  <span className="font-mono text-xs text-[var(--text-3)]">
+                    2020 – 2022
+                  </span>
+                </li>
+                <li className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+                  <span>
+                    <strong className="text-[var(--text)]">
+                      BTech, Computer Science
+                    </strong>{" "}
+                    — ICFAI Foundation for Higher Education, Hyderabad
+                  </span>
+                  <span className="font-mono text-xs text-[var(--text-3)]">
+                    2015 – 2019
+                  </span>
+                </li>
+              </ul>
             </div>
 
             <div className="mt-10 pt-8 border-t border-[var(--border)]">

@@ -48,9 +48,8 @@ export default function Nav() {
           >
             <span className="relative inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border-2)] bg-[var(--surface)]">
               <span className="absolute inset-0 rounded-lg opacity-70 blur-md bg-[radial-gradient(circle,var(--accent),transparent_70%)]" />
-              <span className="relative font-mono text-sm gradient-text">np</span>
+              <span className="relative font-mono text-sm gradient-text">Np</span>
             </span>
-            <span className="hidden sm:inline text-sm">narendrapandrinki</span>
           </Link>
 
           <div className="hidden md:flex items-center gap-1">
