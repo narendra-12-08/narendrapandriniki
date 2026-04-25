@@ -557,6 +557,92 @@ Salesforce, HubSpot, and the others are excellent until they aren't. The point a
 When your team has outgrown a SaaS template and the cost of working around it (in time, in opportunity cost, in monthly fees) is comparable to a one-time engineering investment. That tipping point arrives sooner than most teams expect.
     `,
   },
+  {
+    slug: "prompt-engineering",
+    title: "AI Prompt Engineering",
+    tagline: "Prompts that hold up in production",
+    shortDescription:
+      "Prompt design, eval suites, and the discipline to keep AI features high-quality as models change underneath you.",
+    description:
+      "Production-grade prompt engineering: structured prompting, schema-constrained outputs, retrieval-grounded answers, eval harnesses, and the regression discipline that distinguishes a working AI feature from a hopeful one.",
+    icon: "wand-2",
+    benefits: [
+      "Prompts designed against eval suites, not vibes",
+      "Structured outputs (JSON schema, tool-calling) that parse reliably",
+      "Multi-model portability — your prompts survive a model swap",
+      "Documented prompt library your team can extend",
+    ],
+    deliverables: [
+      "Prompt library organised by feature, with version history",
+      "Eval harness (golden sets, model-graded, regression suite)",
+      "Structured-output schemas with Zod / Pydantic validation",
+      "Prompt-injection and jailbreak audit",
+      "Cost / latency baseline per prompt",
+    ],
+    stack: ["OpenAI", "Anthropic", "Gemini", "Vercel AI SDK", "Instructor", "DSPy", "promptfoo"],
+    content: `
+The thing nobody tells you about prompt engineering is that the prompt isn't the artefact. The eval is. A prompt that scores 92% on a 200-example eval set is a thing you can defend, ship, and improve. A prompt that "feels good" is a feature about to regress next time the upstream model updates.
+
+## What I do
+
+**Prompt design** — for the actual problem you're solving, not a generic 'helpful assistant'. Structured prompting with system / role / context layering. Schema-constrained outputs where the answer feeds another system. Retrieval-grounded answers when freshness matters.
+
+**Eval harness** — golden sets that represent the real distribution of your inputs. Model-graded evals for soft criteria (helpfulness, tone). Regression suite that runs on every prompt change. Score deltas surfaced in PR review.
+
+**Multi-model portability** — design prompts that survive a swap from GPT-4 to Claude to Gemini. The eval tells you whether the new model is actually better for your use case.
+
+**Prompt-injection audit** — adversarial test set, system-prompt leak detection, refusal patterns. The basics most teams skip.
+
+**Documentation** — a prompt library your team can read, extend, and improve. Versioned. Tested. Owned.
+
+## When this is the right engagement
+
+You have an AI feature in production (or about to be) and the quality is inconsistent. Or you're picking between models and don't have data to decide. Or you've been burned by a regression after a model update and want never to be again.
+    `,
+  },
+  {
+    slug: "cascade-systems",
+    title: "AI Cascade & Agent Systems",
+    tagline: "Multi-step orchestration that ships",
+    shortDescription:
+      "Cascade systems and AI agent orchestration: tool-using agents, multi-step pipelines, MCP servers, and the operational maturity to run them.",
+    description:
+      "Production multi-step AI systems — agents that use tools, cascades that route easy queries to small models and hard ones to larger ones, MCP servers that expose your data to AI clients. With observability, cost guardrails, and the discipline to keep them honest.",
+    icon: "git-merge",
+    benefits: [
+      "Cost-aware cascades: route easy queries to small/cheap models, hard ones to capable models",
+      "Tool-using agents with audit logs and human checkpoints",
+      "MCP (Model Context Protocol) servers exposing your APIs to AI clients",
+      "End-to-end traces showing every step's input, output, latency, cost",
+    ],
+    deliverables: [
+      "Cascade architecture: classifier → router → model tiers → fallback",
+      "Agent loop with tool registry, retry, and termination conditions",
+      "MCP server(s) exposing your data and actions",
+      "Per-step observability via OpenTelemetry + LLM spans",
+      "Cost dashboards segmented by feature, tenant, and step",
+    ],
+    stack: ["LangGraph", "Vercel AI SDK", "MCP", "OpenTelemetry", "Temporal", "Inngest", "Postgres"],
+    content: `
+The honest version of "AI agents in production" in 2026: most work is still cascades, not autonomous loops. A classifier decides whether the query is simple, a small fast model handles 80% of cases, a larger model handles the remaining 20%, and a human gets routed the 1% that need judgement. The agent isn't out-thinking you — it's plumbing that handles cost and quality together.
+
+## What I build
+
+**Cost-aware cascades** — classification step routes to model tiers (Haiku → Sonnet → Opus, or Flash → Pro, or local-llama → frontier). Cascade decisions cached. Cost-per-query budgets enforced.
+
+**Tool-using agents** — agent loops with a tool registry, retry semantics, max-step termination, and audit logs of every tool call. Built for use-cases that genuinely need multi-step reasoning, not bolted onto things that don't.
+
+**MCP servers** — Model Context Protocol servers exposing your databases, APIs, or workflows as tools that any MCP-compatible AI client can use. Authenticated, rate-limited, observable.
+
+**Observability** — every step traced with OpenTelemetry, LLM spans showing prompt/output/cost/latency, sampled traces drilled into Honeycomb / Langfuse. The "why is this slow?" question becomes a 5-minute investigation.
+
+**Operational discipline** — eval suites covering the cascade end-to-end, regression detection on routing decisions, kill-switches and circuit breakers, gradual rollout via feature flags.
+
+## What I steer you away from
+
+Wiring a 12-tool agent loop onto a problem that's a 200-line script. Multi-agent "swarm" architectures because someone read a paper. Autonomous agents that touch production data without human-in-the-loop checkpoints. Cascades fail less spectacularly than autonomous agents, and ship years sooner.
+    `,
+  },
 ];
 
 export function getService(slug: string) {
