@@ -32,6 +32,8 @@ import {
   TrendingUp,
   Award,
   BarChart3,
+  FileSignature,
+  FileCog,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
@@ -45,6 +47,8 @@ const navItems = [
   { href: "/control/projects", label: "Projects", icon: FolderKanban },
   { href: "/control/invoices", label: "Invoices", icon: FileText },
   { href: "/control/payments", label: "Payments", icon: CreditCard },
+  { href: "/control/contracts", label: "Contracts", icon: FileSignature },
+  { href: "/control/contract-templates", label: "Contract templates", icon: FileCog },
   { href: "/control/services", label: "Services", icon: Sparkles },
   { href: "/control/solutions", label: "Solutions", icon: Target },
   { href: "/control/case-studies", label: "Case Studies", icon: Briefcase },

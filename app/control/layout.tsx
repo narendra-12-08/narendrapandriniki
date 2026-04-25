@@ -1,3 +1,4 @@
+import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import AdminNav from "@/components/admin/AdminNav";
 
@@ -14,6 +15,20 @@ export default async function ControlLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const h = await headers();
+  const pathname = h.get("x-pathname") ?? "";
+  const isLoginRoute =
+    pathname === "/control/login" || pathname.endsWith("/control/login");
+
+  // Login page never gets admin chrome, regardless of any stale session.
+  if (isLoginRoute) {
+    return (
+      <div className="min-h-screen bg-[var(--bg)] text-[var(--text)]">
+        {children}
+      </div>
+    );
+  }
+
   const supabase = await createClient();
   const {
     data: { user },

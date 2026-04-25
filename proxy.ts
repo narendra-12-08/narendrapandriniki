@@ -8,16 +8,22 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
+  // Expose pathname to server components so the layout can decide whether
+  // to render admin chrome (sidebar) — used to suppress it on /control/login
+  // even when a stale auth cookie exists.
+  const forwardHeaders = new Headers(request.headers);
+  forwardHeaders.set("x-pathname", pathname);
+
   if (
     pathname === "/control/login" ||
     pathname === "/control" ||
     pathname.startsWith("/api/")
   ) {
-    return NextResponse.next();
+    return NextResponse.next({ request: { headers: forwardHeaders } });
   }
 
   let response = NextResponse.next({
-    request: { headers: request.headers },
+    request: { headers: forwardHeaders },
   });
 
   const supabase = createServerClient(
