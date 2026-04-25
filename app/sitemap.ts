@@ -38,6 +38,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: "/faq", changeFrequency: "monthly", priority: 0.7, lastModified: now },
     { url: "/contact", changeFrequency: "yearly", priority: 0.8, lastModified: now },
     { url: "/compare", changeFrequency: "monthly", priority: 0.6, lastModified: now },
+    { url: "/hire", changeFrequency: "monthly", priority: 0.9, lastModified: now },
+    { url: "/cv", changeFrequency: "monthly", priority: 0.7, lastModified: now },
+    { url: "/skills", changeFrequency: "monthly", priority: 0.7, lastModified: now },
+    { url: "/certifications", changeFrequency: "monthly", priority: 0.6, lastModified: now },
+    { url: "/playbook", changeFrequency: "monthly", priority: 0.7, lastModified: now },
     { url: "/privacy", changeFrequency: "yearly", priority: 0.3, lastModified: now },
     { url: "/terms", changeFrequency: "yearly", priority: 0.3, lastModified: now },
   ];
