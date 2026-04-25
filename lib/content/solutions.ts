@@ -1,142 +1,222 @@
-export const solutions = [
+export type Solution = {
+  slug: string;
+  title: string;
+  tagline: string;
+  shortDescription: string;
+  outcomes: string[];
+  content: string;
+};
+
+export const solutions: Solution[] = [
   {
-    slug: "admin-dashboards",
-    title: "Admin Dashboards",
+    slug: "cloud-migration",
+    title: "Cloud Migration",
+    tagline: "On-prem → cloud, or cloud → cloud",
     shortDescription:
-      "Custom operational dashboards for managing your business without fighting generic SaaS tools.",
+      "Migrate without a 'big bang' weekend. Wave-based, reversible, customer-impact-near-zero.",
+    outcomes: [
+      "Cutover playbooks rehearsed in lower environments",
+      "Cost target hit within 90 days post-migration",
+      "Old environment safely decommissioned, not forgotten",
+    ],
     content: `
-Admin dashboards are the control rooms of modern businesses. When they're built well, your team can see exactly what's happening, take action directly, and move fast. When they're built badly — or they're just a wrapped spreadsheet or a configuration-heavy SaaS tool — they become the thing everyone works around.
+Cloud migration as theatre is a budget killer. A migration that succeeds is a series of small, reversible cutovers — each one leaving the business measurably better off and the old environment one step closer to retirement.
 
-I build admin dashboards designed around your actual operations: the data you need, the actions you take, the workflows your team follows. Not a templated UI that sort-of-fits.
+## How I run them
 
-## What's typically included
+Discovery and dependency mapping first; wave plan agreed across engineering, finance, and product; stateless workloads first, then async/batch, then stateful with the most care; bidirectional sync during cutover so rollback is real, not theoretical; post-migration cleanup tracked to actual decommissioning.
 
-**Data visibility** — Revenue, pipeline, orders, clients, tasks. Whatever drives your operations, surfaced clearly with the right filters and the right level of granularity.
+## Outcomes you should expect
 
-**Action interfaces** — CRUD interfaces for the records your team manages. Clients, orders, content, configuration. Designed for how your team actually works.
-
-**Role-based access** — Different people see and do different things. Sales sees pipeline. Finance sees invoices. Ops sees tasks. Admins see everything.
-
-**Notification and alert systems** — The right people get notified when something needs attention, without the noise of constant pings about things that don't matter.
-
-**Integration hooks** — Connects to your existing systems: CRM, billing, database, third-party APIs.
+Zero or near-zero downtime per workload, cost baseline hit by month three, a documented operational model your team owns afterwards, and an old environment that is genuinely turned off — not still running because nobody's sure if it's needed.
     `,
   },
   {
-    slug: "client-portals",
-    title: "Client Portals",
+    slug: "cloud-cost-optimisation",
+    title: "Cloud Cost Optimisation",
+    tagline: "FinOps without the consultancy theatre",
     shortDescription:
-      "Secure, branded portals where your clients access project updates, reports, files, and approvals.",
+      "Find the 25–40% you didn't know you were spending. Lock it in. Build the discipline so it doesn't come back.",
+    outcomes: [
+      "Quick-win savings within 30 days, no architecture risk",
+      "Tagging, budgets, and alerts that survive after I leave",
+      "Savings plans / CUDs structured against stable baseline",
+    ],
     content: `
-Your clients shouldn't need to chase you for updates, dig through email threads for files, or wait for a status call to know where their project stands.
+Most cloud bills have 25–40% slack. It's not in one place — it's in idle dev environments, oversized RDS instances, NAT gateway egress, log retention nobody picked, GP2 volumes that should be GP3, and snapshots from 2022.
 
-Client portals give them a direct view of what they need — and give you control over exactly what they see and when.
+## The first 30 days
 
-## What's typically included
+Audit, prioritise quick wins (no architecture risk), execute, set up tagging and budget alerts, structure your committed-use discount strategy. Most teams see 15–25% off the bill in the first month.
 
-**Project status views** — Real-time or scheduled views of project progress, milestones, and upcoming deliverables.
+## Months 2–3
 
-**Document and file access** — Secure file uploads, downloads, and version management. Reports, contracts, deliverables — all accessible without emailing attachments.
+The structural work: rightsizing pipeline, autoscaling tuning, multi-tenant resource sharing, region/AZ rationalisation, log/metric retention discipline. This is where the next 10–15% comes from — and where it stays gone.
 
-**Approval workflows** — Clients can review and sign off on work items, proposals, or deliverables directly in the portal, with a full audit trail.
+## Discipline that lasts
 
-**Secure messaging** — In-portal communication threads that keep context attached to the right project, instead of spreading across email and Slack.
-
-**Branded experience** — Your domain, your brand, your design. Not a third-party portal with someone else's logo.
+Cost dashboards your engineers actually look at, weekly cost-of-change report, blameless reviews when bills spike. Cost becomes a property of how you build, not a quarterly fire drill.
     `,
   },
   {
-    slug: "internal-operations-platforms",
-    title: "Internal Operations Platforms",
+    slug: "zero-downtime-deploys",
+    title: "Zero-Downtime Deployments",
+    tagline: "Ship in the middle of the day",
     shortDescription:
-      "Centralised operations systems that replace fragmented tools and give your team one place to work.",
+      "Progressive delivery with automated rollback. Friday afternoons stop being scary.",
+    outcomes: [
+      "Deploys at noon Tuesday instead of 11pm Friday",
+      "Automated rollback on SLO regression",
+      "Deploy frequency up, change failure rate down",
+    ],
     content: `
-Most teams reach a point where their operations are running across too many tools: tasks in one place, client records in another, projects somewhere else, and communication fragmented across email and Slack. Coordination becomes the job.
+Deploys are scary because they're high-stakes one-shot events. Replace them with progressive, observable, automatically-rolled-back changes and they become non-events.
 
-Internal operations platforms solve this by building a system designed around your specific workflows — not by adding another generic tool.
+## What changes
 
-## What's typically included
+Argo Rollouts or Flagger for canary / blue-green strategies, traffic shifted by percentage with health checks at each step, automated rollback when SLOs degrade, feature flags decoupling deploy from release. Suddenly the engineer who shipped the bug isn't in a Slack war room — the platform rolled it back at 1% traffic.
 
-**Unified task and workflow management** — Task assignment, status tracking, and handoff workflows built around your actual process, not a template.
+## Outcomes
 
-**Client and project management** — CRM-adjacent functionality built for how your team manages engagements, not how a generic CRM vendor thinks you should.
-
-**Document and knowledge management** — Standard operating procedures, runbooks, templates, and knowledge bases attached to the right contexts.
-
-**Reporting and operational visibility** — Dashboards that show leadership what's happening across the business without requiring manual reporting.
-
-**Automation and integrations** — Connections to the tools you can't replace, so data flows between systems rather than being manually maintained.
+Multi-deploy-a-day cadence even on critical services, SLO-driven rollback within 60 seconds of regression, and a deploy culture where small frequent changes replace heroic releases.
     `,
   },
   {
-    slug: "workflow-systems",
-    title: "Workflow Automation Systems",
+    slug: "compliance-foundations",
+    title: "Compliance Foundations",
+    tagline: "SOC 2 · ISO 27001 · HIPAA · PCI",
     shortDescription:
-      "End-to-end automation systems that eliminate manual, repetitive work across your operations.",
+      "Engineering work that turns 'we need to be SOC 2' into 'we are, here's the evidence pipeline'.",
+    outcomes: [
+      "Controls mapped to actual technical evidence",
+      "Continuous evidence collection, not pre-audit panic",
+      "Audit-ready in 60–90 days for greenfield posture",
+    ],
     content: `
-Most operational workflows contain manual steps that exist purely because the systems involved don't talk to each other. Data copied from one system to another. Status updates triggered by email. Approvals requested and tracked in spreadsheets.
+Compliance frameworks aren't security. They're documentation of security. Treat them as engineering problems and they become a foundation; treat them as paperwork and they become a quarterly fire.
 
-Workflow automation systems replace these with reliable, audited, automatic processes.
+## What I deliver
 
-## What's typically included
+Control catalog mapped to your actual technical reality (Drata / Vanta / Tugboat aware), evidence collection pipelines wired into CI/CD and infrastructure, identity baseline (SSO, MFA, least privilege), data classification and encryption posture, vendor risk process that doesn't die in a spreadsheet.
 
-**Process mapping** — Working with your team to identify where time is being spent on manual work and prioritising the automation opportunities with the highest return.
+## Reality check
 
-**System integrations** — Connecting the tools your business runs on so data flows automatically: CRM, billing, project management, communication tools, databases.
-
-**Trigger-based workflows** — Events in one system automatically trigger actions in others. A deal closes: create the project, send the onboarding email, notify the team.
-
-**Document automation** — Contracts, invoices, reports, and briefs generated from templates and data, distributed automatically, and stored correctly.
-
-**Monitoring and alerting** — Automated workflows still need oversight. Failure alerts, audit logs, and monitoring dashboards ensure you know when something breaks.
+I'm an engineer, not an auditor. I make your environment audit-able. The auditor still has to certify. But the difference between 'auditor takes 4 weeks pulling evidence' and 'auditor takes 3 days reviewing evidence' is what this engagement creates.
     `,
   },
   {
-    slug: "reporting-platforms",
-    title: "Reporting & KPI Platforms",
+    slug: "disaster-recovery",
+    title: "Disaster Recovery & Business Continuity",
+    tagline: "Test it, or you don't have it",
     shortDescription:
-      "Business intelligence infrastructure that turns your operational data into clear, reliable reporting.",
+      "RTO and RPO targets that match your business. Drilled. Documented. Honest.",
+    outcomes: [
+      "Tested DR procedure with measured RTO/RPO",
+      "Quarterly drill cadence with tracked findings",
+      "Backup integrity verified — not just configured",
+    ],
     content: `
-Business decisions made on unclear or incomplete data are one of the most expensive problems companies face — and one of the most fixable. The data usually exists; it just isn't visible in a usable form.
+'We have backups' is a position. 'We tested restore last quarter and the RTO was 47 minutes' is a plan.
 
-Reporting and KPI platforms consolidate data from across your operations and make it accessible to decision-makers without requiring an analyst to produce every report.
+## What I deliver
 
-## What's typically included
+Business impact analysis to set realistic RTO/RPO per workload, backup architecture aligned to those targets (multi-region, off-account, encrypted), tested restore procedure documented and rehearsed, runbook for full-region failure, communication plan for outage scenarios.
 
-**Data consolidation** — Pulling data from multiple sources — your database, your CRM, your billing system — into a unified view with consistent definitions.
+## What gets caught
 
-**KPI dashboards** — The metrics that actually matter to your business, tracked consistently, with trend data and period comparisons. Boards and leadership teams get visibility without waiting.
-
-**Scheduled reports** — Weekly operational summaries, monthly financial reports, client-facing performance reports — generated and distributed automatically.
-
-**Custom analytics** — Cohort analysis, funnel reporting, revenue attribution, utilisation — built around the specific business questions you need to answer.
-
-**Self-service tooling** — Where appropriate, giving teams the ability to build their own queries and views on top of the consolidated data without requiring engineering support.
+Most engagements find at least one of: a backup that doesn't restore, a 'documented' RTO that's actually 4× longer in practice, a critical workload nobody had backed up, or a restore procedure that requires credentials only the person who's on holiday has.
     `,
   },
   {
-    slug: "cloud-standardisation",
-    title: "Cloud Environment Standardisation",
+    slug: "internal-developer-platform",
+    title: "Internal Developer Platform",
+    tagline: "Make the right thing the easy thing",
     shortDescription:
-      "Bring order to sprawling cloud environments with infrastructure standards, security baselines, and cost governance.",
+      "Self-service platform that lets engineers ship without filing tickets — with safety rails that mean nobody nukes prod by accident.",
+    outcomes: [
+      "Lead time for change measured in hours, not days",
+      "New service from idea to deployed in <2 hours",
+      "Platform team scales 10× the engineers it serves",
+    ],
     content: `
-Cloud environments that grew organically tend to accumulate technical debt in a particular way: inconsistent naming, undocumented resources, security groups with holes that nobody noticed, costs that keep climbing without clear explanation.
+Platform engineering is a force multiplier. A 4-person platform team should be making 60 engineers each measurably faster. The way you get there is by removing the work people repeat — not by adding more dashboards.
 
-Cloud standardisation projects bring this under control systematically.
+## What I build
 
-## What's typically included
+Service templates with paved CI/CD and observability, internal dev portal (Backstage or equivalent) with a real service catalog, self-service infrastructure provisioning with policy guardrails, runtime platform abstraction so deploy targets stay stable as infra evolves underneath, DX scorecards published per team.
 
-**Environment audit** — Full inventory of existing resources, security posture assessment, cost analysis, and identification of technical debt and risk.
+## Phasing
 
-**Infrastructure as Code migration** — Bringing existing manually-provisioned resources under Terraform or Pulumi management so they're reproducible, auditable, and version-controlled.
+Quarter 1: golden path service template and self-service prod-grade staging environments. Quarter 2: portal with catalog and ownership graph. Quarter 3: runtime abstraction and DX metrics. Each phase is independently valuable; teams adopt as the platform earns trust.
+    `,
+  },
+  {
+    slug: "kubernetes-platform",
+    title: "Kubernetes Platform",
+    tagline: "From 'we use k8s' to 'we run k8s well'",
+    shortDescription:
+      "Cluster strategy, GitOps, autoscaling, security baseline, upgrade muscle. The full operational maturity stack.",
+    outcomes: [
+      "Quarterly cluster upgrades become routine",
+      "Pod-level + node-level autoscaling tuned to traffic",
+      "GitOps audit trail covers 100% of deploys",
+    ],
+    content: `
+Kubernetes adoption is fastest when treated as a platform, not a project. The teams that struggle are the ones that 'launched on k8s' and never went back to make it operationally serious.
 
-**Security baseline** — IAM policies following least privilege, encryption at rest and in transit, network segmentation, secrets management, and compliance foundations.
+## What I bring
 
-**Cost governance** — Tagging standards, budget alerts, rightsizing analysis, and elimination of unused resources. FinOps visibility from day one.
+Cluster topology decided deliberately (per-team, per-environment, multi-region — with documented blast radius), GitOps with ArgoCD or Flux as the only deployment surface, autoscaling at pod (HPA/VPA) and node (Karpenter / cluster autoscaler) levels, security baseline (Pod Security Standards, network policy, image signing, supply chain), and an upgrade playbook so 1.27 → 1.30 is a Tuesday afternoon, not a quarterly project.
 
-**Standards and runbooks** — Documentation of how your cloud environment is structured, how new resources should be provisioned, and how incidents should be handled. The tribal knowledge written down.
+## Outcome
 
-**Monitoring and observability** — Centralised logging, metrics collection, and alerting configured for your environment, with dashboards for operational visibility.
+A platform engineers can ship on safely, an operations team that isn't drowning in cluster minutiae, and a roadmap for quarterly upgrade cadence.
+    `,
+  },
+  {
+    slug: "observability-overhaul",
+    title: "Observability Overhaul",
+    tagline: "From dashboards to answers",
+    shortDescription:
+      "Replace 200 alerts and 50 dashboards with SLOs, traces, and runbooks people actually use.",
+    outcomes: [
+      "70–90% alert noise reduction",
+      "MTTR cut by half on typical engagements",
+      "Distributed tracing covers your top user journeys",
+    ],
+    content: `
+Most observability stacks are graveyards. Dashboards built once and never reopened, alerts firing into channels nobody reads, $40k/month log bills nobody questions.
+
+## What I rebuild
+
+User-journey SLOs replacing metric-vanity targets, error-budget-burn alerting that pages 1–2 actionable times per shift, distributed tracing with sampling that captures the slow tail, log strategy with retention by tier, runbooks linked from every alert.
+
+## What stays
+
+Whatever vendor you're already paying — Datadog, Grafana Cloud, New Relic, Honeycomb, native Prometheus. I optimise the stack you have unless there's a strong case to switch.
+    `,
+  },
+  {
+    slug: "incident-response-uplift",
+    title: "Incident Response Uplift",
+    tagline: "When it breaks, be ready",
+    shortDescription:
+      "Severity matrix, paging policy, comms templates, postmortem culture — battle-tested and human-friendly.",
+    outcomes: [
+      "Defined severities and clear escalation",
+      "Blameless postmortems with action items closed to deadline",
+      "On-call rotation that doesn't burn people out",
+    ],
+    content: `
+Most incident response post-mortems read the same: confusion about who owned what, a war room of 14 people none of whom were the right one, action items written and forgotten. Fix the structural issues and the next incident is half the duration with a quarter of the stress.
+
+## What I install
+
+Severity matrix tied to user impact (not 'how stressed is the engineer'), paging policy with primary/secondary/escalation, comms templates per audience (internal, customer-facing, leadership), postmortem template with action items tracked in your project tool with deadlines, on-call schedule that's humane (rotation length, comp, handoff).
+
+## Outcome
+
+Incidents become smaller, faster, and learning-rich rather than retraumatising.
     `,
   },
 ];

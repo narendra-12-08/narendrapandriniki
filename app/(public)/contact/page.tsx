@@ -4,105 +4,115 @@ import ContactForm from "@/components/public/ContactForm";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Get in touch to discuss your engineering requirements. Cloud infrastructure, backend systems, internal tools, and workflow automation.",
+    "Tell me about your project. Independent DevOps and platform engineer, UK-based, taking on a small number of engagements at a time.",
 };
+
+const faq = [
+  {
+    q: "What happens after I submit?",
+    a: "I read every message myself. You get a reply within one or two business days, usually with a few clarifying questions and an honest read on whether I can help.",
+  },
+  {
+    q: "How do you scope and price work?",
+    a: "Discovery is a fixed-fee one-week sprint that ends with a written assessment. Delivery work is then either fixed-fee per phase or a weekly retainer. I never bill hourly.",
+  },
+  {
+    q: "Do you sign NDAs and DPAs?",
+    a: "Yes. Mutual NDA and a standard DPA are part of every engagement. Happy to use yours or mine.",
+  },
+  {
+    q: "Where are you based?",
+    a: "United Kingdom. I work with teams across UK and EU timezones natively, and US East coast comfortably for half-day overlap.",
+  },
+  {
+    q: "What if it isn't a fit?",
+    a: "I'll say so, and where I can I'll refer you to someone in my network who's better suited.",
+  },
+];
 
 export default function ContactPage() {
   return (
-    <div style={{ backgroundColor: "#faf7f2" }}>
-      <section style={{ borderBottom: "1px solid #dfc5a5" }} className="py-24">
-        <div className="container mx-auto px-6 lg:px-12">
-          <p style={{ color: "#9b7653" }} className="text-sm font-semibold uppercase tracking-widest mb-6">
-            Contact
-          </p>
-          <h1 style={{ color: "#1e1208" }} className="text-4xl md:text-5xl font-semibold max-w-2xl leading-tight mb-6">
-            Let's talk about what you need
+    <div className="bg-grid">
+      <section className="section pb-12">
+        <div className="container-page">
+          <span className="eyebrow">Contact</span>
+          <h1 className="mt-6 text-5xl md:text-7xl font-semibold tracking-tight leading-[1.05] text-[var(--text)] max-w-4xl">
+            Tell me about{" "}
+            <span className="gradient-text">the problem.</span>
           </h1>
-          <p style={{ color: "#7d5c3a" }} className="text-xl max-w-2xl leading-relaxed">
-            Tell me about your engineering requirements. I'll respond within 1–2
-            business days with an honest view on whether I can help.
+          <p className="mt-8 max-w-2xl text-lg text-[var(--text-2)] leading-relaxed">
+            What you&apos;re trying to ship, fix, or untangle. Constraints,
+            timeline, who else is in the room. The more concrete, the better
+            the first reply.
           </p>
         </div>
       </section>
 
-      <div className="py-20">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="grid md:grid-cols-3 gap-16">
-            <div className="md:col-span-2">
-              <ContactForm />
-            </div>
-
-            <div className="space-y-8">
-              <div>
-                <h3 style={{ color: "#1e1208" }} className="font-semibold mb-4">
-                  What to expect
-                </h3>
-                <ul className="space-y-4">
-                  {[
-                    {
-                      step: "01",
-                      text: "I'll read your message carefully and consider whether your project is a good fit for my services.",
-                    },
-                    {
-                      step: "02",
-                      text: "I'll respond within 1–2 business days with either an honest yes, a suggested approach, or a referral if I'm not the right fit.",
-                    },
-                    {
-                      step: "03",
-                      text: "If there's a clear fit, we'll schedule a call to understand requirements properly before discussing scope and pricing.",
-                    },
-                  ].map(({ step, text }) => (
-                    <li key={step} className="flex gap-4">
-                      <span style={{ color: "#cfa97e" }} className="text-sm font-mono flex-shrink-0 mt-0.5">
-                        {step}
-                      </span>
-                      <p style={{ color: "#7d5c3a" }} className="text-sm leading-relaxed">
-                        {text}
-                      </p>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div style={{ borderTop: "1px solid #dfc5a5" }} className="pt-8">
-                <h3 style={{ color: "#1e1208" }} className="font-semibold mb-4">
-                  Good fits
-                </h3>
-                <ul className="space-y-2">
-                  {[
-                    "Cloud infrastructure build or migration",
-                    "Backend systems and API development",
-                    "Internal tools and admin dashboards",
-                    "Workflow automation and integrations",
-                    "Platform engineering and DevOps",
-                    "Reporting and operations systems",
-                  ].map((item) => (
-                    <li key={item} className="flex items-center gap-2">
-                      <span style={{ color: "#cfa97e" }}>—</span>
-                      <span style={{ color: "#7d5c3a" }} className="text-sm">
-                        {item}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div style={{ borderTop: "1px solid #dfc5a5" }} className="pt-8">
-                <p style={{ color: "#9b7653" }} className="text-sm font-semibold uppercase tracking-widest mb-2">
-                  Direct email
+      <section className="pb-32">
+        <div className="container-page">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+            {/* Left: FAQ + email */}
+            <aside className="lg:col-span-5 space-y-8">
+              <div className="surface-card p-7">
+                <div className="flex items-center gap-3">
+                  <span className="live-dot" />
+                  <span className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--lime)]">
+                    Available · Q2 2026
+                  </span>
+                </div>
+                <p className="mt-4 text-[var(--text-2)] leading-relaxed">
+                  Independent DevOps engineer based in the UK. Taking on a
+                  small number of engagements at any one time, with one
+                  full-time-equivalent capped across all clients.
                 </p>
                 <a
                   href="mailto:hello@narendrapandrinki.com"
-                  style={{ color: "#5c3d1e" }}
-                  className="text-sm font-medium hover:opacity-80"
+                  className="mt-6 inline-flex items-center gap-2 text-[var(--accent)] hover:opacity-80"
                 >
+                  <span className="font-mono">→</span>
                   hello@narendrapandrinki.com
                 </a>
+              </div>
+
+              <div>
+                <span className="eyebrow">What happens next</span>
+                <ul className="mt-5 space-y-4">
+                  {faq.map((item, i) => (
+                    <li key={i} className="surface-card p-6">
+                      <div className="flex items-start gap-3">
+                        <span className="font-mono text-xs text-[var(--accent)] mt-1">
+                          {String(i + 1).padStart(2, "0")}
+                        </span>
+                        <div>
+                          <h3 className="text-[var(--text)] font-semibold">
+                            {item.q}
+                          </h3>
+                          <p className="mt-2 text-sm text-[var(--text-3)] leading-relaxed">
+                            {item.a}
+                          </p>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </aside>
+
+            {/* Right: form */}
+            <div className="lg:col-span-7">
+              <div className="surface-card glow-ring p-7 md:p-10">
+                <div className="mb-6">
+                  <span className="eyebrow">Send a message</span>
+                  <h2 className="mt-3 text-2xl md:text-3xl font-semibold text-[var(--text)] tracking-tight">
+                    Start the conversation.
+                  </h2>
+                </div>
+                <ContactForm />
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

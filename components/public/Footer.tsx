@@ -1,100 +1,116 @@
 import Link from "next/link";
 
+const cols: { title: string; links: [string, string][] }[] = [
+  {
+    title: "Services",
+    links: [
+      ["Cloud & DevOps", "/services/cloud-devops"],
+      ["Platform Engineering", "/services/platform-engineering"],
+      ["Kubernetes & Containers", "/services/kubernetes"],
+      ["CI/CD Pipelines", "/services/cicd-pipelines"],
+      ["Infrastructure as Code", "/services/infrastructure-as-code"],
+      ["Site Reliability", "/services/sre-observability"],
+      ["DevSecOps", "/services/devsecops"],
+      ["Database Operations", "/services/database-operations"],
+    ],
+  },
+  {
+    title: "Solutions",
+    links: [
+      ["Cloud Migrations", "/solutions/cloud-migration"],
+      ["Cost Optimisation", "/solutions/cloud-cost-optimisation"],
+      ["Zero-Downtime Deploys", "/solutions/zero-downtime-deploys"],
+      ["Compliance Foundations", "/solutions/compliance-foundations"],
+      ["Disaster Recovery", "/solutions/disaster-recovery"],
+      ["Internal Developer Platform", "/solutions/internal-developer-platform"],
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      ["About", "/about"],
+      ["Process", "/process"],
+      ["Pricing", "/pricing"],
+      ["Industries", "/industries"],
+      ["Stack", "/technology"],
+      ["Case Studies", "/work"],
+      ["Blog", "/blog"],
+      ["Comparisons", "/compare"],
+      ["FAQ", "/faq"],
+      ["Contact", "/contact"],
+    ],
+  },
+];
+
 export default function Footer() {
   const year = new Date().getFullYear();
-
   return (
-    <footer
-      style={{
-        backgroundColor: "#2a1608",
-        color: "#cfa97e",
-        borderTop: "1px solid #3e2610",
-      }}
-    >
-      <div className="container mx-auto px-6 lg:px-12 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
-          <div className="md:col-span-2">
-            <div
-              style={{ color: "#faf7f2" }}
-              className="text-xl font-semibold mb-4"
-            >
-              Narendra Pandrinki
-            </div>
-            <p style={{ color: "#9b7653" }} className="text-sm leading-relaxed max-w-sm">
-              Independent platform and cloud engineer. I build cloud
-              infrastructure, backend systems, internal tools, and operational
-              platforms for businesses that need reliable engineering done
-              properly.
+    <footer className="relative border-t border-[var(--border)] bg-[var(--bg-1)]">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)]/40 to-transparent" />
+      <div className="container-page py-20">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
+          <div className="md:col-span-4">
+            <Link href="/" className="inline-flex items-center gap-2">
+              <span className="relative inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--border-2)] bg-[var(--surface)]">
+                <span className="absolute inset-0 rounded-lg opacity-70 blur-md bg-[radial-gradient(circle,var(--accent),transparent_70%)]" />
+                <span className="relative font-mono text-sm gradient-text">np</span>
+              </span>
+              <span className="text-base font-semibold text-[var(--text)]">Narendra Pandrinki</span>
+            </Link>
+            <p className="mt-5 text-sm text-[var(--text-3)] leading-relaxed max-w-sm">
+              Independent DevOps & Platform engineer. Building reliable cloud
+              infrastructure, ship-it-quietly pipelines, and platforms engineers
+              actually want to use.
             </p>
+            <p className="mt-4 text-sm text-[var(--text-3)] leading-relaxed max-w-sm">
+              Working remotely with clients across the UK, EU, US, and APAC.
+            </p>
+            <div className="mt-6 flex items-center gap-3">
+              <span className="live-dot" />
+              <span className="text-xs font-mono text-[var(--text-3)]">
+                Working with engineering teams globally · Available Q2 2026
+              </span>
+            </div>
+            <a
+              href="mailto:hello@narendrapandrinki.com"
+              className="mt-6 inline-flex items-center gap-2 text-sm text-[var(--text-2)] hover:text-[var(--accent)]"
+            >
+              <span className="font-mono">→</span> hello@narendrapandrinki.com
+            </a>
           </div>
 
-          <div>
-            <div
-              style={{ color: "#faf7f2" }}
-              className="text-xs font-semibold uppercase tracking-widest mb-4"
-            >
-              Services
-            </div>
-            <ul className="space-y-2 text-sm">
-              {[
-                ["Cloud & DevOps", "/services/cloud-devops"],
-                ["Platform Engineering", "/services/platform-engineering"],
-                ["Backend Systems", "/services/backend-systems"],
-                ["Internal Tools", "/services/internal-tools"],
-                ["Workflow Automation", "/services/workflow-automation"],
-                ["Reporting Dashboards", "/services/reporting-dashboards"],
-              ].map(([label, href]) => (
-                <li key={href}>
-                  <Link
-                    href={href}
-                    style={{ color: "#9b7653" }}
-                    className="hover:opacity-80 transition-opacity"
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <div
-              style={{ color: "#faf7f2" }}
-              className="text-xs font-semibold uppercase tracking-widest mb-4"
-            >
-              Company
-            </div>
-            <ul className="space-y-2 text-sm">
-              {[
-                ["About", "/about"],
-                ["Work", "/work"],
-                ["Blog", "/blog"],
-                ["Contact", "/contact"],
-              ].map(([label, href]) => (
-                <li key={href}>
-                  <Link
-                    href={href}
-                    style={{ color: "#9b7653" }}
-                    className="hover:opacity-80 transition-opacity"
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          <div className="md:col-span-8 grid grid-cols-2 sm:grid-cols-3 gap-8">
+            {cols.map((col) => (
+              <div key={col.title}>
+                <div className="text-xs font-mono uppercase tracking-[0.16em] text-[var(--text-4)] mb-4">
+                  {col.title}
+                </div>
+                <ul className="space-y-2.5 text-sm">
+                  {col.links.map(([label, href]) => (
+                    <li key={href}>
+                      <Link
+                        href={href}
+                        className="text-[var(--text-3)] hover:text-[var(--accent)] transition-colors"
+                      >
+                        {label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
 
-        <div
-          style={{ borderTop: "1px solid #3e2610" }}
-          className="mt-12 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4"
-        >
-          <p style={{ color: "#7d5c3a" }} className="text-xs">
-            © {year} Narendra Pandrinki. All rights reserved.
+        <div className="mt-16 pt-8 border-t border-[var(--border)] flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-xs font-mono text-[var(--text-4)]">
+            © {year} Narendra Pandrinki · narendrapandrinki.com
           </p>
-          <p style={{ color: "#7d5c3a" }} className="text-xs">
-            narendrapandrinki.com
-          </p>
+          <div className="flex items-center gap-4 text-xs font-mono text-[var(--text-4)]">
+            <Link href="/privacy" className="hover:text-[var(--text-2)]">Privacy</Link>
+            <Link href="/terms" className="hover:text-[var(--text-2)]">Terms</Link>
+            <span>v2.0</span>
+          </div>
         </div>
       </div>
     </footer>

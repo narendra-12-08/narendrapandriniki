@@ -147,6 +147,141 @@ export interface Note {
   created_at: string;
 }
 
+// =====================
+// Managed content rows (Supabase-backed CMS tables)
+// =====================
+// These mirror the columns of the content tables added in
+// supabase/migrations/20260201000000_content_tables.sql. They are
+// suffixed with `Row` to distinguish them from the static content
+// shapes defined in lib/content/*.
+
+export interface ServiceRow {
+  id: string;
+  slug: string;
+  title: string;
+  tagline: string | null;
+  short_description: string | null;
+  description: string | null;
+  content: string | null;
+  icon: string | null;
+  benefits: string[];
+  deliverables: string[];
+  stack: string[];
+  order_index: number;
+  published: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SolutionRow {
+  id: string;
+  slug: string;
+  title: string;
+  tagline: string | null;
+  short_description: string | null;
+  outcomes: string[];
+  content: string | null;
+  order_index: number;
+  published: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CaseStudyMetric {
+  label: string;
+  value: string;
+}
+
+export interface CaseStudyRow {
+  id: string;
+  slug: string;
+  title: string;
+  client: string | null;
+  industry: string | null;
+  duration: string | null;
+  team: string | null;
+  tags: string[];
+  outcome: string | null;
+  metrics: CaseStudyMetric[];
+  problem: string | null;
+  approach: string[];
+  result: string | null;
+  stack: string[];
+  published: boolean;
+  order_index: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface IndustryRow {
+  id: string;
+  slug: string;
+  title: string;
+  tagline: string | null;
+  short_description: string | null;
+  pain_points: string[];
+  how_i_help: string | null;
+  common_stack: string[];
+  typical_engagement: string | null;
+  content: string | null;
+  order_index: number;
+  published: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface TechnologyCategoryRow {
+  id: string;
+  slug: string;
+  name: string;
+  description: string | null;
+  order_index: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface TechnologyItemRow {
+  id: string;
+  category_id: string;
+  name: string;
+  role: "core" | "fluent" | "familiar";
+  note: string | null;
+  order_index: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface TechnologyCategoryWithItems extends TechnologyCategoryRow {
+  items: TechnologyItemRow[];
+}
+
+export interface TestimonialRow {
+  id: string;
+  quote: string;
+  author: string;
+  role: string | null;
+  company: string | null;
+  industry: string | null;
+  order_index: number;
+  published: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BlogPostRow {
+  id: string;
+  slug: string;
+  title: string;
+  description: string | null;
+  content: string | null;
+  tags: string[];
+  published: boolean;
+  published_at: string | null;
+  reading_time: number | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface DashboardStats {
   totalLeads: number;
   activeClients: number;

@@ -1,294 +1,199 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { bio, principles, timeline, availability } from "@/lib/content/about";
+import JsonLd from "@/components/seo/JsonLd";
+import { personSchema, breadcrumbSchema } from "@/lib/seo/schema";
 
 export const metadata: Metadata = {
   title: "About",
   description:
-    "Independent platform and cloud engineer. Who I help, what I build, and how I work.",
+    "Narendra Pandrinki — independent DevOps, platform, and SRE engineer. Five years building production platforms across fintech, healthtech, AI/ML, and marketplaces.",
+  alternates: { canonical: "/about" },
 };
 
-const capabilities = [
-  "Cloud infrastructure design and build (AWS, GCP)",
-  "Infrastructure as Code — Terraform, Pulumi",
-  "Container orchestration — Kubernetes, ECS, EKS",
-  "CI/CD pipeline design and implementation",
-  "Backend APIs and data systems",
-  "Internal tools and admin dashboards",
-  "Workflow automation and system integrations",
-  "Reporting systems and operational dashboards",
-  "Platform engineering and developer tooling",
-  "Monitoring, observability, and incident response",
-];
-
-const workingWith = [
-  {
-    title: "Growing SaaS businesses",
-    desc: "Teams that have outgrown their initial infrastructure and need it rebuilt properly before the next phase of growth.",
-  },
-  {
-    title: "Digital agencies",
-    desc: "Agencies that need internal operations platforms, client portals, or backend systems for their clients.",
-  },
-  {
-    title: "Scale-ups building platform capability",
-    desc: "Engineering teams that need to establish a platform engineering function or build internal developer tooling.",
-  },
-  {
-    title: "Businesses automating manual processes",
-    desc: "Organisations with operational processes that should be automated but haven't been yet.",
-  },
-];
-
 export default function AboutPage() {
+  const bioParagraphs = bio.trim().split(/\n\n+/);
   return (
-    <div style={{ backgroundColor: "#faf7f2" }}>
-      {/* Header */}
-      <section
-        style={{ borderBottom: "1px solid #dfc5a5" }}
-        className="py-24"
-      >
-        <div className="container mx-auto px-6 lg:px-12">
-          <p
-            style={{ color: "#9b7653" }}
-            className="text-sm font-semibold uppercase tracking-widest mb-6"
-          >
-            About
-          </p>
-          <h1
-            style={{ color: "#1e1208" }}
-            className="text-4xl md:text-5xl font-semibold max-w-3xl leading-tight mb-8"
-          >
-            Engineering delivered as a service, not a job title
+    <div className="bg-grid">
+      <JsonLd id="ld-about-person" data={personSchema()} />
+      <JsonLd
+        id="ld-about-breadcrumbs"
+        data={breadcrumbSchema([
+          { name: "Home", url: "/" },
+          { name: "About", url: "/about" },
+        ])}
+      />
+      <section className="section pb-12">
+        <div className="container-page">
+          <span className="eyebrow">About</span>
+          <h1 className="mt-6 text-5xl md:text-7xl font-semibold tracking-tight leading-[1.05] text-[var(--text)] max-w-4xl">
+            Independent DevOps engineer.{" "}
+            <span className="gradient-text">UK based.</span> Five years in.
           </h1>
-          <p
-            style={{ color: "#7d5c3a" }}
-            className="text-xl leading-relaxed max-w-2xl"
-          >
-            I work with businesses as an independent engineer — taking on the
-            infrastructure, backend systems, internal tools, and automation work
-            that needs to be done properly but doesn't justify a full-time hire.
-          </p>
         </div>
       </section>
 
-      {/* Who I help */}
-      <section className="py-20" style={{ borderBottom: "1px solid #dfc5a5" }}>
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="grid md:grid-cols-5 gap-12">
-            <div className="md:col-span-2">
-              <p
-                style={{ color: "#9b7653" }}
-                className="text-sm font-semibold uppercase tracking-widest mb-4"
-              >
-                Who I work with
-              </p>
-              <h2
-                style={{ color: "#1e1208" }}
-                className="text-2xl md:text-3xl font-semibold leading-tight"
-              >
-                Teams that need engineering done properly
-              </h2>
-            </div>
-            <div className="md:col-span-3 grid sm:grid-cols-2 gap-6">
-              {workingWith.map(({ title, desc }) => (
-                <div
-                  key={title}
-                  style={{ border: "1px solid #dfc5a5" }}
-                  className="p-6 rounded-lg"
+      <section className="pb-24">
+        <div className="container-page">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+            <aside className="lg:col-span-4">
+              <div className="surface-card p-7 lg:sticky lg:top-24">
+                <div className="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-[var(--text-4)] mb-4">
+                  At a glance
+                </div>
+                <dl className="space-y-4 text-sm">
+                  <div>
+                    <dt className="text-[var(--text-4)] font-mono text-xs uppercase tracking-wider">
+                      Name
+                    </dt>
+                    <dd className="text-[var(--text)] mt-1">
+                      Narendra Pandrinki
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-[var(--text-4)] font-mono text-xs uppercase tracking-wider">
+                      Based
+                    </dt>
+                    <dd className="text-[var(--text)] mt-1">United Kingdom</dd>
+                  </div>
+                  <div>
+                    <dt className="text-[var(--text-4)] font-mono text-xs uppercase tracking-wider">
+                      Practice
+                    </dt>
+                    <dd className="text-[var(--text)] mt-1">Independent · solo</dd>
+                  </div>
+                  <div>
+                    <dt className="text-[var(--text-4)] font-mono text-xs uppercase tracking-wider">
+                      Focus
+                    </dt>
+                    <dd className="text-[var(--text)] mt-1">
+                      Cloud, Kubernetes, SRE, platforms
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-[var(--text-4)] font-mono text-xs uppercase tracking-wider">
+                      Industries
+                    </dt>
+                    <dd className="text-[var(--text)] mt-1">
+                      Fintech, healthtech, AI infra, marketplaces, SaaS
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="text-[var(--text-4)] font-mono text-xs uppercase tracking-wider">
+                      Email
+                    </dt>
+                    <dd className="mt-1">
+                      <a
+                        href="mailto:hello@narendrapandrinki.com"
+                        className="text-[var(--accent)] hover:opacity-80"
+                      >
+                        hello@narendrapandrinki.com
+                      </a>
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+            </aside>
+
+            <div className="lg:col-span-8">
+              <span className="eyebrow">Bio</span>
+              {bioParagraphs.map((p, i) => (
+                <p
+                  key={i}
+                  className="mt-5 text-[var(--text-2)] text-lg leading-[1.8]"
                 >
-                  <h3
-                    style={{ color: "#1e1208" }}
-                    className="font-semibold mb-2"
-                  >
-                    {title}
-                  </h3>
-                  <p style={{ color: "#9b7653" }} className="text-sm leading-relaxed">
-                    {desc}
-                  </p>
-                </div>
+                  {p}
+                </p>
               ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* What I build */}
-      <section
-        className="py-20"
-        style={{
-          backgroundColor: "#f5ede0",
-          borderBottom: "1px solid #dfc5a5",
-        }}
-      >
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="grid md:grid-cols-5 gap-12">
-            <div className="md:col-span-2">
-              <p
-                style={{ color: "#9b7653" }}
-                className="text-sm font-semibold uppercase tracking-widest mb-4"
-              >
-                Capability
-              </p>
-              <h2
-                style={{ color: "#1e1208" }}
-                className="text-2xl md:text-3xl font-semibold leading-tight mb-4"
-              >
-                What I build and manage
-              </h2>
-              <p style={{ color: "#7d5c3a" }} className="text-base leading-relaxed">
-                A cross-section of infrastructure, backend, and operations
-                engineering — the technical foundation businesses run on.
-              </p>
-            </div>
-            <div className="md:col-span-3">
-              <ul className="space-y-3">
-                {capabilities.map((item) => (
-                  <li key={item} className="flex items-start gap-3">
-                    <span
-                      style={{ color: "#cfa97e" }}
-                      className="mt-1 flex-shrink-0"
-                    >
-                      —
-                    </span>
-                    <span style={{ color: "#5c3d1e" }} className="text-base">
-                      {item}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* How I work */}
-      <section className="py-20" style={{ borderBottom: "1px solid #dfc5a5" }}>
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="max-w-3xl">
-            <p
-              style={{ color: "#9b7653" }}
-              className="text-sm font-semibold uppercase tracking-widest mb-4"
-            >
-              How I work
-            </p>
-            <h2
-              style={{ color: "#1e1208" }}
-              className="text-2xl md:text-3xl font-semibold mb-8"
-            >
-              Direct, accountable, and commercially focused
+      <section className="section border-t border-[var(--border)] bg-[var(--bg-1)]/40">
+        <div className="container-page">
+          <div className="max-w-2xl mb-12">
+            <span className="eyebrow">Principles</span>
+            <h2 className="mt-4 text-4xl md:text-5xl font-semibold tracking-tight text-[var(--text)]">
+              How I work.
             </h2>
-            <div className="space-y-8">
-              {[
-                {
-                  step: "01",
-                  title: "Discovery first",
-                  body: "Before writing code or proposing architecture, I understand what you're actually trying to achieve — what the business requires, what constraints matter, and what success looks like. Most engineering problems are solved by clear thinking before the work begins.",
-                },
-                {
-                  step: "02",
-                  title: "Architecture once",
-                  body: "I design the system clearly before building it. Not overengineered, not speculative — designed for the actual requirements with the right level of abstraction and future flexibility.",
-                },
-                {
-                  step: "03",
-                  title: "Execution in batches",
-                  body: "Work is delivered in usable increments. You see progress and can give feedback throughout the engagement, not just at handover. Most projects benefit from shipping something useful early rather than waiting for everything to be perfect.",
-                },
-                {
-                  step: "04",
-                  title: "Documentation and handover",
-                  body: "Everything I build comes with documentation your team can actually use. Runbooks, architecture diagrams, deployment processes, and the tribal knowledge written down — not left in my head.",
-                },
-              ].map(({ step, title, body }) => (
-                <div key={step} className="grid grid-cols-12 gap-6">
-                  <div className="col-span-1">
-                    <span
-                      style={{ color: "#cfa97e" }}
-                      className="text-sm font-mono"
-                    >
-                      {step}
-                    </span>
-                  </div>
-                  <div className="col-span-11">
-                    <h3
-                      style={{ color: "#1e1208" }}
-                      className="font-semibold mb-2"
-                    >
-                      {title}
-                    </h3>
-                    <p style={{ color: "#7d5c3a" }} className="leading-relaxed">
-                      {body}
-                    </p>
-                  </div>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            {principles.map((p, i) => (
+              <article key={p.title} className="surface-card p-7">
+                <div className="font-mono text-xs text-[var(--text-4)] mb-3">
+                  {String(i + 1).padStart(2, "0")} /{" "}
+                  {String(principles.length).padStart(2, "0")}
                 </div>
-              ))}
+                <h3 className="text-xl font-semibold text-[var(--text)] tracking-tight">
+                  {p.title}
+                </h3>
+                <p className="mt-3 text-[var(--text-3)] leading-relaxed">
+                  {p.description}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container-page">
+          <div className="max-w-2xl mb-12">
+            <span className="eyebrow">Timeline</span>
+            <h2 className="mt-4 text-4xl md:text-5xl font-semibold tracking-tight text-[var(--text)]">
+              Five years, briefly.
+            </h2>
+          </div>
+
+          <ol className="relative max-w-3xl">
+            <span
+              className="absolute left-[1.4rem] top-0 bottom-0 w-px bg-gradient-to-b from-[var(--accent)]/40 via-[var(--border-2)] to-transparent"
+              aria-hidden
+            />
+            {timeline.map((entry) => (
+              <li key={entry.year} className="relative pl-16 pb-10">
+                <span className="absolute left-0 top-0 inline-flex h-12 w-12 items-center justify-center rounded-full border border-[var(--border-2)] bg-[var(--surface)] font-mono text-xs text-[var(--accent)]">
+                  {entry.year}
+                </span>
+                <h3 className="text-lg font-semibold text-[var(--text)]">
+                  {entry.title}
+                </h3>
+                <p className="mt-2 text-[var(--text-3)] leading-relaxed">
+                  {entry.description}
+                </p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      <section className="section border-t border-[var(--border)] bg-[var(--bg-1)]/40">
+        <div className="container-page">
+          <div className="surface-card glow-ring p-10 md:p-14 max-w-4xl">
+            <div className="flex items-center gap-3">
+              <span className="live-dot" />
+              <span className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--lime)]">
+                Currently available
+              </span>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Why hire */}
-      <section
-        className="py-20"
-        style={{ backgroundColor: "#f5ede0", borderBottom: "1px solid #dfc5a5" }}
-      >
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="max-w-3xl">
-            <p
-              style={{ color: "#9b7653" }}
-              className="text-sm font-semibold uppercase tracking-widest mb-4"
-            >
-              Why businesses hire me
-            </p>
-            <h2
-              style={{ color: "#1e1208" }}
-              className="text-2xl md:text-3xl font-semibold mb-8"
-            >
-              Senior engineering without the overhead
+            <h2 className="mt-5 text-3xl md:text-4xl font-semibold tracking-tight text-[var(--text)]">
+              Availability.
             </h2>
-            <p style={{ color: "#7d5c3a" }} className="text-lg leading-relaxed mb-6">
-              A senior engineer costs £80–120k/year as a full-time hire — plus
-              recruitment, onboarding, management overhead, and the time it takes
-              to become effective. For businesses that need significant engineering
-              capability without a full-time headcount, an independent engagement
-              is often far more effective.
+            <p className="mt-5 text-[var(--text-2)] leading-relaxed text-lg">
+              {availability}
             </p>
-            <p style={{ color: "#7d5c3a" }} className="text-lg leading-relaxed mb-6">
-              I bring cross-functional depth: infrastructure, backend, and
-              product-facing tooling. Most engineering problems span more than one
-              of these. Having someone who can take end-to-end ownership avoids
-              the coordination overhead of multiple specialists.
-            </p>
-            <p style={{ color: "#7d5c3a" }} className="text-lg leading-relaxed">
-              Engagements are shaped around what you need: a defined project with
-              a clear end point, an ongoing monthly retainer, or specific advisory
-              work. I'm a direct extension of your team, not a vendor.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-20">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="max-w-xl">
-            <h2
-              style={{ color: "#1e1208" }}
-              className="text-2xl md:text-3xl font-semibold mb-4"
-            >
-              Let's talk about what you need
-            </h2>
-            <p style={{ color: "#7d5c3a" }} className="text-lg mb-8">
-              Tell me about your engineering problem. I'll respond with an honest
-              view on whether I can help and how.
-            </p>
-            <Link
-              href="/contact"
-              style={{ backgroundColor: "#5c3d1e", color: "#faf7f2" }}
-              className="inline-flex items-center justify-center px-8 py-4 text-sm font-semibold rounded hover:opacity-90 transition-opacity"
-            >
-              Get in touch
-            </Link>
+            <div className="mt-8 flex flex-col sm:flex-row gap-3">
+              <Link href="/contact" className="btn-primary">
+                Start a conversation
+              </Link>
+              <a
+                href="mailto:hello@narendrapandrinki.com"
+                className="btn-ghost"
+              >
+                hello@narendrapandrinki.com
+              </a>
+            </div>
           </div>
         </div>
       </section>

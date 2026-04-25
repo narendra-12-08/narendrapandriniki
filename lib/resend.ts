@@ -9,8 +9,9 @@ export function getResend(): Resend {
 }
 export const resend = { emails: { send: (...args: Parameters<Resend["emails"]["send"]>) => getResend().emails.send(...args) } };
 
-export const FROM_EMAIL = "hello@narendrapandrinki.com";
-export const ADMIN_EMAIL = "emailme0666@yahoo.com";
+export const FROM_ADDRESS = "hello@narendrapandrinki.com";
+export const FROM_EMAIL = "Narendra Pandrinki <hello@narendrapandrinki.com>";
+export const ADMIN_EMAIL = "hello@narendrapandrinki.com";
 export const DOMAIN = "narendrapandrinki.com";
 
 export async function sendContactAcknowledgement(
@@ -18,7 +19,7 @@ export async function sendContactAcknowledgement(
   toName: string
 ) {
   return resend.emails.send({
-    from: `Narendra Pandrinki <${FROM_EMAIL}>`,
+    from: FROM_EMAIL,
     to: toEmail,
     subject: "Thanks for getting in touch",
     html: `
@@ -40,7 +41,7 @@ export async function sendAdminNotification(data: {
   service?: string;
 }) {
   return resend.emails.send({
-    from: `Site Notifications <${FROM_EMAIL}>`,
+    from: `Site Notifications <${FROM_ADDRESS}>`,
     to: ADMIN_EMAIL,
     subject: `New inquiry from ${data.name}`,
     html: `
@@ -67,7 +68,7 @@ export async function sendInvoiceEmail(data: {
   dueDate: string;
 }) {
   return resend.emails.send({
-    from: `Narendra Pandrinki <${FROM_EMAIL}>`,
+    from: FROM_EMAIL,
     to: data.toEmail,
     subject: `Invoice ${data.invoiceNumber} — Narendra Pandrinki`,
     html: `
@@ -82,6 +83,34 @@ export async function sendInvoiceEmail(data: {
         </table>
         <p>Please arrange payment by the due date. If you have any questions, reply to this email.</p>
         <p style="margin-top: 2rem;">Best regards,<br/>Narendra Pandrinki</p>
+      </div>
+    `,
+  });
+}
+
+export async function sendWelcomeEmail({
+  to,
+  name,
+}: {
+  to: string;
+  name: string;
+}) {
+  return resend.emails.send({
+    from: FROM_EMAIL,
+    to,
+    subject: `Welcome, ${name}`,
+    html: `
+      <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; color: #1e1208;">
+        <h2 style="color: #5c3d1e;">Welcome, ${name}</h2>
+        <p>Thanks for reaching out. I read every message myself and reply within 1–2 business days.</p>
+        <p>While you're waiting, a few things you might find useful:</p>
+        <ul style="line-height: 1.7;">
+          <li><a href="https://${DOMAIN}/services" style="color:#7d5c3a;">Services</a> — what I do and how engagements typically run</li>
+          <li><a href="https://${DOMAIN}/work" style="color:#7d5c3a;">Selected work</a> — recent case studies with measurable outcomes</li>
+          <li><a href="https://${DOMAIN}/blog" style="color:#7d5c3a;">Writing</a> — notes on platform engineering, cloud, and infra</li>
+        </ul>
+        <p>If anything's time-sensitive, reply directly to this email and I'll prioritise it.</p>
+        <p style="margin-top: 2rem;">Best,<br/>Narendra Pandrinki<br/><span style="color:#7d5c3a;">Independent Platform &amp; Cloud Engineer</span></p>
       </div>
     `,
   });

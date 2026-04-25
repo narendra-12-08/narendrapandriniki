@@ -2,11 +2,16 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Plus } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import Modal from "./Modal";
 
 interface Props {
   invoices: { id: string; invoice_number: string; total: number }[];
 }
+
+const inputCls =
+  "w-full px-3 py-2 text-sm rounded-md bg-[var(--surface-2)] border border-[var(--border)] text-[var(--text)] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/25";
 
 export default function PaymentForm({ invoices }: Props) {
   const router = useRouter();
@@ -39,7 +44,10 @@ export default function PaymentForm({ invoices }: Props) {
       notes: form.notes || null,
     });
 
-    await supabase.from("invoices").update({ status: "paid", paid_at: form.paid_at }).eq("id", form.invoice_id);
+    await supabase
+      .from("invoices")
+      .update({ status: "paid", paid_at: form.paid_at })
+      .eq("id", form.invoice_id);
 
     setOpen(false);
     setLoading(false);
@@ -48,60 +56,110 @@ export default function PaymentForm({ invoices }: Props) {
 
   return (
     <>
-      <button onClick={() => setOpen(true)} style={{ backgroundColor: "#5c3d1e", color: "#faf7f2" }} className="px-4 py-2 text-sm font-medium rounded hover:opacity-90">
-        + Record Payment
+      <button
+        onClick={() => setOpen(true)}
+        className="inline-flex items-center gap-2 px-3.5 py-2 text-sm font-semibold rounded-md bg-[var(--accent)] text-[#04121a] hover:bg-[var(--accent-2)]"
+      >
+        <Plus size={14} /> Record payment
       </button>
 
-      {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(0,0,0,0.7)" }}>
-          <div style={{ backgroundColor: "#2a1608", border: "1px solid #3e2610", width: "100%", maxWidth: "440px" }} className="rounded-lg p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 style={{ color: "#faf7f2" }} className="font-semibold">Record Payment</h2>
-              <button onClick={() => setOpen(false)} style={{ color: "#9b7653" }}>✕</button>
-            </div>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label style={{ color: "#9b7653" }} className="block text-xs mb-1">Invoice *</label>
-                <select name="invoice_id" required value={form.invoice_id} onChange={change} style={{ backgroundColor: "#1e1208", border: "1px solid #3e2610", color: "#faf7f2" }} className="w-full px-3 py-2 text-sm rounded outline-none">
-                  <option value="">Select invoice</option>
-                  {invoices.map((i) => <option key={i.id} value={i.id}>{i.invoice_number} (£{i.total.toLocaleString()})</option>)}
-                </select>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label style={{ color: "#9b7653" }} className="block text-xs mb-1">Amount (£) *</label>
-                  <input type="number" name="amount" required value={form.amount} onChange={change} style={{ backgroundColor: "#1e1208", border: "1px solid #3e2610", color: "#faf7f2" }} className="w-full px-3 py-2 text-sm rounded outline-none" />
-                </div>
-                <div>
-                  <label style={{ color: "#9b7653" }} className="block text-xs mb-1">Date *</label>
-                  <input type="date" name="paid_at" required value={form.paid_at} onChange={change} style={{ backgroundColor: "#1e1208", border: "1px solid #3e2610", color: "#faf7f2" }} className="w-full px-3 py-2 text-sm rounded outline-none" />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label style={{ color: "#9b7653" }} className="block text-xs mb-1">Method</label>
-                  <select name="method" value={form.method} onChange={change} style={{ backgroundColor: "#1e1208", border: "1px solid #3e2610", color: "#faf7f2" }} className="w-full px-3 py-2 text-sm rounded outline-none">
-                    <option value="bank_transfer">Bank Transfer</option>
-                    <option value="card">Card</option>
-                    <option value="paypal">PayPal</option>
-                    <option value="other">Other</option>
-                  </select>
-                </div>
-                <div>
-                  <label style={{ color: "#9b7653" }} className="block text-xs mb-1">Reference</label>
-                  <input name="reference" value={form.reference} onChange={change} style={{ backgroundColor: "#1e1208", border: "1px solid #3e2610", color: "#faf7f2" }} className="w-full px-3 py-2 text-sm rounded outline-none" />
-                </div>
-              </div>
-              <div className="flex gap-3 pt-2">
-                <button type="button" onClick={() => setOpen(false)} style={{ color: "#9b7653", border: "1px solid #3e2610" }} className="flex-1 py-2 text-sm rounded">Cancel</button>
-                <button type="submit" disabled={loading} style={{ backgroundColor: "#5c3d1e", color: "#faf7f2" }} className="flex-1 py-2 text-sm rounded">
-                  {loading ? "Saving..." : "Record"}
-                </button>
-              </div>
-            </form>
+      <Modal open={open} onClose={() => setOpen(false)} title="Record payment">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-xs font-medium text-[var(--text-2)] mb-1.5">
+              Invoice *
+            </label>
+            <select
+              name="invoice_id"
+              required
+              value={form.invoice_id}
+              onChange={change}
+              className={inputCls}
+            >
+              <option value="">Select invoice</option>
+              {invoices.map((i) => (
+                <option key={i.id} value={i.id}>
+                  {i.invoice_number} (£{i.total.toLocaleString()})
+                </option>
+              ))}
+            </select>
           </div>
-        </div>
-      )}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-medium text-[var(--text-2)] mb-1.5">
+                Amount (£) *
+              </label>
+              <input
+                type="number"
+                step="0.01"
+                name="amount"
+                required
+                value={form.amount}
+                onChange={change}
+                className={inputCls}
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-[var(--text-2)] mb-1.5">
+                Date *
+              </label>
+              <input
+                type="date"
+                name="paid_at"
+                required
+                value={form.paid_at}
+                onChange={change}
+                className={inputCls}
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-medium text-[var(--text-2)] mb-1.5">
+                Method
+              </label>
+              <select
+                name="method"
+                value={form.method}
+                onChange={change}
+                className={inputCls}
+              >
+                <option value="bank_transfer">Bank transfer</option>
+                <option value="card">Card</option>
+                <option value="paypal">PayPal</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-[var(--text-2)] mb-1.5">
+                Reference
+              </label>
+              <input
+                name="reference"
+                value={form.reference}
+                onChange={change}
+                className={inputCls}
+              />
+            </div>
+          </div>
+          <div className="flex gap-2 pt-2">
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="flex-1 py-2 text-sm rounded-md bg-[var(--surface-2)] border border-[var(--border)] text-[var(--text-2)] hover:text-[var(--text)]"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex-1 py-2 text-sm font-semibold rounded-md bg-[var(--accent)] text-[#04121a] hover:bg-[var(--accent-2)] disabled:opacity-60"
+            >
+              {loading ? "Saving..." : "Record"}
+            </button>
+          </div>
+        </form>
+      </Modal>
     </>
   );
 }

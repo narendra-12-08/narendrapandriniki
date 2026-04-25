@@ -1,109 +1,130 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { blogPosts } from "@/lib/content/blog";
+import { allPosts } from "@/lib/content/blog-adapter";
 import { formatDate } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Blog",
   description:
-    "Engineering articles on DevOps, AWS, Kubernetes, Terraform, backend systems, and platform engineering.",
+    "Notes on DevOps, platform engineering, Kubernetes operations, observability, and the boring infrastructure of running production systems.",
 };
 
-export default function BlogPage() {
-  const sorted = [...blogPosts].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+export default function BlogIndexPage() {
+  const sorted = [...allPosts].sort(
+    (a, b) =>
+      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
   );
 
-  const allTags = Array.from(new Set(blogPosts.flatMap((p) => p.tags))).sort();
+  // Group by year if more than 15 posts
+  const groupByYear = sorted.length > 15;
+  const grouped: Record<string, typeof sorted> = {};
+  if (groupByYear) {
+    for (const p of sorted) {
+      const year = new Date(p.publishedAt).getFullYear().toString();
+      (grouped[year] ??= []).push(p);
+    }
+  }
 
   return (
-    <div style={{ backgroundColor: "#faf7f2" }}>
-      <section style={{ borderBottom: "1px solid #dfc5a5" }} className="py-24">
-        <div className="container mx-auto px-6 lg:px-12">
-          <p style={{ color: "#9b7653" }} className="text-sm font-semibold uppercase tracking-widest mb-6">
-            Blog
-          </p>
-          <h1 style={{ color: "#1e1208" }} className="text-4xl md:text-5xl font-semibold max-w-2xl leading-tight mb-6">
-            Engineering writing
+    <div className="bg-grid">
+      <section className="section pb-12">
+        <div className="container-page">
+          <span className="eyebrow">Writing</span>
+          <h1 className="mt-6 text-5xl md:text-7xl font-semibold tracking-tight leading-[1.05] text-[var(--text)] max-w-4xl">
+            Notes from the{" "}
+            <span className="gradient-text">on-call rotation.</span>
           </h1>
-          <p style={{ color: "#7d5c3a" }} className="text-xl max-w-2xl leading-relaxed">
-            Articles on cloud infrastructure, platform engineering, backend
-            systems, and the operational practices that keep software running
-            well.
+          <p className="mt-8 max-w-2xl text-lg text-[var(--text-2)] leading-relaxed">
+            Things I&apos;ve learned, written down so I don&apos;t have to
+            relearn them. Long-form, opinionated, no SEO bait.
           </p>
         </div>
       </section>
 
-      <div className="py-20">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="grid md:grid-cols-4 gap-12">
-            <div className="md:col-span-3 space-y-8">
-              {sorted.map((post) => (
-                <Link
-                  key={post.slug}
-                  href={`/blog/${post.slug}`}
-                  style={{ border: "1px solid #dfc5a5" }}
-                  className="group flex flex-col sm:flex-row gap-6 p-7 rounded-lg hover:border-[#9b7653] transition-colors block"
-                >
-                  <div className="flex-1">
-                    <div className="flex items-center gap-4 mb-3">
-                      <span style={{ color: "#9b7653" }} className="text-sm">
-                        {formatDate(post.date)}
-                      </span>
-                      <span style={{ color: "#cfa97e" }}>·</span>
-                      <span style={{ color: "#9b7653" }} className="text-sm">
-                        {post.readingTime} min read
+      <section className="pb-32">
+        <div className="container-page">
+          {groupByYear ? (
+            <div className="space-y-16">
+              {Object.entries(grouped)
+                .sort(([a], [b]) => Number(b) - Number(a))
+                .map(([year, posts]) => (
+                  <div key={year}>
+                    <div className="mb-8 flex items-center gap-4">
+                      <h2 className="font-mono text-2xl text-[var(--text-4)]">
+                        {year}
+                      </h2>
+                      <span className="hairline flex-1" />
+                      <span className="font-mono text-xs text-[var(--text-4)]">
+                        {posts.length} posts
                       </span>
                     </div>
-                    <h2
-                      style={{ color: "#1e1208" }}
-                      className="text-xl font-semibold mb-3 group-hover:text-[#5c3d1e] transition-colors"
-                    >
-                      {post.title}
-                    </h2>
-                    <p style={{ color: "#7d5c3a" }} className="text-sm leading-relaxed mb-4">
-                      {post.description}
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {post.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          style={{ backgroundColor: "#ecdcc6", color: "#5c3d1e" }}
-                          className="text-xs font-medium px-2 py-1 rounded"
-                        >
-                          {tag}
-                        </span>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                      {posts.map((p) => (
+                        <PostCard key={p.slug} post={p} />
                       ))}
                     </div>
                   </div>
-                </Link>
+                ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {sorted.map((p) => (
+                <PostCard key={p.slug} post={p} />
               ))}
             </div>
+          )}
 
-            <div>
-              <div
-                style={{ border: "1px solid #dfc5a5" }}
-                className="p-6 rounded-lg sticky top-24"
-              >
-                <h3 style={{ color: "#1e1208" }} className="font-semibold mb-4 text-sm uppercase tracking-widest">
-                  Topics
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {allTags.map((tag) => (
-                    <span
-                      key={tag}
-                      style={{ backgroundColor: "#f5ede0", color: "#5c3d1e", border: "1px solid #dfc5a5" }}
-                      className="text-xs font-medium px-3 py-1 rounded-full"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
+          {sorted.length === 0 && (
+            <div className="surface-card p-12 text-center">
+              <p className="text-[var(--text-3)]">No posts yet.</p>
             </div>
-          </div>
+          )}
         </div>
-      </div>
+      </section>
     </div>
+  );
+}
+
+function PostCard({
+  post,
+}: {
+  post: {
+    slug: string;
+    title: string;
+    description: string;
+    tags: string[];
+    category?: string;
+    publishedAt: string;
+    readingTime: number;
+  };
+}) {
+  return (
+    <Link
+      href={`/blog/${post.slug}`}
+      className="surface-card group p-7 block transition-transform hover:-translate-y-0.5"
+    >
+      <div className="flex items-center justify-between gap-3">
+        <span className="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-[var(--accent)]">
+          {post.category ?? post.tags[0] ?? "Notes"}
+        </span>
+        <span className="font-mono text-[0.65rem] text-[var(--text-4)]">
+          {post.readingTime}m read
+        </span>
+      </div>
+      <h3 className="mt-4 text-lg font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors leading-snug">
+        {post.title}
+      </h3>
+      <p className="mt-3 text-sm text-[var(--text-3)] leading-relaxed line-clamp-3">
+        {post.description}
+      </p>
+      <div className="mt-5 pt-5 border-t border-[var(--border)] flex items-center justify-between">
+        <span className="font-mono text-[0.65rem] uppercase tracking-[0.15em] text-[var(--text-4)]">
+          {formatDate(post.publishedAt)}
+        </span>
+        <span className="font-mono text-xs text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity">
+          →
+        </span>
+      </div>
+    </Link>
   );
 }

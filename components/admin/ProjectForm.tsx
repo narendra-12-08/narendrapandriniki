@@ -2,11 +2,16 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Plus } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import Modal from "./Modal";
 
 interface Props {
   clients: { id: string; name: string; company: string | null }[];
 }
+
+const inputCls =
+  "w-full px-3 py-2 text-sm rounded-md bg-[var(--surface-2)] border border-[var(--border)] text-[var(--text)] outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/25";
 
 export default function ProjectForm({ clients }: Props) {
   const router = useRouter();
@@ -23,7 +28,9 @@ export default function ProjectForm({ clients }: Props) {
     status: "discovery",
   });
 
-  function change(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) {
+  function change(
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) {
     setForm((p) => ({ ...p, [e.target.name]: e.target.value }));
   }
 
@@ -49,69 +56,135 @@ export default function ProjectForm({ clients }: Props) {
 
   return (
     <>
-      <button onClick={() => setOpen(true)} style={{ backgroundColor: "#5c3d1e", color: "#faf7f2" }} className="px-4 py-2 text-sm font-medium rounded hover:opacity-90">
-        + New Project
+      <button
+        onClick={() => setOpen(true)}
+        className="inline-flex items-center gap-2 px-3.5 py-2 text-sm font-semibold rounded-md bg-[var(--accent)] text-[#04121a] hover:bg-[var(--accent-2)]"
+      >
+        <Plus size={14} /> New project
       </button>
 
-      {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(0,0,0,0.7)" }}>
-          <div style={{ backgroundColor: "#2a1608", border: "1px solid #3e2610", width: "100%", maxWidth: "480px", maxHeight: "90vh", overflowY: "auto" }} className="rounded-lg p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h2 style={{ color: "#faf7f2" }} className="font-semibold">New Project</h2>
-              <button onClick={() => setOpen(false)} style={{ color: "#9b7653" }}>✕</button>
-            </div>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label style={{ color: "#9b7653" }} className="block text-xs mb-1">Project Name *</label>
-                <input name="name" required value={form.name} onChange={change} style={{ backgroundColor: "#1e1208", border: "1px solid #3e2610", color: "#faf7f2" }} className="w-full px-3 py-2 text-sm rounded outline-none" />
-              </div>
-              <div>
-                <label style={{ color: "#9b7653" }} className="block text-xs mb-1">Client</label>
-                <select name="client_id" value={form.client_id} onChange={change} style={{ backgroundColor: "#1e1208", border: "1px solid #3e2610", color: "#faf7f2" }} className="w-full px-3 py-2 text-sm rounded outline-none">
-                  <option value="">Select client</option>
-                  {clients.map((c) => (
-                    <option key={c.id} value={c.id}>{c.name}{c.company ? ` (${c.company})` : ""}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label style={{ color: "#9b7653" }} className="block text-xs mb-1">Service Type</label>
-                <input name="service_type" value={form.service_type} onChange={change} style={{ backgroundColor: "#1e1208", border: "1px solid #3e2610", color: "#faf7f2" }} className="w-full px-3 py-2 text-sm rounded outline-none" />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label style={{ color: "#9b7653" }} className="block text-xs mb-1">Start Date</label>
-                  <input type="date" name="start_date" value={form.start_date} onChange={change} style={{ backgroundColor: "#1e1208", border: "1px solid #3e2610", color: "#faf7f2" }} className="w-full px-3 py-2 text-sm rounded outline-none" />
-                </div>
-                <div>
-                  <label style={{ color: "#9b7653" }} className="block text-xs mb-1">Due Date</label>
-                  <input type="date" name="due_date" value={form.due_date} onChange={change} style={{ backgroundColor: "#1e1208", border: "1px solid #3e2610", color: "#faf7f2" }} className="w-full px-3 py-2 text-sm rounded outline-none" />
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label style={{ color: "#9b7653" }} className="block text-xs mb-1">Agreed Amount (£)</label>
-                  <input type="number" name="agreed_amount" value={form.agreed_amount} onChange={change} style={{ backgroundColor: "#1e1208", border: "1px solid #3e2610", color: "#faf7f2" }} className="w-full px-3 py-2 text-sm rounded outline-none" />
-                </div>
-                <div>
-                  <label style={{ color: "#9b7653" }} className="block text-xs mb-1">Status</label>
-                  <select name="status" value={form.status} onChange={change} style={{ backgroundColor: "#1e1208", border: "1px solid #3e2610", color: "#faf7f2" }} className="w-full px-3 py-2 text-sm rounded outline-none">
-                    {["discovery", "active", "paused", "complete", "cancelled"].map((s) => (
-                      <option key={s} value={s}>{s}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div className="flex gap-3 pt-2">
-                <button type="button" onClick={() => setOpen(false)} style={{ color: "#9b7653", border: "1px solid #3e2610" }} className="flex-1 py-2 text-sm rounded">Cancel</button>
-                <button type="submit" disabled={loading} style={{ backgroundColor: "#5c3d1e", color: "#faf7f2" }} className="flex-1 py-2 text-sm rounded">
-                  {loading ? "Saving..." : "Create"}
-                </button>
-              </div>
-            </form>
+      <Modal open={open} onClose={() => setOpen(false)} title="New project" maxWidth={520}>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-xs font-medium text-[var(--text-2)] mb-1.5">
+              Name *
+            </label>
+            <input
+              name="name"
+              required
+              value={form.name}
+              onChange={change}
+              className={inputCls}
+            />
           </div>
-        </div>
-      )}
+          <div>
+            <label className="block text-xs font-medium text-[var(--text-2)] mb-1.5">
+              Client
+            </label>
+            <select
+              name="client_id"
+              value={form.client_id}
+              onChange={change}
+              className={inputCls}
+            >
+              <option value="">Select client</option>
+              {clients.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.name}
+                  {c.company ? ` (${c.company})` : ""}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-[var(--text-2)] mb-1.5">
+              Service type
+            </label>
+            <input
+              name="service_type"
+              value={form.service_type}
+              onChange={change}
+              className={inputCls}
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-medium text-[var(--text-2)] mb-1.5">
+                Start date
+              </label>
+              <input
+                type="date"
+                name="start_date"
+                value={form.start_date}
+                onChange={change}
+                className={inputCls}
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-[var(--text-2)] mb-1.5">
+                Due date
+              </label>
+              <input
+                type="date"
+                name="due_date"
+                value={form.due_date}
+                onChange={change}
+                className={inputCls}
+              />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs font-medium text-[var(--text-2)] mb-1.5">
+                Agreed amount (£)
+              </label>
+              <input
+                type="number"
+                step="0.01"
+                name="agreed_amount"
+                value={form.agreed_amount}
+                onChange={change}
+                className={inputCls}
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-medium text-[var(--text-2)] mb-1.5">
+                Status
+              </label>
+              <select
+                name="status"
+                value={form.status}
+                onChange={change}
+                className={inputCls}
+              >
+                {["discovery", "active", "paused", "complete", "cancelled"].map(
+                  (s) => (
+                    <option key={s} value={s}>
+                      {s}
+                    </option>
+                  )
+                )}
+              </select>
+            </div>
+          </div>
+          <div className="flex gap-2 pt-2">
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="flex-1 py-2 text-sm rounded-md bg-[var(--surface-2)] border border-[var(--border)] text-[var(--text-2)] hover:text-[var(--text)]"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex-1 py-2 text-sm font-semibold rounded-md bg-[var(--accent)] text-[#04121a] hover:bg-[var(--accent-2)] disabled:opacity-60"
+            >
+              {loading ? "Saving..." : "Create"}
+            </button>
+          </div>
+        </form>
+      </Modal>
     </>
   );
 }

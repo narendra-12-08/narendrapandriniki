@@ -2,140 +2,122 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { solutions, getSolution } from "@/lib/content/solutions";
+import Markdown from "@/components/public/Markdown";
 
-interface Props {
-  params: Promise<{ slug: string }>;
-}
-
-export async function generateStaticParams() {
+export function generateStaticParams() {
   return solutions.map((s) => ({ slug: s.slug }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(
+  { params }: { params: Promise<{ slug: string }> }
+): Promise<Metadata> {
   const { slug } = await params;
-  const solution = getSolution(slug);
-  if (!solution) return {};
+  const sol = getSolution(slug);
+  if (!sol) return { title: "Solution" };
   return {
-    title: solution.title,
-    description: solution.shortDescription,
+    title: sol.title,
+    description: sol.shortDescription,
   };
 }
 
-export default async function SolutionPage({ params }: Props) {
+export default async function SolutionDetailPage(
+  { params }: { params: Promise<{ slug: string }> }
+) {
   const { slug } = await params;
-  const solution = getSolution(slug);
-  if (!solution) notFound();
-
-  const others = solutions.filter((s) => s.slug !== slug).slice(0, 3);
+  const sol = getSolution(slug);
+  if (!sol) notFound();
 
   return (
-    <div style={{ backgroundColor: "#faf7f2" }}>
-      <section style={{ borderBottom: "1px solid #dfc5a5" }} className="py-24">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="mb-6">
-            <Link href="/solutions" style={{ color: "#9b7653" }} className="text-sm hover:opacity-80">
-              ← Solutions
-            </Link>
+    <div className="bg-grid">
+      <section className="section pb-10">
+        <div className="container-page">
+          <Link
+            href="/solutions"
+            className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--text-4)] hover:text-[var(--accent)]"
+          >
+            ← All solutions
+          </Link>
+          <div className="mt-8 max-w-4xl">
+            <span className="eyebrow">{sol.tagline}</span>
+            <h1 className="mt-6 text-5xl md:text-7xl font-semibold tracking-tight leading-[1.05] text-[var(--text)]">
+              {sol.title}
+            </h1>
+            <p className="mt-8 text-lg md:text-xl text-[var(--text-2)] leading-relaxed">
+              {sol.shortDescription}
+            </p>
           </div>
-          <p style={{ color: "#9b7653" }} className="text-sm font-semibold uppercase tracking-widest mb-4">
-            Solution
-          </p>
-          <h1 style={{ color: "#1e1208" }} className="text-4xl md:text-5xl font-semibold max-w-3xl leading-tight mb-6">
-            {solution.title}
-          </h1>
-          <p style={{ color: "#7d5c3a" }} className="text-xl max-w-2xl leading-relaxed">
-            {solution.shortDescription}
-          </p>
         </div>
       </section>
 
-      <div className="py-20">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="grid md:grid-cols-3 gap-16">
-            <div className="md:col-span-2">
-              <div className="space-y-6">
-                {solution.content.trim().split("\n\n").map((para, i) => {
-                  if (para.startsWith("## ")) {
-                    return (
-                      <h2 key={i} style={{ color: "#1e1208" }} className="text-2xl font-semibold mt-10 mb-4 first:mt-0">
-                        {para.replace("## ", "")}
-                      </h2>
-                    );
-                  }
-                  return (
-                    <p key={i} style={{ color: "#7d5c3a" }} className="leading-relaxed">
-                      {para}
-                    </p>
-                  );
-                })}
-              </div>
+      <section className="pb-16">
+        <div className="container-page">
+          <div className="surface-card p-8 md:p-10 max-w-4xl">
+            <div className="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-[var(--accent)] mb-5">
+              Outcomes you should expect
             </div>
-
-            <div>
-              <div
-                style={{ backgroundColor: "#f5ede0", border: "1px solid #dfc5a5", borderRadius: "8px" }}
-                className="p-6"
-              >
-                <h3 style={{ color: "#1e1208" }} className="font-semibold mb-3">
-                  Ready to build this?
-                </h3>
-                <p style={{ color: "#9b7653" }} className="text-sm mb-4">
-                  Tell me about your requirements and I'll outline how I'd approach it.
-                </p>
-                <Link
-                  href="/contact"
-                  style={{ backgroundColor: "#5c3d1e", color: "#faf7f2" }}
-                  className="block text-center text-sm font-semibold px-4 py-3 rounded hover:opacity-90 transition-opacity"
+            <ul className="space-y-3.5">
+              {sol.outcomes.map((o) => (
+                <li
+                  key={o}
+                  className="flex items-start gap-3 text-[var(--text-2)] text-base leading-relaxed"
                 >
-                  Get in touch
-                </Link>
-              </div>
+                  <span
+                    className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-[var(--accent)]/40 bg-[var(--accent-soft)] text-[var(--accent)] mt-0.5"
+                    aria-hidden
+                  >
+                    <svg
+                      width="10"
+                      height="10"
+                      viewBox="0 0 12 12"
+                      fill="none"
+                    >
+                      <path
+                        d="M2.5 6L5 8.5L9.5 4"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
+                  <span>{o}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
 
-              <div className="mt-6">
-                <h3 style={{ color: "#9b7653" }} className="text-xs font-semibold uppercase tracking-widest mb-3">
-                  Related services
-                </h3>
-                <div className="space-y-2">
-                  {[
-                    { href: "/services/internal-tools", label: "Internal Tools & Admin Platforms" },
-                    { href: "/services/backend-systems", label: "Backend Systems & APIs" },
-                    { href: "/services/cloud-devops", label: "Cloud & DevOps Engineering" },
-                  ].map(({ href, label }) => (
-                    <Link key={href} href={href} style={{ color: "#7d5c3a" }} className="block text-sm hover:text-[#5c3d1e] transition-colors">
-                      {label} →
-                    </Link>
-                  ))}
-                </div>
-              </div>
+      <section className="pb-24">
+        <div className="container-page">
+          <div className="max-w-3xl">
+            <Markdown source={sol.content} />
+          </div>
+        </div>
+      </section>
+
+      <section className="section border-t border-[var(--border)] bg-[var(--bg-1)]/40">
+        <div className="container-page">
+          <div className="surface-card glow-ring p-10 md:p-14 text-center">
+            <span className="eyebrow justify-center">Next step</span>
+            <h2 className="mt-5 text-3xl md:text-5xl font-semibold tracking-tight text-[var(--text)]">
+              Talk through {sol.title.toLowerCase()}.
+            </h2>
+            <p className="mt-5 max-w-xl mx-auto text-[var(--text-2)]">
+              A 30-minute call to understand the shape, the constraints, and
+              whether I&apos;m the right person for it.
+            </p>
+            <div className="mt-8 flex flex-col sm:flex-row justify-center gap-3">
+              <Link href="/contact" className="btn-primary">
+                Start a conversation
+              </Link>
+              <Link href="/work" className="btn-ghost">
+                See related work
+              </Link>
             </div>
           </div>
         </div>
-      </div>
-
-      {others.length > 0 && (
-        <section style={{ backgroundColor: "#f5ede0", borderTop: "1px solid #dfc5a5" }} className="py-16">
-          <div className="container mx-auto px-6 lg:px-12">
-            <h2 style={{ color: "#1e1208" }} className="text-xl font-semibold mb-8">
-              Other solutions
-            </h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              {others.map((s) => (
-                <Link
-                  key={s.slug}
-                  href={`/solutions/${s.slug}`}
-                  style={{ border: "1px solid #dfc5a5", backgroundColor: "#faf7f2" }}
-                  className="group p-6 rounded-lg hover:border-[#9b7653] transition-colors block"
-                >
-                  <h3 style={{ color: "#1e1208" }} className="font-semibold mb-2 group-hover:text-[#5c3d1e] transition-colors">
-                    {s.title}
-                  </h3>
-                  <p style={{ color: "#9b7653" }} className="text-sm">{s.shortDescription}</p>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+      </section>
     </div>
   );
 }

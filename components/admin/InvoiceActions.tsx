@@ -10,9 +10,29 @@ interface Props {
   invoiceNumber: string;
 }
 
-export default function InvoiceActions({ invoiceId, currentStatus, invoiceNumber }: Props) {
+const transitions: Record<string, string[]> = {
+  draft: ["sent", "cancelled"],
+  sent: ["paid", "overdue", "cancelled"],
+  overdue: ["paid", "cancelled"],
+  paid: [],
+  cancelled: [],
+};
+
+const labelMap: Record<string, string> = {
+  sent: "Mark sent",
+  paid: "Mark paid",
+  overdue: "Mark overdue",
+  cancelled: "Cancel",
+};
+
+export default function InvoiceActions({
+  invoiceId,
+  currentStatus,
+  invoiceNumber,
+}: Props) {
   const router = useRouter();
   const [loading, setLoading] = useState<string | null>(null);
+  void invoiceNumber;
 
   async function updateStatus(status: string) {
     setLoading(status);
@@ -25,32 +45,32 @@ export default function InvoiceActions({ invoiceId, currentStatus, invoiceNumber
     setLoading(null);
   }
 
-  const transitions: Record<string, string[]> = {
-    draft: ["sent", "cancelled"],
-    sent: ["paid", "overdue", "cancelled"],
-    overdue: ["paid", "cancelled"],
-    paid: [],
-    cancelled: [],
-  };
-
   const nextStates = transitions[currentStatus] ?? [];
 
+  if (!nextStates.length) return null;
+
   return (
-    <div className="flex gap-1.5">
-      {nextStates.map((state) => (
-        <button
-          key={state}
-          onClick={() => updateStatus(state)}
-          disabled={loading === state}
-          style={{
-            color: state === "paid" ? "#4ade80" : state === "cancelled" ? "#ef4444" : "#cfa97e",
-            border: `1px solid ${state === "paid" ? "#1a3a1a" : state === "cancelled" ? "#3a1a1a" : "#5c3d1e"}`,
-          }}
-          className="text-xs px-2 py-1 rounded hover:opacity-80 capitalize"
-        >
-          {state === "sent" ? "Mark Sent" : state === "paid" ? "Mark Paid" : state === "overdue" ? "Mark Overdue" : "Cancel"}
-        </button>
-      ))}
+    <div className="flex gap-1.5 flex-wrap justify-end">
+      {nextStates.map((state) => {
+        const tone =
+          state === "paid"
+            ? "bg-[var(--lime)]/10 border-[var(--lime)]/30 text-[var(--lime)] hover:bg-[var(--lime)]/15"
+            : state === "cancelled"
+            ? "bg-[var(--rose)]/10 border-[var(--rose)]/30 text-[var(--rose)] hover:bg-[var(--rose)]/15"
+            : state === "overdue"
+            ? "bg-[var(--amber)]/10 border-[var(--amber)]/30 text-[var(--amber)] hover:bg-[var(--amber)]/15"
+            : "bg-[var(--accent)]/10 border-[var(--accent)]/30 text-[var(--accent)] hover:bg-[var(--accent)]/15";
+        return (
+          <button
+            key={state}
+            onClick={() => updateStatus(state)}
+            disabled={loading === state}
+            className={`text-[11px] px-2 py-1 rounded-full border transition-colors disabled:opacity-50 ${tone}`}
+          >
+            {labelMap[state] ?? state}
+          </button>
+        );
+      })}
     </div>
   );
 }

@@ -2,193 +2,172 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { services, getService } from "@/lib/content/services";
+import Markdown from "@/components/public/Markdown";
+import JsonLd from "@/components/seo/JsonLd";
+import { serviceSchema, breadcrumbSchema } from "@/lib/seo/schema";
 
-interface Props {
-  params: Promise<{ slug: string }>;
-}
-
-export async function generateStaticParams() {
+export function generateStaticParams() {
   return services.map((s) => ({ slug: s.slug }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(
+  { params }: { params: Promise<{ slug: string }> }
+): Promise<Metadata> {
   const { slug } = await params;
   const service = getService(slug);
-  if (!service) return {};
+  if (!service) return { title: "Service" };
   return {
     title: service.title,
     description: service.shortDescription,
+    alternates: { canonical: `/services/${service.slug}` },
   };
 }
 
-export default async function ServicePage({ params }: Props) {
+export default async function ServiceDetailPage(
+  { params }: { params: Promise<{ slug: string }> }
+) {
   const { slug } = await params;
   const service = getService(slug);
   if (!service) notFound();
 
-  const otherServices = services.filter((s) => s.slug !== slug).slice(0, 3);
+  const related = services.filter((s) => s.slug !== service.slug).slice(0, 3);
 
   return (
-    <div style={{ backgroundColor: "#faf7f2" }}>
-      <section
-        style={{ borderBottom: "1px solid #dfc5a5" }}
-        className="py-24"
-      >
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="mb-6">
-            <Link
-              href="/services"
-              style={{ color: "#9b7653" }}
-              className="text-sm hover:opacity-80"
-            >
-              ← Services
-            </Link>
-          </div>
-          <p
-            style={{ color: "#9b7653" }}
-            className="text-sm font-semibold uppercase tracking-widest mb-4"
+    <div className="bg-grid">
+      <JsonLd
+        id={`ld-service-${service.slug}`}
+        data={serviceSchema({
+          name: service.title,
+          description: service.shortDescription,
+          slug: service.slug,
+        })}
+      />
+      <JsonLd
+        id={`ld-service-breadcrumbs-${service.slug}`}
+        data={breadcrumbSchema([
+          { name: "Home", url: "/" },
+          { name: "Services", url: "/services" },
+          { name: service.title, url: `/services/${service.slug}` },
+        ])}
+      />
+      <section className="section pb-10">
+        <div className="container-page">
+          <Link
+            href="/services"
+            className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--text-4)] hover:text-[var(--accent)]"
           >
-            Service
-          </p>
-          <h1
-            style={{ color: "#1e1208" }}
-            className="text-4xl md:text-5xl font-semibold max-w-3xl leading-tight mb-6"
-          >
-            {service.title}
-          </h1>
-          <p style={{ color: "#7d5c3a" }} className="text-xl max-w-2xl leading-relaxed">
-            {service.description}
-          </p>
-        </div>
-      </section>
-
-      <div className="py-20">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="grid md:grid-cols-3 gap-16">
-            <div className="md:col-span-2">
-              <div
-                style={{ color: "#5c3d1e" }}
-                className="prose-custom space-y-6"
-              >
-                {service.content.trim().split("\n\n").map((para, i) => {
-                  if (para.startsWith("## ")) {
-                    return (
-                      <h2
-                        key={i}
-                        style={{ color: "#1e1208" }}
-                        className="text-2xl font-semibold mt-10 mb-4 first:mt-0"
-                      >
-                        {para.replace("## ", "")}
-                      </h2>
-                    );
-                  }
-                  if (para.startsWith("**") && para.includes("**—")) {
-                    return (
-                      <p key={i} style={{ color: "#7d5c3a" }} className="leading-relaxed">
-                        {para}
-                      </p>
-                    );
-                  }
-                  return (
-                    <p key={i} style={{ color: "#7d5c3a" }} className="leading-relaxed">
-                      {para}
-                    </p>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div className="space-y-8">
-              <div
-                style={{ border: "1px solid #dfc5a5", borderRadius: "8px" }}
-                className="p-6"
-              >
-                <h3
-                  style={{ color: "#1e1208" }}
-                  className="font-semibold mb-4"
-                >
-                  What's included
-                </h3>
-                <ul className="space-y-3">
-                  {service.benefits.map((b) => (
-                    <li key={b} className="flex items-start gap-3">
-                      <span style={{ color: "#cfa97e" }}>—</span>
-                      <span style={{ color: "#7d5c3a" }} className="text-sm">
-                        {b}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div
-                style={{
-                  backgroundColor: "#f5ede0",
-                  border: "1px solid #dfc5a5",
-                  borderRadius: "8px",
-                }}
-                className="p-6"
-              >
-                <h3
-                  style={{ color: "#1e1208" }}
-                  className="font-semibold mb-3"
-                >
-                  Interested in this service?
-                </h3>
-                <p style={{ color: "#9b7653" }} className="text-sm mb-4">
-                  Tell me about your project and I'll let you know how I can help.
-                </p>
-                <Link
-                  href="/contact"
-                  style={{ backgroundColor: "#5c3d1e", color: "#faf7f2" }}
-                  className="block text-center text-sm font-semibold px-4 py-3 rounded hover:opacity-90 transition-opacity"
-                >
-                  Get in touch
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {otherServices.length > 0 && (
-        <section
-          style={{
-            backgroundColor: "#f5ede0",
-            borderTop: "1px solid #dfc5a5",
-          }}
-          className="py-16"
-        >
-          <div className="container mx-auto px-6 lg:px-12">
-            <h2
-              style={{ color: "#1e1208" }}
-              className="text-xl font-semibold mb-8"
-            >
-              Other services
-            </h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              {otherServices.map((s) => (
-                <Link
-                  key={s.slug}
-                  href={`/services/${s.slug}`}
-                  style={{ border: "1px solid #dfc5a5", backgroundColor: "#faf7f2" }}
-                  className="group p-6 rounded-lg hover:border-[#9b7653] transition-colors block"
-                >
-                  <h3
-                    style={{ color: "#1e1208" }}
-                    className="font-semibold mb-2 group-hover:text-[#5c3d1e] transition-colors"
-                  >
-                    {s.title}
-                  </h3>
-                  <p style={{ color: "#9b7653" }} className="text-sm">
-                    {s.shortDescription}
-                  </p>
-                </Link>
+            ← All services
+          </Link>
+          <div className="mt-8 max-w-4xl">
+            <span className="eyebrow">{service.tagline}</span>
+            <h1 className="mt-6 text-5xl md:text-7xl font-semibold tracking-tight leading-[1.05] text-[var(--text)]">
+              {service.title}
+            </h1>
+            <p className="mt-8 text-lg md:text-xl text-[var(--text-2)] leading-relaxed">
+              {service.description}
+            </p>
+            <div className="mt-8 flex flex-wrap gap-1.5">
+              {service.stack.map((t) => (
+                <span key={t} className="tag">
+                  {t}
+                </span>
               ))}
             </div>
           </div>
-        </section>
-      )}
+        </div>
+      </section>
+
+      <section className="pb-24">
+        <div className="container-page">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+            <div className="lg:col-span-8">
+              <Markdown source={service.content} />
+            </div>
+
+            <aside className="lg:col-span-4 space-y-5">
+              <div className="surface-card p-7 lg:sticky lg:top-24">
+                <div>
+                  <div className="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-[var(--accent)] mb-3">
+                    Benefits
+                  </div>
+                  <ul className="space-y-2.5">
+                    {service.benefits.map((b) => (
+                      <li
+                        key={b}
+                        className="flex items-start gap-2.5 text-sm text-[var(--text-2)] leading-relaxed"
+                      >
+                        <span className="text-[var(--accent)] mt-0.5">→</span>
+                        <span>{b}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="mt-7 pt-7 border-t border-[var(--border)]">
+                  <div className="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-[var(--violet)] mb-3">
+                    Deliverables
+                  </div>
+                  <ul className="space-y-2.5">
+                    {service.deliverables.map((d) => (
+                      <li
+                        key={d}
+                        className="flex items-start gap-2.5 text-sm text-[var(--text-2)] leading-relaxed"
+                      >
+                        <span className="text-[var(--violet)] mt-0.5">◆</span>
+                        <span>{d}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="mt-7 pt-7 border-t border-[var(--border)]">
+                  <Link href="/contact" className="btn-primary w-full">
+                    Discuss this engagement
+                  </Link>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <section className="section border-t border-[var(--border)] bg-[var(--bg-1)]/40">
+        <div className="container-page">
+          <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
+            <div>
+              <span className="eyebrow">Related</span>
+              <h2 className="mt-3 text-3xl md:text-4xl font-semibold tracking-tight text-[var(--text)]">
+                Adjacent services.
+              </h2>
+            </div>
+            <Link
+              href="/services"
+              className="font-mono text-sm text-[var(--accent)] hover:opacity-80"
+            >
+              All services →
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {related.map((r) => (
+              <Link
+                key={r.slug}
+                href={`/services/${r.slug}`}
+                className="surface-card p-6 block group transition-transform hover:-translate-y-0.5"
+              >
+                <span className="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-[var(--accent)]">
+                  {r.tagline}
+                </span>
+                <h3 className="mt-3 text-lg font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors">
+                  {r.title}
+                </h3>
+                <p className="mt-3 text-sm text-[var(--text-3)]">
+                  {r.shortDescription}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

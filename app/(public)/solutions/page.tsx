@@ -5,84 +5,59 @@ import { solutions } from "@/lib/content/solutions";
 export const metadata: Metadata = {
   title: "Solutions",
   description:
-    "Business-oriented engineering solutions — admin dashboards, client portals, internal operations platforms, workflow systems, and more.",
+    "Outcome-shaped engagements: cloud migrations, cost optimisation, zero-downtime deploys, compliance, DR, internal developer platforms, observability overhauls.",
 };
 
 export default function SolutionsPage() {
   return (
-    <div style={{ backgroundColor: "#faf7f2" }}>
-      <section style={{ borderBottom: "1px solid #dfc5a5" }} className="py-24">
-        <div className="container mx-auto px-6 lg:px-12">
-          <p
-            style={{ color: "#9b7653" }}
-            className="text-sm font-semibold uppercase tracking-widest mb-6"
-          >
-            Solutions
-          </p>
-          <h1
-            style={{ color: "#1e1208" }}
-            className="text-4xl md:text-5xl font-semibold max-w-2xl leading-tight mb-6"
-          >
-            Engineering outcomes, not just deliverables
+    <div className="bg-grid">
+      <section className="section pb-12">
+        <div className="container-page">
+          <span className="eyebrow">Solutions</span>
+          <h1 className="mt-6 text-5xl md:text-7xl font-semibold tracking-tight leading-[1.05] text-[var(--text)] max-w-4xl">
+            Outcome-shaped{" "}
+            <span className="gradient-text">engagements.</span>
           </h1>
-          <p style={{ color: "#7d5c3a" }} className="text-xl max-w-2xl leading-relaxed">
-            These are the business outcomes I deliver — structured around what
-            your business needs, backed by the engineering services that make
-            them happen.
+          <p className="mt-8 max-w-2xl text-lg text-[var(--text-2)] leading-relaxed">
+            When the business outcome is clearer than the toolchain — pick by
+            destination, not by stack. Each one is a defined scope with
+            measurable results.
           </p>
         </div>
       </section>
 
-      <section className="py-20">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {solutions.map((solution) => (
+      <section className="pb-32">
+        <div className="container-page">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {solutions.map((sol) => (
               <Link
-                key={solution.slug}
-                href={`/solutions/${solution.slug}`}
-                style={{ border: "1px solid #dfc5a5" }}
-                className="group flex flex-col p-8 rounded-lg hover:border-[#9b7653] transition-colors block min-h-[220px]"
+                key={sol.slug}
+                href={`/solutions/${sol.slug}`}
+                className="surface-card group p-7 block transition-transform hover:-translate-y-0.5"
               >
-                <h2
-                  style={{ color: "#1e1208" }}
-                  className="text-xl font-semibold mb-3 group-hover:text-[#5c3d1e] transition-colors"
-                >
-                  {solution.title}
+                <span className="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-[var(--violet)]">
+                  {sol.tagline}
+                </span>
+                <h2 className="mt-3 text-xl md:text-2xl font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors tracking-tight">
+                  {sol.title}
                 </h2>
-                <p style={{ color: "#7d5c3a" }} className="text-sm leading-relaxed flex-1">
-                  {solution.shortDescription}
+                <p className="mt-3 text-sm leading-relaxed text-[var(--text-3)]">
+                  {sol.shortDescription}
                 </p>
-                <p
-                  style={{ color: "#9b7653" }}
-                  className="text-sm font-medium mt-6 group-hover:text-[#5c3d1e] transition-colors"
-                >
-                  Learn more →
-                </p>
+                <ul className="mt-5 space-y-1.5 pt-5 border-t border-[var(--border)]">
+                  {sol.outcomes.map((o) => (
+                    <li
+                      key={o}
+                      className="flex items-start gap-2 text-xs text-[var(--text-3)]"
+                    >
+                      <span className="text-[var(--accent)] mt-0.5">→</span>
+                      <span>{o}</span>
+                    </li>
+                  ))}
+                </ul>
               </Link>
             ))}
           </div>
-        </div>
-      </section>
-
-      <section
-        style={{ backgroundColor: "#2a1608" }}
-        className="py-20"
-      >
-        <div className="container mx-auto px-6 lg:px-12 text-center">
-          <h2 style={{ color: "#faf7f2" }} className="text-2xl md:text-3xl font-semibold mb-4">
-            Have a different requirement?
-          </h2>
-          <p style={{ color: "#9b7653" }} className="text-lg mb-8 max-w-xl mx-auto">
-            Tell me what your business needs. Most engineering problems have a
-            solution if we approach them properly.
-          </p>
-          <Link
-            href="/contact"
-            style={{ backgroundColor: "#cfa97e", color: "#1e1208" }}
-            className="inline-flex items-center px-8 py-4 text-sm font-semibold rounded hover:opacity-90 transition-opacity"
-          >
-            Discuss your requirements
-          </Link>
         </div>
       </section>
     </div>

@@ -17,12 +17,19 @@ type Errors = Partial<Record<keyof FormData, string>>;
 const serviceOptions = [
   "Cloud & DevOps Engineering",
   "Platform Engineering",
-  "Backend Systems & APIs",
-  "Internal Tools & Admin Platforms",
-  "Workflow Automation",
-  "Reporting & Dashboards",
+  "Kubernetes & Containers",
+  "CI/CD Pipelines",
+  "Infrastructure as Code",
+  "Site Reliability & Observability",
+  "DevSecOps",
+  "Database Operations",
+  "Cloud Migration",
+  "Fractional DevOps Lead",
   "Other / Not sure yet",
 ];
+
+const inputBase =
+  "w-full px-4 py-3 rounded-lg text-sm outline-none transition-colors bg-[var(--surface)] border text-[var(--text)] placeholder:text-[var(--text-4)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/30";
 
 export default function ContactForm() {
   const [form, setForm] = useState<FormData>({
@@ -33,7 +40,9 @@ export default function ContactForm() {
     message: "",
   });
   const [errors, setErrors] = useState<Errors>({});
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">(
+    "idle"
+  );
 
   function handleChange(
     e: React.ChangeEvent<
@@ -76,34 +85,28 @@ export default function ContactForm() {
 
   if (status === "success") {
     return (
-      <div
-        style={{ backgroundColor: "#f5ede0", border: "1px solid #dfc5a5" }}
-        className="p-10 rounded-lg text-center"
-      >
-        <div style={{ color: "#5c3d1e" }} className="text-3xl mb-4">
+      <div className="surface-card glow-ring p-10 text-center">
+        <div className="inline-flex h-12 w-12 items-center justify-center rounded-full border border-[var(--accent)]/40 bg-[var(--accent-soft)] text-[var(--accent)] text-2xl">
           ✓
         </div>
-        <h3 style={{ color: "#1e1208" }} className="text-xl font-semibold mb-3">
+        <h3 className="mt-5 text-xl font-semibold text-[var(--text)] tracking-tight">
           Message received
         </h3>
-        <p style={{ color: "#7d5c3a" }}>
-          Thanks for getting in touch. I'll respond within 1–2 business days.
+        <p className="mt-3 text-[var(--text-3)]">
+          Thanks for getting in touch. I&apos;ll respond within 1–2 business
+          days.
         </p>
       </div>
     );
   }
 
+  const borderClass = (hasError: boolean) =>
+    hasError ? "border-[var(--rose)]/60" : "border-[var(--border)]";
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="grid sm:grid-cols-2 gap-6">
-        <div>
-          <label
-            htmlFor="name"
-            style={{ color: "#5c3d1e" }}
-            className="block text-sm font-medium mb-2"
-          >
-            Name *
-          </label>
+    <form onSubmit={handleSubmit} className="space-y-5">
+      <div className="grid sm:grid-cols-2 gap-5">
+        <Field label="Name" htmlFor="name" required error={errors.name}>
           <input
             id="name"
             name="name"
@@ -111,27 +114,10 @@ export default function ContactForm() {
             value={form.name}
             onChange={handleChange}
             placeholder="Your name"
-            style={{
-              backgroundColor: "#faf7f2",
-              border: `1px solid ${errors.name ? "#b45309" : "#dfc5a5"}`,
-              color: "#1e1208",
-            }}
-            className="w-full px-4 py-3 rounded text-sm outline-none focus:ring-2 focus:ring-[#9b7653]"
+            className={`${inputBase} ${borderClass(!!errors.name)}`}
           />
-          {errors.name && (
-            <p style={{ color: "#b45309" }} className="text-xs mt-1">
-              {errors.name}
-            </p>
-          )}
-        </div>
-        <div>
-          <label
-            htmlFor="email"
-            style={{ color: "#5c3d1e" }}
-            className="block text-sm font-medium mb-2"
-          >
-            Email *
-          </label>
+        </Field>
+        <Field label="Email" htmlFor="email" required error={errors.email}>
           <input
             id="email"
             name="email"
@@ -139,30 +125,13 @@ export default function ContactForm() {
             value={form.email}
             onChange={handleChange}
             placeholder="you@company.com"
-            style={{
-              backgroundColor: "#faf7f2",
-              border: `1px solid ${errors.email ? "#b45309" : "#dfc5a5"}`,
-              color: "#1e1208",
-            }}
-            className="w-full px-4 py-3 rounded text-sm outline-none focus:ring-2 focus:ring-[#9b7653]"
+            className={`${inputBase} ${borderClass(!!errors.email)}`}
           />
-          {errors.email && (
-            <p style={{ color: "#b45309" }} className="text-xs mt-1">
-              {errors.email}
-            </p>
-          )}
-        </div>
+        </Field>
       </div>
 
-      <div className="grid sm:grid-cols-2 gap-6">
-        <div>
-          <label
-            htmlFor="company"
-            style={{ color: "#5c3d1e" }}
-            className="block text-sm font-medium mb-2"
-          >
-            Company
-          </label>
+      <div className="grid sm:grid-cols-2 gap-5">
+        <Field label="Company" htmlFor="company">
           <input
             id="company"
             name="company"
@@ -170,33 +139,16 @@ export default function ContactForm() {
             value={form.company}
             onChange={handleChange}
             placeholder="Your company"
-            style={{
-              backgroundColor: "#faf7f2",
-              border: "1px solid #dfc5a5",
-              color: "#1e1208",
-            }}
-            className="w-full px-4 py-3 rounded text-sm outline-none focus:ring-2 focus:ring-[#9b7653]"
+            className={`${inputBase} ${borderClass(false)}`}
           />
-        </div>
-        <div>
-          <label
-            htmlFor="service"
-            style={{ color: "#5c3d1e" }}
-            className="block text-sm font-medium mb-2"
-          >
-            What do you need?
-          </label>
+        </Field>
+        <Field label="What do you need?" htmlFor="service">
           <select
             id="service"
             name="service"
             value={form.service}
             onChange={handleChange}
-            style={{
-              backgroundColor: "#faf7f2",
-              border: "1px solid #dfc5a5",
-              color: form.service ? "#1e1208" : "#9b7653",
-            }}
-            className="w-full px-4 py-3 rounded text-sm outline-none focus:ring-2 focus:ring-[#9b7653]"
+            className={`${inputBase} ${borderClass(false)} appearance-none`}
           >
             <option value="">Select a service</option>
             {serviceOptions.map((opt) => (
@@ -205,53 +157,70 @@ export default function ContactForm() {
               </option>
             ))}
           </select>
-        </div>
+        </Field>
       </div>
 
-      <div>
-        <label
-          htmlFor="message"
-          style={{ color: "#5c3d1e" }}
-          className="block text-sm font-medium mb-2"
-        >
-          Message *
-        </label>
+      <Field label="Message" htmlFor="message" required error={errors.message}>
         <textarea
           id="message"
           name="message"
-          rows={6}
+          rows={7}
           value={form.message}
           onChange={handleChange}
-          placeholder="Tell me about what you're trying to build or solve..."
-          style={{
-            backgroundColor: "#faf7f2",
-            border: `1px solid ${errors.message ? "#b45309" : "#dfc5a5"}`,
-            color: "#1e1208",
-            resize: "vertical",
-          }}
-          className="w-full px-4 py-3 rounded text-sm outline-none focus:ring-2 focus:ring-[#9b7653]"
+          placeholder="Tell me about what you're trying to build, fix, or untangle..."
+          className={`${inputBase} ${borderClass(!!errors.message)} resize-y`}
         />
-        {errors.message && (
-          <p style={{ color: "#b45309" }} className="text-xs mt-1">
-            {errors.message}
-          </p>
-        )}
-      </div>
+      </Field>
 
       {status === "error" && (
-        <p style={{ color: "#b45309" }} className="text-sm">
-          Something went wrong. Please try again or email me directly.
+        <p className="text-sm text-[var(--rose)]">
+          Something went wrong. Please try again or email me directly at
+          hello@narendrapandrinki.com.
         </p>
       )}
 
-      <button
-        type="submit"
-        disabled={status === "loading"}
-        style={{ backgroundColor: "#5c3d1e", color: "#faf7f2" }}
-        className="w-full sm:w-auto px-10 py-4 text-sm font-semibold rounded hover:opacity-90 transition-opacity disabled:opacity-60"
-      >
-        {status === "loading" ? "Sending..." : "Send message"}
-      </button>
+      <div className="flex items-center justify-between flex-wrap gap-4 pt-2">
+        <p className="font-mono text-xs text-[var(--text-4)]">
+          Replies within 1–2 business days.
+        </p>
+        <button
+          type="submit"
+          disabled={status === "loading"}
+          className="btn-primary disabled:opacity-60 disabled:cursor-not-allowed"
+        >
+          {status === "loading" ? "Sending…" : "Send message"}
+        </button>
+      </div>
     </form>
+  );
+}
+
+function Field({
+  label,
+  htmlFor,
+  required,
+  error,
+  children,
+}: {
+  label: string;
+  htmlFor: string;
+  required?: boolean;
+  error?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <label
+        htmlFor={htmlFor}
+        className="block font-mono text-[0.7rem] uppercase tracking-[0.16em] text-[var(--text-3)] mb-2"
+      >
+        {label}
+        {required && <span className="text-[var(--accent)] ml-1">*</span>}
+      </label>
+      {children}
+      {error && (
+        <p className="mt-1.5 text-xs text-[var(--rose)]">{error}</p>
+      )}
+    </div>
   );
 }

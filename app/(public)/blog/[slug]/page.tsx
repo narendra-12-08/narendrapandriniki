@@ -1,171 +1,174 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { blogPosts, getBlogPost } from "@/lib/content/blog";
+import { allPosts, findPost } from "@/lib/content/blog-adapter";
 import { formatDate } from "@/lib/utils";
+import Markdown from "@/components/public/Markdown";
+import JsonLd from "@/components/seo/JsonLd";
+import { articleSchema, breadcrumbSchema } from "@/lib/seo/schema";
 
-interface Props {
-  params: Promise<{ slug: string }>;
+export function generateStaticParams() {
+  return allPosts.map((p) => ({ slug: p.slug }));
 }
 
-export async function generateStaticParams() {
-  return blogPosts.map((p) => ({ slug: p.slug }));
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(
+  { params }: { params: Promise<{ slug: string }> }
+): Promise<Metadata> {
   const { slug } = await params;
-  const post = getBlogPost(slug);
-  if (!post) return {};
+  const post = findPost(slug);
+  if (!post) return { title: "Post" };
   return {
     title: post.title,
     description: post.description,
+    alternates: { canonical: `/blog/${post.slug}` },
+    openGraph: {
+      type: "article",
+      title: post.title,
+      description: post.description,
+      url: `/blog/${post.slug}`,
+      publishedTime: post.publishedAt,
+      tags: post.tags,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.description,
+    },
   };
 }
 
-function renderContent(content: string) {
-  const sections = content.trim().split("\n\n");
-  return sections.map((section, i) => {
-    if (section.startsWith("## ")) {
-      return (
-        <h2
-          key={i}
-          style={{ color: "#1e1208" }}
-          className="text-2xl font-semibold mt-12 mb-5 first:mt-0"
-        >
-          {section.replace("## ", "")}
-        </h2>
-      );
-    }
-    if (section.startsWith("```")) {
-      const lines = section.split("\n");
-      const code = lines.slice(1, -1).join("\n");
-      return (
-        <pre
-          key={i}
-          style={{
-            backgroundColor: "#2a1608",
-            color: "#cfa97e",
-            border: "1px solid #3e2610",
-          }}
-          className="text-sm p-5 rounded-lg overflow-x-auto my-6 font-mono"
-        >
-          <code>{code}</code>
-        </pre>
-      );
-    }
-    if (section.startsWith("- ")) {
-      const items = section.split("\n").filter((l) => l.startsWith("- "));
-      return (
-        <ul key={i} className="space-y-2 my-4">
-          {items.map((item, j) => (
-            <li key={j} className="flex items-start gap-3">
-              <span style={{ color: "#cfa97e" }} className="mt-0.5">—</span>
-              <span style={{ color: "#7d5c3a" }} className="leading-relaxed">
-                {item.replace("- ", "")}
-              </span>
-            </li>
-          ))}
-        </ul>
-      );
-    }
-    return (
-      <p key={i} style={{ color: "#5c3d1e" }} className="leading-relaxed my-4">
-        {section}
-      </p>
-    );
-  });
-}
-
-export default async function BlogPostPage({ params }: Props) {
+export default async function BlogPostPage(
+  { params }: { params: Promise<{ slug: string }> }
+) {
   const { slug } = await params;
-  const post = getBlogPost(slug);
+  const post = findPost(slug);
   if (!post) notFound();
 
-  const related = blogPosts
-    .filter((p) => p.slug !== slug && p.tags.some((t) => post.tags.includes(t)))
+  // Strip leading "# Title" if duplicated in content
+  const content = post.content
+    .replace(/\r\n/g, "\n")
+    .replace(/^\s*#\s+.+\n+/, "");
+
+  const more = allPosts
+    .filter((p) => p.slug !== post.slug)
     .slice(0, 3);
 
   return (
-    <div style={{ backgroundColor: "#faf7f2" }}>
-      <section style={{ borderBottom: "1px solid #dfc5a5" }} className="py-24">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="mb-6">
-            <Link href="/blog" style={{ color: "#9b7653" }} className="text-sm hover:opacity-80">
-              ← Blog
+    <div className="bg-grid">
+      <JsonLd
+        id={`ld-article-${post.slug}`}
+        data={articleSchema({
+          title: post.title,
+          description: post.description,
+          datePublished: post.publishedAt,
+          slug: post.slug,
+        })}
+      />
+      <JsonLd
+        id={`ld-article-breadcrumbs-${post.slug}`}
+        data={breadcrumbSchema([
+          { name: "Home", url: "/" },
+          { name: "Blog", url: "/blog" },
+          { name: post.title, url: `/blog/${post.slug}` },
+        ])}
+      />
+      <article>
+        <section className="section pb-10">
+          <div className="container-page">
+            <Link
+              href="/blog"
+              className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--text-4)] hover:text-[var(--accent)]"
+            >
+              ← All posts
             </Link>
-          </div>
-          <div className="flex flex-wrap gap-2 mb-6">
-            {post.tags.map((tag) => (
-              <span
-                key={tag}
-                style={{ backgroundColor: "#ecdcc6", color: "#5c3d1e" }}
-                className="text-xs font-medium px-2 py-1 rounded"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-          <h1 style={{ color: "#1e1208" }} className="text-4xl md:text-5xl font-semibold max-w-3xl leading-tight mb-6">
-            {post.title}
-          </h1>
-          <div className="flex items-center gap-4">
-            <span style={{ color: "#9b7653" }} className="text-sm">{formatDate(post.date)}</span>
-            <span style={{ color: "#cfa97e" }}>·</span>
-            <span style={{ color: "#9b7653" }} className="text-sm">{post.readingTime} min read</span>
-          </div>
-        </div>
-      </section>
 
-      <div className="py-20">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="grid md:grid-cols-3 gap-16">
-            <div className="md:col-span-2">
-              <p style={{ color: "#7d5c3a" }} className="text-lg leading-relaxed mb-8">
+            <div className="mt-8 max-w-3xl mx-auto">
+              <div className="flex flex-wrap gap-1.5 mb-6">
+                {post.tags.map((t) => (
+                  <span key={t} className="tag">
+                    {t}
+                  </span>
+                ))}
+              </div>
+              <h1 className="text-4xl md:text-6xl font-semibold tracking-tight leading-[1.08] text-[var(--text)]">
+                {post.title}
+              </h1>
+              <p className="mt-6 text-lg md:text-xl text-[var(--text-2)] leading-relaxed">
                 {post.description}
               </p>
-              <div>{renderContent(post.content)}</div>
-            </div>
-            <div>
-              <div
-                style={{ backgroundColor: "#f5ede0", border: "1px solid #dfc5a5", borderRadius: "8px" }}
-                className="p-6 sticky top-24"
-              >
-                <h3 style={{ color: "#1e1208" }} className="font-semibold mb-3">
-                  Need help with this?
-                </h3>
-                <p style={{ color: "#9b7653" }} className="text-sm mb-4">
-                  If this topic is relevant to a problem you're working on, I'd be happy to discuss it.
-                </p>
-                <Link
-                  href="/contact"
-                  style={{ backgroundColor: "#5c3d1e", color: "#faf7f2" }}
-                  className="block text-center text-sm font-semibold px-4 py-3 rounded hover:opacity-90 transition-opacity"
-                >
-                  Get in touch
-                </Link>
+              <div className="mt-8 flex flex-wrap items-center gap-3 font-mono text-xs uppercase tracking-[0.15em] text-[var(--text-4)]">
+                <span>{formatDate(post.publishedAt)}</span>
+                <span>·</span>
+                <span>{post.readingTime} min read</span>
+                {post.category && (
+                  <>
+                    <span>·</span>
+                    <span className="text-[var(--accent)]">{post.category}</span>
+                  </>
+                )}
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </section>
 
-      {related.length > 0 && (
-        <section style={{ backgroundColor: "#f5ede0", borderTop: "1px solid #dfc5a5" }} className="py-16">
-          <div className="container mx-auto px-6 lg:px-12">
-            <h2 style={{ color: "#1e1208" }} className="text-xl font-semibold mb-8">Related articles</h2>
-            <div className="grid md:grid-cols-3 gap-6">
-              {related.map((p) => (
+        <section className="pb-24">
+          <div className="container-page">
+            <div className="max-w-3xl mx-auto">
+              <span className="hairline block mb-10" />
+              <Markdown source={content} />
+
+              {post.references && post.references.length > 0 && (
+                <div className="mt-16 pt-10 border-t border-[var(--border)]">
+                  <span className="eyebrow">References</span>
+                  <ol className="mt-5 space-y-2.5 list-decimal pl-5 marker:text-[var(--text-4)] marker:font-mono">
+                    {post.references.map((r) => (
+                      <li
+                        key={r.url}
+                        className="text-sm text-[var(--text-2)] pl-2"
+                      >
+                        <a
+                          href={r.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[var(--accent)] underline underline-offset-4 hover:opacity-80"
+                        >
+                          {r.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+      </article>
+
+      {more.length > 0 && (
+        <section className="section border-t border-[var(--border)] bg-[var(--bg-1)]/40">
+          <div className="container-page">
+            <div className="max-w-3xl mx-auto mb-10">
+              <span className="eyebrow">Keep reading</span>
+              <h2 className="mt-3 text-3xl md:text-4xl font-semibold tracking-tight text-[var(--text)]">
+                More notes.
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {more.map((p) => (
                 <Link
                   key={p.slug}
                   href={`/blog/${p.slug}`}
-                  style={{ border: "1px solid #dfc5a5", backgroundColor: "#faf7f2" }}
-                  className="group p-6 rounded-lg hover:border-[#9b7653] transition-colors block"
+                  className="surface-card p-6 block group transition-transform hover:-translate-y-0.5"
                 >
-                  <p style={{ color: "#9b7653" }} className="text-xs mb-2">{formatDate(p.date)}</p>
-                  <h3 style={{ color: "#1e1208" }} className="font-semibold mb-2 group-hover:text-[#5c3d1e] transition-colors text-sm">
+                  <div className="font-mono text-[0.65rem] uppercase tracking-[0.18em] text-[var(--accent)]">
+                    {p.category ?? p.tags[0] ?? "Notes"}
+                  </div>
+                  <h3 className="mt-3 text-base font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors leading-snug">
                     {p.title}
                   </h3>
-                  <p style={{ color: "#9b7653" }} className="text-xs">{p.readingTime} min read</p>
+                  <div className="mt-4 font-mono text-[0.65rem] uppercase tracking-[0.15em] text-[var(--text-4)]">
+                    {formatDate(p.publishedAt)} · {p.readingTime}m
+                  </div>
                 </Link>
               ))}
             </div>

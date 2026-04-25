@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Archive, Check, MailOpen, NotebookPen, UserPlus, X } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 interface Props {
@@ -25,10 +26,7 @@ export default function InboxActions({
   async function updateStatus(status: string) {
     setLoading(status);
     const supabase = createClient();
-    await supabase
-      .from("inbox_messages")
-      .update({ status })
-      .eq("id", messageId);
+    await supabase.from("inbox_messages").update({ status }).eq("id", messageId);
     router.refresh();
     setLoading(null);
   }
@@ -71,81 +69,80 @@ export default function InboxActions({
     setLoading(null);
   }
 
+  const btn =
+    "inline-flex items-center gap-1.5 px-2.5 py-1 text-xs rounded-full border transition-colors disabled:opacity-50";
+
   return (
-    <div>
+    <div className="space-y-2">
       {showNoteInput && (
-        <div className="flex gap-2 mb-2">
+        <div className="flex gap-2">
           <input
             type="text"
             value={note}
             onChange={(e) => setNote(e.target.value)}
             placeholder="Add note..."
-            style={{
-              backgroundColor: "#1e1208",
-              border: "1px solid #3e2610",
-              color: "#faf7f2",
-            }}
-            className="px-3 py-1 text-xs rounded flex-1 outline-none"
+            className="flex-1 px-3 py-1.5 text-xs rounded-md bg-[var(--surface-2)] border border-[var(--border)] text-[var(--text)] outline-none focus:border-[var(--accent)]"
+            autoFocus
           />
           <button
             onClick={saveNote}
             disabled={loading === "note"}
-            style={{ backgroundColor: "#5c3d1e", color: "#faf7f2" }}
-            className="px-3 py-1 text-xs rounded"
+            className="px-2.5 py-1 text-xs rounded-md bg-[var(--accent)] text-[#04121a] font-semibold"
           >
             Save
           </button>
           <button
             onClick={() => setShowNoteInput(false)}
-            style={{ color: "#9b7653" }}
-            className="px-2 py-1 text-xs"
+            className="px-1.5 py-1 text-xs text-[var(--text-3)] hover:text-[var(--text)]"
           >
-            ✕
+            <X size={14} />
           </button>
         </div>
       )}
-      <div className="flex gap-2 flex-wrap">
+      <div className="flex gap-1.5 flex-wrap justify-end">
         {currentStatus === "unread" ? (
           <button
             onClick={() => updateStatus("read")}
             disabled={loading === "read"}
-            style={{ color: "#9b7653", border: "1px solid #3e2610" }}
-            className="text-xs px-2 py-1 rounded hover:opacity-80"
+            className={`${btn} bg-[var(--surface-2)] border-[var(--border)] text-[var(--text-2)] hover:text-[var(--text)] hover:border-[var(--border-2)]`}
           >
-            Mark read
+            <MailOpen size={12} /> Mark read
           </button>
         ) : (
           <button
             onClick={() => updateStatus("unread")}
             disabled={loading === "unread"}
-            style={{ color: "#9b7653", border: "1px solid #3e2610" }}
-            className="text-xs px-2 py-1 rounded hover:opacity-80"
+            className={`${btn} bg-[var(--surface-2)] border-[var(--border)] text-[var(--text-2)] hover:text-[var(--text)] hover:border-[var(--border-2)]`}
           >
-            Mark unread
+            <MailOpen size={12} /> Unread
           </button>
         )}
         <button
-          onClick={() => setShowNoteInput(true)}
-          style={{ color: "#9b7653", border: "1px solid #3e2610" }}
-          className="text-xs px-2 py-1 rounded hover:opacity-80"
+          onClick={() => updateStatus("replied")}
+          disabled={loading === "replied"}
+          className={`${btn} bg-[var(--lime)]/10 border-[var(--lime)]/30 text-[var(--lime)] hover:bg-[var(--lime)]/15`}
         >
-          Note
+          <Check size={12} /> Replied
+        </button>
+        <button
+          onClick={() => setShowNoteInput(true)}
+          className={`${btn} bg-[var(--surface-2)] border-[var(--border)] text-[var(--text-2)] hover:text-[var(--text)] hover:border-[var(--border-2)]`}
+        >
+          <NotebookPen size={12} /> Note
         </button>
         <button
           onClick={convertToLead}
           disabled={loading === "lead"}
-          style={{ color: "#cfa97e", border: "1px solid #5c3d1e" }}
-          className="text-xs px-2 py-1 rounded hover:opacity-80"
+          className={`${btn} bg-[var(--violet)]/10 border-[var(--violet)]/30 text-[var(--violet)] hover:bg-[var(--violet)]/15`}
         >
-          → Lead
+          <UserPlus size={12} /> Lead
         </button>
         <button
           onClick={() => updateStatus("archived")}
           disabled={loading === "archived"}
-          style={{ color: "#7d5c3a", border: "1px solid #3e2610" }}
-          className="text-xs px-2 py-1 rounded hover:opacity-80"
+          className={`${btn} bg-[var(--surface-2)] border-[var(--border)] text-[var(--text-3)] hover:text-[var(--text)] hover:border-[var(--border-2)]`}
         >
-          Archive
+          <Archive size={12} /> Archive
         </button>
       </div>
     </div>

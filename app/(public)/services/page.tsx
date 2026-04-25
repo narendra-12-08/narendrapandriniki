@@ -5,83 +5,63 @@ import { services } from "@/lib/content/services";
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Cloud & DevOps, platform engineering, backend systems, internal tools, workflow automation, and reporting dashboards.",
+    "Cloud, platform, Kubernetes, CI/CD, IaC, SRE, DevSecOps, databases, migrations, and fractional DevOps leadership.",
 };
 
 export default function ServicesPage() {
   return (
-    <div style={{ backgroundColor: "#faf7f2" }}>
-      <section
-        style={{ borderBottom: "1px solid #dfc5a5" }}
-        className="py-24"
-      >
-        <div className="container mx-auto px-6 lg:px-12">
-          <p
-            style={{ color: "#9b7653" }}
-            className="text-sm font-semibold uppercase tracking-widest mb-6"
-          >
-            Services
-          </p>
-          <h1
-            style={{ color: "#1e1208" }}
-            className="text-4xl md:text-5xl font-semibold max-w-2xl leading-tight mb-6"
-          >
-            Engineering services for businesses that need it done properly
+    <div className="bg-grid">
+      <section className="section pb-12">
+        <div className="container-page">
+          <span className="eyebrow">Services</span>
+          <h1 className="mt-6 text-5xl md:text-7xl font-semibold tracking-tight leading-[1.05] text-[var(--text)] max-w-4xl">
+            Ten focused engagements.{" "}
+            <span className="gradient-text">One operator.</span>
           </h1>
-          <p style={{ color: "#7d5c3a" }} className="text-xl max-w-2xl leading-relaxed">
-            I work across the stack — from cloud infrastructure to backend
-            systems to internal tooling — taking ownership of the engineering
-            problems that matter to your operations.
+          <p className="mt-8 max-w-2xl text-lg text-[var(--text-2)] leading-relaxed">
+            I take on a small number of engagements at any one time so the
+            attention is real. Pick the shape that fits — fixed-scope project,
+            embedded fractional, or a focused remediation.
           </p>
         </div>
       </section>
 
-      <section className="py-20">
-        <div className="container mx-auto px-6 lg:px-12">
-          <div className="space-y-6">
-            {services.map((service, index) => (
+      <section className="pb-32">
+        <div className="container-page">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {services.map((s, idx) => (
               <Link
-                key={service.slug}
-                href={`/services/${service.slug}`}
-                style={{ border: "1px solid #dfc5a5" }}
-                className="group flex flex-col md:flex-row items-start gap-8 p-8 rounded-lg hover:border-[#9b7653] transition-colors block"
+                key={s.slug}
+                href={`/services/${s.slug}`}
+                className={`surface-card group p-7 block transition-transform hover:-translate-y-0.5 ${
+                  idx === 0 || idx === 5
+                    ? "md:col-span-2 lg:col-span-2"
+                    : ""
+                }`}
               >
-                <div
-                  style={{ color: "#cfa97e" }}
-                  className="text-2xl font-mono flex-shrink-0"
-                >
-                  {String(index + 1).padStart(2, "0")}
-                </div>
-                <div className="flex-1">
-                  <h2
-                    style={{ color: "#1e1208" }}
-                    className="text-xl font-semibold mb-3 group-hover:text-[#5c3d1e] transition-colors"
-                  >
-                    {service.title}
-                  </h2>
-                  <p style={{ color: "#7d5c3a" }} className="leading-relaxed mb-4">
-                    {service.description}
-                  </p>
-                  <ul className="space-y-1">
-                    {service.benefits.slice(0, 3).map((b) => (
-                      <li
-                        key={b}
-                        style={{ color: "#9b7653" }}
-                        className="text-sm flex items-start gap-2"
-                      >
-                        <span style={{ color: "#cfa97e" }}>—</span>
-                        {b}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="flex-shrink-0">
-                  <span
-                    style={{ color: "#5c3d1e" }}
-                    className="text-sm font-semibold group-hover:underline"
-                  >
-                    Learn more →
+                <div className="flex items-center justify-between gap-3">
+                  <span className="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-[var(--accent)]">
+                    {s.tagline}
                   </span>
+                  <span className="font-mono text-[0.65rem] text-[var(--text-4)]">
+                    {String(idx + 1).padStart(2, "0")}
+                  </span>
+                </div>
+                <h2 className="mt-3 text-xl md:text-2xl font-semibold text-[var(--text)] group-hover:text-[var(--accent)] transition-colors tracking-tight">
+                  {s.title}
+                </h2>
+                <p className="mt-3 text-sm leading-relaxed text-[var(--text-3)]">
+                  {s.shortDescription}
+                </p>
+                <div className="mt-5 flex flex-wrap gap-1.5">
+                  {s.stack.slice(0, 5).map((t) => (
+                    <span key={t} className="tag">
+                      {t}
+                    </span>
+                  ))}
+                </div>
+                <div className="mt-6 font-mono text-xs text-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity">
+                  Read more →
                 </div>
               </Link>
             ))}
@@ -89,28 +69,19 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      <section
-        style={{ backgroundColor: "#2a1608" }}
-        className="py-20"
-      >
-        <div className="container mx-auto px-6 lg:px-12 text-center">
-          <h2
-            style={{ color: "#faf7f2" }}
-            className="text-2xl md:text-3xl font-semibold mb-4"
-          >
-            Not sure which service fits?
-          </h2>
-          <p style={{ color: "#9b7653" }} className="text-lg mb-8 max-w-xl mx-auto">
-            Tell me what you're trying to achieve. I'll suggest the right
-            approach.
-          </p>
-          <Link
-            href="/contact"
-            style={{ backgroundColor: "#cfa97e", color: "#1e1208" }}
-            className="inline-flex items-center px-8 py-4 text-sm font-semibold rounded hover:opacity-90 transition-opacity"
-          >
-            Get in touch
-          </Link>
+      <section className="section border-t border-[var(--border)] bg-[var(--bg-1)]/40">
+        <div className="container-page">
+          <div className="surface-card glow-ring p-10 md:p-14 text-center">
+            <span className="eyebrow justify-center">Not sure which</span>
+            <h2 className="mt-5 text-3xl md:text-5xl font-semibold tracking-tight text-[var(--text)]">
+              Tell me the problem. I&apos;ll tell you the shape.
+            </h2>
+            <div className="mt-8 flex flex-col sm:flex-row justify-center gap-3">
+              <Link href="/contact" className="btn-primary">
+                Start a conversation
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
     </div>

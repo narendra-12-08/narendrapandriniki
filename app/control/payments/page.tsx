@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { formatDate, formatCurrency } from "@/lib/utils";
 import PaymentForm from "@/components/admin/PaymentForm";
+import { Badge, Card, Empty, PageHeader } from "@/components/admin/ui";
 
 export const metadata: Metadata = { title: "Payments" };
 
@@ -19,58 +20,64 @@ export default async function PaymentsPage() {
       .in("status", ["sent", "overdue"]),
   ]);
 
-  const totalReceived = payments?.reduce((sum: number, p: { amount: number }) => sum + p.amount, 0) ?? 0;
+  const list = (payments ?? []) as Array<{
+    id: string;
+    invoice?: {
+      invoice_number: string;
+      total: number;
+      client?: { name: string } | null;
+    } | null;
+    amount: number;
+    paid_at: string;
+    method: string;
+    reference: string | null;
+  }>;
+
+  const totalReceived = list.reduce((s, p) => s + Number(p.amount ?? 0), 0);
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <div className="mb-8 flex items-center justify-between">
-        <div>
-          <h1 style={{ color: "#faf7f2" }} className="text-2xl font-semibold">Payments</h1>
-          <p style={{ color: "#9b7653" }} className="text-sm mt-1">
-            {payments?.length ?? 0} received · {formatCurrency(totalReceived)} total
-          </p>
-        </div>
-        <PaymentForm invoices={invoices ?? []} />
-      </div>
+    <>
+      <PageHeader
+        title="Payments"
+        subtitle={`${list.length} received · ${formatCurrency(totalReceived)} total`}
+        actions={<PaymentForm invoices={invoices ?? []} />}
+      />
 
-      <div style={{ backgroundColor: "#2a1608", border: "1px solid #3e2610" }} className="rounded-lg overflow-hidden">
-        {payments && payments.length > 0 ? (
-          <div>
-            {payments.map((payment: {
-              id: string;
-              invoice?: { invoice_number: string; total: number; client?: { name: string } | null } | null;
-              amount: number;
-              paid_at: string;
-              method: string;
-              reference: string | null;
-            }) => (
-              <div key={payment.id} style={{ borderBottom: "1px solid #3e2610" }} className="p-5 flex items-center justify-between last:border-0">
-                <div>
-                  <p style={{ color: "#faf7f2" }} className="font-medium text-sm">
-                    {payment.invoice?.client?.name ?? "—"}
+      <Card>
+        {list.length > 0 ? (
+          <ul className="divide-y divide-[var(--border)]">
+            {list.map((p) => (
+              <li
+                key={p.id}
+                className="p-5 flex items-center justify-between gap-3 hover:bg-[var(--surface-2)]/40"
+              >
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-[var(--text)] truncate">
+                    {p.invoice?.client?.name ?? "—"}
                   </p>
-                  <p style={{ color: "#9b7653" }} className="text-xs mt-0.5">
-                    {payment.invoice?.invoice_number ?? "—"} · {payment.method}
-                    {payment.reference ? ` · Ref: ${payment.reference}` : ""}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <p style={{ color: "#4ade80" }} className="font-semibold">
-                    {formatCurrency(payment.amount)}
-                  </p>
-                  <p style={{ color: "#7d5c3a" }} className="text-xs mt-0.5">
-                    {formatDate(payment.paid_at)}
+                  <p className="text-xs text-[var(--text-3)] truncate">
+                    <span className="font-mono">
+                      {p.invoice?.invoice_number ?? "—"}
+                    </span>{" "}
+                    · {p.method.replace("_", " ")}
+                    {p.reference ? ` · Ref ${p.reference}` : ""}
                   </p>
                 </div>
-              </div>
+                <div className="text-right shrink-0">
+                  <p className="font-mono font-semibold text-[var(--lime)] tabular-nums">
+                    {formatCurrency(Number(p.amount ?? 0))}
+                  </p>
+                  <p className="text-xs text-[var(--text-4)] mt-0.5">
+                    {formatDate(p.paid_at)}
+                  </p>
+                </div>
+              </li>
             ))}
-          </div>
+          </ul>
         ) : (
-          <div className="p-12 text-center">
-            <p style={{ color: "#7d5c3a" }} className="text-sm">No payments recorded</p>
-          </div>
+          <Empty title="No payments recorded" />
         )}
-      </div>
-    </div>
+      </Card>
+    </>
   );
 }
