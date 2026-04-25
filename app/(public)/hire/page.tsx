@@ -9,6 +9,11 @@ import {
 } from "@/lib/seo/schema";
 import { pricingTiers } from "@/lib/content/pricing";
 import { caseStudies } from "@/lib/content/work";
+import Reveal from "@/components/motion/Reveal";
+import Stagger from "@/components/motion/Stagger";
+import StaggerItem from "@/components/motion/StaggerItem";
+import HeroTitle from "@/components/motion/HeroTitle";
+import MagneticButton from "@/components/motion/MagneticButton";
 
 export const metadata: Metadata = {
   title: "Hire — Senior DevOps & Platform Engineer",
@@ -90,81 +95,97 @@ export default function HirePage() {
 
       <section className="section bg-grid">
         <div className="container-page">
-          <p className="eyebrow">Hire</p>
-          <h1 className="text-4xl md:text-6xl font-semibold tracking-tight mt-6 max-w-4xl">
+          <Reveal>
+            <p className="eyebrow">Hire</p>
+          </Reveal>
+          <HeroTitle className="text-4xl md:text-6xl font-semibold tracking-tight mt-6 max-w-4xl">
             Senior DevOps engineer.{" "}
             <span className="gradient-text">Available globally for engagements.</span>
-          </h1>
-          <div className="mt-6 flex items-center gap-3">
-            <span className="live-dot" />
-            <span className="text-xs font-mono text-[var(--text-2)]">
-              Currently booking Q3 2026
-            </span>
-          </div>
+          </HeroTitle>
+          <Reveal delay={0.4}>
+            <div className="mt-6 flex items-center gap-3">
+              <span className="live-dot" />
+              <span className="text-xs font-mono text-[var(--text-2)]">
+                Currently booking Q3 2026
+              </span>
+            </div>
+          </Reveal>
 
-          <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-3">
+          <Stagger className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-3" delay={0.5}>
             {[
               { label: "Years", value: "5y" },
               { label: "Engagements", value: "30+" },
               { label: "Cloud providers", value: "3" },
               { label: "Remote", value: "100%" },
             ].map((m) => (
-              <div
-                key={m.label}
-                className="surface-card p-5 font-mono"
-              >
-                <div className="text-2xl text-[var(--text)]">{m.value}</div>
-                <div className="mt-1 text-xs uppercase tracking-[0.16em] text-[var(--text-4)]">
-                  {m.label}
+              <StaggerItem key={m.label}>
+                <div className="surface-card p-5 font-mono h-full">
+                  <div className="text-2xl text-[var(--text)]">{m.value}</div>
+                  <div className="mt-1 text-xs uppercase tracking-[0.16em] text-[var(--text-4)]">
+                    {m.label}
+                  </div>
                 </div>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
 
-          <div className="mt-10 flex flex-wrap items-center gap-3">
-            <a
-              href={`mailto:hello@narendrapandrinki.com?subject=${encodeURIComponent(
-                "Engagement enquiry"
-              )}`}
-              className="btn-primary"
-            >
-              Email hello@narendrapandrinki.com
-            </a>
-            <Link href="/cv" className="btn-ghost">
-              View CV
-            </Link>
-          </div>
+          <Reveal delay={0.7}>
+            <div className="mt-10 flex flex-wrap items-center gap-3">
+              <MagneticButton>
+                <a
+                  href={`mailto:hello@narendrapandrinki.com?subject=${encodeURIComponent(
+                    "Engagement enquiry"
+                  )}`}
+                  className="btn-primary"
+                >
+                  Email hello@narendrapandrinki.com
+                </a>
+              </MagneticButton>
+              <MagneticButton>
+                <Link href="/cv" className="btn-ghost">
+                  View CV
+                </Link>
+              </MagneticButton>
+            </div>
+          </Reveal>
         </div>
       </section>
 
       <section className="section pt-0">
         <div className="container-page">
-          <p className="eyebrow">What I do best</p>
-          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight mt-4 max-w-2xl">
-            Six things you'd hire a senior platform engineer for.
-          </h2>
-          <div className="mt-10 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <Reveal>
+            <p className="eyebrow">What I do best</p>
+            <h2 className="text-2xl md:text-3xl font-semibold tracking-tight mt-4 max-w-2xl">
+              Six things you'd hire a senior platform engineer for.
+            </h2>
+          </Reveal>
+          <Stagger className="mt-10 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {strengths.map((s) => (
-              <div key={s.title} className="surface-card p-6">
-                <h3 className="text-lg font-semibold text-[var(--text)]">{s.title}</h3>
-                <p className="mt-3 text-sm text-[var(--text-2)] leading-relaxed">
-                  {s.body}
-                </p>
-              </div>
+              <StaggerItem key={s.title}>
+                <div className="surface-card p-6 h-full">
+                  <h3 className="text-lg font-semibold text-[var(--text)]">{s.title}</h3>
+                  <p className="mt-3 text-sm text-[var(--text-2)] leading-relaxed">
+                    {s.body}
+                  </p>
+                </div>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
       </section>
 
       <section className="section pt-0">
         <div className="container-page">
-          <p className="eyebrow">Engagement options</p>
-          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight mt-4 max-w-2xl">
-            Three shapes. Pick the one that fits the problem.
-          </h2>
-          <div className="mt-10 grid lg:grid-cols-3 gap-5">
+          <Reveal>
+            <p className="eyebrow">Engagement options</p>
+            <h2 className="text-2xl md:text-3xl font-semibold tracking-tight mt-4 max-w-2xl">
+              Three shapes. Pick the one that fits the problem.
+            </h2>
+          </Reveal>
+          <Stagger className="mt-10 grid lg:grid-cols-3 gap-5">
             {pricingTiers.map((t) => (
-              <div key={t.slug} className="surface-card p-7 flex flex-col">
+              <StaggerItem key={t.slug}>
+              <div className="surface-card p-7 flex flex-col h-full">
                 <h3 className="text-xl font-semibold text-[var(--text)]">{t.name}</h3>
                 <p className="mt-2 text-sm text-[var(--text-3)]">{t.tagline}</p>
                 <div className="mt-5 pt-5 border-t border-[var(--border)]">
@@ -179,22 +200,26 @@ export default function HirePage() {
                   </Link>
                 </div>
               </div>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
       </section>
 
       <section className="section pt-0">
         <div className="container-page">
-          <p className="eyebrow">Past wins</p>
-          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight mt-4 max-w-2xl">
-            Three recent engagements, picked because the numbers held up.
-          </h2>
-          <div className="mt-10 grid md:grid-cols-3 gap-5">
+          <Reveal>
+            <p className="eyebrow">Past wins</p>
+            <h2 className="text-2xl md:text-3xl font-semibold tracking-tight mt-4 max-w-2xl">
+              Three recent engagements, picked because the numbers held up.
+            </h2>
+          </Reveal>
+          <Stagger className="mt-10 grid md:grid-cols-3 gap-5">
             {wins.map((c) => {
               const headline = c.metrics[0];
               return (
-                <div key={c.slug} className="surface-card p-6 flex flex-col">
+                <StaggerItem key={c.slug}>
+                <div className="surface-card p-6 flex flex-col h-full">
                   <div className="flex items-center justify-between text-xs font-mono text-[var(--text-4)] uppercase tracking-[0.14em]">
                     <span>{c.industry}</span>
                     <span>{c.duration}</span>
@@ -221,19 +246,22 @@ export default function HirePage() {
                     </Link>
                   </div>
                 </div>
+                </StaggerItem>
               );
             })}
-          </div>
+          </Stagger>
         </div>
       </section>
 
       <section className="section pt-0">
         <div className="container-page">
-          <p className="eyebrow">How to start</p>
-          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight mt-4 max-w-2xl">
-            Three steps. No portal. No forms.
-          </h2>
-          <div className="mt-10 grid md:grid-cols-3 gap-5">
+          <Reveal>
+            <p className="eyebrow">How to start</p>
+            <h2 className="text-2xl md:text-3xl font-semibold tracking-tight mt-4 max-w-2xl">
+              Three steps. No portal. No forms.
+            </h2>
+          </Reveal>
+          <Stagger className="mt-10 grid md:grid-cols-3 gap-5">
             {[
               {
                 n: 1,
@@ -251,19 +279,21 @@ export default function HirePage() {
                 body: "If we both want to move forward, you get a written proposal with scope, milestones, fee, and assumptions. No surprises later.",
               },
             ].map((s) => (
-              <div key={s.n} className="surface-card p-6">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--accent)] text-[var(--accent)] font-mono">
-                  {s.n}
+              <StaggerItem key={s.n}>
+                <div className="surface-card p-6 h-full">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full border border-[var(--accent)] text-[var(--accent)] font-mono">
+                    {s.n}
+                  </div>
+                  <h3 className="mt-5 text-lg font-semibold text-[var(--text)]">
+                    {s.title}
+                  </h3>
+                  <p className="mt-3 text-sm text-[var(--text-2)] leading-relaxed">
+                    {s.body}
+                  </p>
                 </div>
-                <h3 className="mt-5 text-lg font-semibold text-[var(--text)]">
-                  {s.title}
-                </h3>
-                <p className="mt-3 text-sm text-[var(--text-2)] leading-relaxed">
-                  {s.body}
-                </p>
-              </div>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
       </section>
 

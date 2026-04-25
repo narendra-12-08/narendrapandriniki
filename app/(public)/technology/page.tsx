@@ -8,8 +8,8 @@ function TechIcon({ name }: { name: string }) {
   const url = getLogoUrl(name);
   const initials = getInitials(name);
   return (
-    <span className="relative inline-flex items-center justify-center w-9 h-9 rounded-md bg-[var(--surface-2)] border border-[var(--border)] overflow-hidden shrink-0">
-      <span className="absolute inset-0 flex items-center justify-center font-mono text-[10px] text-[var(--text-4)]">
+    <span className="relative inline-flex items-center justify-center w-11 h-11 rounded-xl bg-white/95 border border-[var(--border)] overflow-hidden shrink-0 shadow-[0_4px_20px_-8px_rgba(34,211,238,0.4)]">
+      <span className="absolute inset-0 flex items-center justify-center font-mono text-[11px] text-[var(--bg)] font-semibold">
         {initials}
       </span>
       {url && (
@@ -18,9 +18,9 @@ function TechIcon({ name }: { name: string }) {
           src={url}
           alt={name}
           loading="lazy"
-          width={22}
-          height={22}
-          className="relative opacity-90"
+          width={28}
+          height={28}
+          className="relative z-10"
         />
       )}
     </span>

@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getPublishedServices } from "@/lib/db/content";
+import Reveal from "@/components/motion/Reveal";
+import Stagger from "@/components/motion/Stagger";
+import StaggerItem from "@/components/motion/StaggerItem";
+import HeroTitle from "@/components/motion/HeroTitle";
+import MagneticButton from "@/components/motion/MagneticButton";
 
 export const metadata: Metadata = {
   title: "Services",
@@ -14,31 +19,36 @@ export default async function ServicesPage() {
     <div className="bg-grid">
       <section className="section pb-12">
         <div className="container-page">
-          <span className="eyebrow">Services</span>
-          <h1 className="mt-6 text-5xl md:text-7xl font-semibold tracking-tight leading-[1.05] text-[var(--text)] max-w-4xl">
+          <Reveal>
+            <span className="eyebrow">Services</span>
+          </Reveal>
+          <HeroTitle className="mt-6 text-5xl md:text-7xl font-semibold tracking-tight leading-[1.05] text-[var(--text)] max-w-4xl">
             Ten focused engagements.{" "}
             <span className="gradient-text">One operator.</span>
-          </h1>
-          <p className="mt-8 max-w-2xl text-lg text-[var(--text-2)] leading-relaxed">
-            I take on a small number of engagements at any one time so the
-            attention is real. Pick the shape that fits — fixed-scope project,
-            embedded fractional, or a focused remediation.
-          </p>
+          </HeroTitle>
+          <Reveal delay={0.4}>
+            <p className="mt-8 max-w-2xl text-lg text-[var(--text-2)] leading-relaxed">
+              I take on a small number of engagements at any one time so the
+              attention is real. Pick the shape that fits — fixed-scope project,
+              embedded fractional, or a focused remediation.
+            </p>
+          </Reveal>
         </div>
       </section>
 
       <section className="pb-32">
         <div className="container-page">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <Stagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {services.map((s, idx) => (
-              <Link
+              <StaggerItem
                 key={s.slug}
+                className={
+                  idx === 0 || idx === 5 ? "md:col-span-2 lg:col-span-2" : ""
+                }
+              >
+              <Link
                 href={`/services/${s.slug}`}
-                className={`surface-card group p-7 block transition-transform hover:-translate-y-0.5 ${
-                  idx === 0 || idx === 5
-                    ? "md:col-span-2 lg:col-span-2"
-                    : ""
-                }`}
+                className="surface-card group p-7 block transition-transform hover:-translate-y-0.5 h-full"
               >
                 <div className="flex items-center justify-between gap-3">
                   <span className="font-mono text-[0.7rem] uppercase tracking-[0.18em] text-[var(--accent)]">
@@ -65,24 +75,29 @@ export default async function ServicesPage() {
                   Read more →
                 </div>
               </Link>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
       </section>
 
       <section className="section border-t border-[var(--border)] bg-[var(--bg-1)]/40">
         <div className="container-page">
+          <Reveal>
           <div className="surface-card glow-ring p-10 md:p-14 text-center">
             <span className="eyebrow justify-center">Not sure which</span>
             <h2 className="mt-5 text-3xl md:text-5xl font-semibold tracking-tight text-[var(--text)]">
               Tell me the problem. I&apos;ll tell you the shape.
             </h2>
             <div className="mt-8 flex flex-col sm:flex-row justify-center gap-3">
-              <Link href="/contact" className="btn-primary">
-                Start a conversation
-              </Link>
+              <MagneticButton>
+                <Link href="/contact" className="btn-primary">
+                  Start a conversation
+                </Link>
+              </MagneticButton>
             </div>
           </div>
+          </Reveal>
         </div>
       </section>
     </div>

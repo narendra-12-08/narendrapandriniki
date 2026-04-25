@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getPublishedCaseStudies } from "@/lib/db/content";
+import Reveal from "@/components/motion/Reveal";
+import Stagger from "@/components/motion/Stagger";
+import StaggerItem from "@/components/motion/StaggerItem";
+import HeroTitle from "@/components/motion/HeroTitle";
+import MagneticButton from "@/components/motion/MagneticButton";
 
 export const metadata: Metadata = {
   title: "Case Studies",
@@ -14,25 +19,29 @@ export default async function WorkPage() {
     <div className="bg-grid">
       <section className="section pb-12">
         <div className="container-page">
-          <span className="eyebrow">Selected work</span>
-          <h1 className="mt-6 text-5xl md:text-7xl font-semibold tracking-tight leading-[1.05] text-[var(--text)] max-w-4xl">
+          <Reveal>
+            <span className="eyebrow">Selected work</span>
+          </Reveal>
+          <HeroTitle className="mt-6 text-5xl md:text-7xl font-semibold tracking-tight leading-[1.05] text-[var(--text)] max-w-4xl">
             What was hired,{" "}
             <span className="gradient-text">what changed.</span>
-          </h1>
-          <p className="mt-8 max-w-2xl text-lg text-[var(--text-2)] leading-relaxed">
-            Six engagements with measured outcomes. Each one is a slice of the
-            same operating philosophy: deliberate boundaries, tested failovers,
-            observability tied to user journeys.
-          </p>
+          </HeroTitle>
+          <Reveal delay={0.4}>
+            <p className="mt-8 max-w-2xl text-lg text-[var(--text-2)] leading-relaxed">
+              Six engagements with measured outcomes. Each one is a slice of the
+              same operating philosophy: deliberate boundaries, tested failovers,
+              observability tied to user journeys.
+            </p>
+          </Reveal>
         </div>
       </section>
 
       <section className="pb-32">
         <div className="container-page">
-          <div className="space-y-4">
+          <Stagger className="space-y-4" stagger={0.09}>
             {caseStudies.map((cs, idx) => (
+              <StaggerItem key={cs.slug}>
               <Link
-                key={cs.slug}
                 href={`/work/${cs.slug}`}
                 className="surface-card group relative block p-7 md:p-10 transition-all hover:border-[var(--border-strong)]"
               >
@@ -83,24 +92,29 @@ export default async function WorkPage() {
                   </div>
                 </div>
               </Link>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
       </section>
 
       <section className="section border-t border-[var(--border)] bg-[var(--bg-1)]/40">
         <div className="container-page">
+          <Reveal>
           <div className="surface-card glow-ring p-10 md:p-14 text-center">
             <span className="eyebrow justify-center">Your project next</span>
             <h2 className="mt-5 text-3xl md:text-5xl font-semibold tracking-tight text-[var(--text)]">
               Ready to add a seventh row?
             </h2>
             <div className="mt-8">
-              <Link href="/contact" className="btn-primary">
-                Start a conversation
-              </Link>
+              <MagneticButton>
+                <Link href="/contact" className="btn-primary">
+                  Start a conversation
+                </Link>
+              </MagneticButton>
             </div>
           </div>
+          </Reveal>
         </div>
       </section>
     </div>

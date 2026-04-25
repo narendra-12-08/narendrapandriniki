@@ -114,7 +114,6 @@ export default function Footer() {
           <div className="flex items-center gap-4 text-xs font-mono text-[var(--text-4)]">
             <Link href="/privacy" className="hover:text-[var(--text-2)]">Privacy</Link>
             <Link href="/terms" className="hover:text-[var(--text-2)]">Terms</Link>
-            <span>v2.0</span>
           </div>
         </div>
       </div>

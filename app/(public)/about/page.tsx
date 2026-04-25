@@ -8,6 +8,10 @@ import {
 } from "@/lib/db/content-extra";
 import JsonLd from "@/components/seo/JsonLd";
 import { personSchema, breadcrumbSchema } from "@/lib/seo/schema";
+import Reveal from "@/components/motion/Reveal";
+import Stagger from "@/components/motion/Stagger";
+import StaggerItem from "@/components/motion/StaggerItem";
+import HeroTitle from "@/components/motion/HeroTitle";
 
 export const metadata: Metadata = {
   title: "About",
@@ -35,11 +39,13 @@ export default async function AboutPage() {
       />
       <section className="section pb-12">
         <div className="container-page">
-          <span className="eyebrow">About</span>
-          <h1 className="mt-6 text-5xl md:text-7xl font-semibold tracking-tight leading-[1.05] text-[var(--text)] max-w-4xl">
+          <Reveal>
+            <span className="eyebrow">About</span>
+          </Reveal>
+          <HeroTitle className="mt-6 text-5xl md:text-7xl font-semibold tracking-tight leading-[1.05] text-[var(--text)] max-w-4xl">
             Independent DevOps engineer.{" "}
             <span className="gradient-text">Hyderabad based.</span> Five years in.
-          </h1>
+          </HeroTitle>
         </div>
       </section>
 
@@ -122,15 +128,18 @@ export default async function AboutPage() {
 
       <section className="section border-t border-[var(--border)] bg-[var(--bg-1)]/40">
         <div className="container-page">
-          <div className="max-w-2xl mb-12">
-            <span className="eyebrow">Principles</span>
-            <h2 className="mt-4 text-4xl md:text-5xl font-semibold tracking-tight text-[var(--text)]">
-              How I work.
-            </h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <Reveal>
+            <div className="max-w-2xl mb-12">
+              <span className="eyebrow">Principles</span>
+              <h2 className="mt-4 text-4xl md:text-5xl font-semibold tracking-tight text-[var(--text)]">
+                How I work.
+              </h2>
+            </div>
+          </Reveal>
+          <Stagger className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {principles.map((p, i) => (
-              <article key={p.id} className="surface-card p-7">
+              <StaggerItem key={p.id}>
+              <article className="surface-card p-7 h-full">
                 <div className="font-mono text-xs text-[var(--text-4)] mb-3">
                   {String(i + 1).padStart(2, "0")} /{" "}
                   {String(principles.length).padStart(2, "0")}
@@ -142,27 +151,35 @@ export default async function AboutPage() {
                   {p.description}
                 </p>
               </article>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
         </div>
       </section>
 
       <section className="section">
         <div className="container-page">
-          <div className="max-w-2xl mb-12">
-            <span className="eyebrow">Timeline</span>
-            <h2 className="mt-4 text-4xl md:text-5xl font-semibold tracking-tight text-[var(--text)]">
-              Five years, briefly.
-            </h2>
-          </div>
+          <Reveal>
+            <div className="max-w-2xl mb-12">
+              <span className="eyebrow">Timeline</span>
+              <h2 className="mt-4 text-4xl md:text-5xl font-semibold tracking-tight text-[var(--text)]">
+                Five years, briefly.
+              </h2>
+            </div>
+          </Reveal>
 
           <ol className="relative max-w-3xl">
             <span
               className="absolute left-[1.4rem] top-0 bottom-0 w-px bg-gradient-to-b from-[var(--accent)]/40 via-[var(--border-2)] to-transparent"
               aria-hidden
             />
-            {timeline.map((entry) => (
-              <li key={entry.id} className="relative pl-16 pb-10">
+            {timeline.map((entry, i) => (
+              <Reveal
+                key={entry.id}
+                as="li"
+                delay={i * 0.06}
+                className="relative pl-16 pb-10"
+              >
                 <span className="absolute left-0 top-0 inline-flex h-12 w-12 items-center justify-center rounded-full border border-[var(--border-2)] bg-[var(--surface)] font-mono text-xs text-[var(--accent)]">
                   {entry.year}
                 </span>
@@ -172,7 +189,7 @@ export default async function AboutPage() {
                 <p className="mt-2 text-[var(--text-3)] leading-relaxed">
                   {entry.description}
                 </p>
-              </li>
+              </Reveal>
             ))}
           </ol>
         </div>
@@ -180,6 +197,7 @@ export default async function AboutPage() {
 
       <section className="section border-t border-[var(--border)] bg-[var(--bg-1)]/40">
         <div className="container-page">
+          <Reveal>
           <div className="surface-card glow-ring p-10 md:p-14 max-w-4xl">
             <div className="flex items-center gap-3">
               <span className="live-dot" />
@@ -205,6 +223,7 @@ export default async function AboutPage() {
               </a>
             </div>
           </div>
+          </Reveal>
         </div>
       </section>
     </div>

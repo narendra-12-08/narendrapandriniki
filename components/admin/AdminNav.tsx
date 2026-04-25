@@ -31,12 +31,14 @@ import {
   ListOrdered,
   TrendingUp,
   Award,
+  BarChart3,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { href: "/control/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/control/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/control/inbox", label: "Inbox", icon: Inbox },
   { href: "/control/email", label: "Compose email", icon: Mail },
   { href: "/control/clients", label: "Clients", icon: Users },

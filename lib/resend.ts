@@ -11,7 +11,10 @@ export const resend = { emails: { send: (...args: Parameters<Resend["emails"]["s
 
 export const FROM_ADDRESS = "hello@narendrapandrinki.com";
 export const FROM_EMAIL = "Narendra Pandrinki <hello@narendrapandrinki.com>";
-export const ADMIN_EMAIL = "hello@narendrapandrinki.com";
+// Personal inbox where notifications + forwarded inbound mail land.
+// hello@narendrapandrinki.com is the public-facing send address (FROM_EMAIL).
+// All admin/notification email is routed to the personal inbox below.
+export const ADMIN_EMAIL = "narendra1208@icloud.com";
 export const DOMAIN = "narendrapandrinki.com";
 
 export async function sendContactAcknowledgement(

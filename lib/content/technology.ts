@@ -105,9 +105,59 @@ export const technology: TechCategory[] = [
     items: [
       { name: "Python", role: "core", note: "Most of my automation and tooling; data work and ML platform integration." },
       { name: "Go", role: "core", note: "Operators, controllers, CLI tooling, performance-sensitive platform code." },
-      { name: "TypeScript", role: "fluent", note: "Pulumi programs, Backstage customisation, occasional internal tools." },
+      { name: "TypeScript", role: "core", note: "Full-stack apps, internal tools, Pulumi programs, AI/agent code." },
+      { name: "JavaScript", role: "core" },
       { name: "Bash", role: "core", note: "Where the right answer is genuinely a shell script." },
       { name: "Rust", role: "familiar", note: "I read it and contribute to it; not my primary language for new tooling." },
+      { name: "Java", role: "familiar" },
+    ],
+  },
+  {
+    slug: "frontend-fullstack",
+    name: "Frontend & Full-stack",
+    description:
+      "The stack I use for building product apps, marketing sites, internal tools, and admin dashboards.",
+    items: [
+      { name: "Next.js", role: "core", note: "App Router, server components, server actions, edge + Node runtimes." },
+      { name: "React", role: "core", note: "Server and client components; React 19 with concurrent rendering." },
+      { name: "TypeScript", role: "core", note: "Strict mode end-to-end across UI, API, and infrastructure." },
+      { name: "Tailwind CSS", role: "core", note: "v4 with CSS-variable design tokens." },
+      { name: "Node.js", role: "core", note: "API routes, background workers, MCP servers." },
+      { name: "Vercel", role: "core", note: "Edge deployment, ISR, OG image generation, env management." },
+      { name: "Cloudflare", role: "fluent", note: "Workers, R2, D1, Pages, and Zero Trust." },
+      { name: "Stripe", role: "core", note: "Subscriptions, metered billing, Tax, customer portal." },
+      { name: "Resend", role: "core", note: "Transactional email + inbound parsing." },
+    ],
+  },
+  {
+    slug: "ai-stack",
+    name: "AI & Agents",
+    description:
+      "Tooling for production AI features — RAG, agents, evals, and the orchestration that keeps them honest.",
+    items: [
+      { name: "OpenAI", role: "core", note: "GPT-4 / GPT-4o family, function calling, structured outputs." },
+      { name: "Anthropic", role: "core", note: "Claude 4 / 3.5 Sonnet for reasoning-heavy and coding workloads." },
+      { name: "Gemini", role: "fluent", note: "Long-context retrieval and Vertex AI agent builds." },
+      { name: "MCP", role: "core", note: "Model Context Protocol servers exposing data to AI clients." },
+      { name: "LangChain", role: "fluent", note: "Used selectively when the orchestration earns its weight." },
+      { name: "pgvector", role: "core", note: "Postgres-native embeddings; default RAG store for most teams." },
+      { name: "Pinecone", role: "fluent", note: "Managed vector store at scale." },
+      { name: "Ollama", role: "fluent", note: "Local model evals and dev workflows." },
+      { name: "Hugging Face", role: "fluent" },
+    ],
+  },
+  {
+    slug: "vcs-collab",
+    name: "VCS & Collaboration",
+    description:
+      "Where the code lives and how the work gets coordinated.",
+    items: [
+      { name: "Git", role: "core", note: "Worktrees, rebase discipline, monorepo with sparse checkout when sensible." },
+      { name: "GitHub", role: "core", note: "Actions, Codespaces, branch policies, CODEOWNERS." },
+      { name: "GitLab", role: "fluent" },
+      { name: "Linear", role: "fluent" },
+      { name: "Notion", role: "fluent" },
+      { name: "Slack", role: "core" },
     ],
   },
   {
