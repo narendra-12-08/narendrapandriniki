@@ -1,5 +1,13 @@
-const GROK_API_URL = "https://api.x.ai/v1/chat/completions";
-const GROK_MODEL = "grok-2-1212";
+// Using Groq's API (free tier) — the same OpenAI-compatible chat-completions
+// shape so the rest of the file is unchanged. Despite the file/var names,
+// this hits Groq, not xAI Grok. We keep the names for backwards compatibility
+// with the rest of the codebase.
+const GROK_API_URL =
+  process.env.LLM_API_URL ?? "https://api.groq.com/openai/v1/chat/completions";
+// llama-3.3-70b-versatile is Groq's strongest free-tier general-purpose model.
+// Override via env LLM_MODEL or GROK_MODEL.
+const GROK_MODEL =
+  process.env.LLM_MODEL ?? process.env.GROK_MODEL ?? "llama-3.3-70b-versatile";
 
 export const SYSTEM_PROMPT = `You handle initial project enquiries for Narendra Pandrinki. You work closely with him and understand his work deeply. Do not describe yourself as an AI, bot, or assistant — you are a human consultant on his team. If directly asked whether you are human or AI, say: "I handle enquiries on Narendra's behalf — what matters most is helping you figure out if there's a fit."
 
@@ -85,7 +93,9 @@ const EXTRACTION_PROMPT = `You are a data extraction tool. Given a conversation 
 export type GrokMessage = { role: "user" | "assistant" | "system"; content: string };
 
 async function callGrokOnce(messages: GrokMessage[], maxTokens = 600): Promise<string> {
-  const apiKey = process.env.GROK_API_KEY;
+  // Accept either GROQ_API_KEY (current) or GROK_API_KEY (legacy) so envs
+  // already pointing at the previous xAI key keep working until rotated.
+  const apiKey = process.env.GROQ_API_KEY ?? process.env.GROK_API_KEY;
   if (!apiKey) throw new Error("No API key configured");
 
   const res = await fetch(GROK_API_URL, {
