@@ -51,7 +51,7 @@ export default function CvPage() {
                   DevOps & Platform Engineer
                 </p>
                 <p className="mt-1 text-sm text-[var(--text-3)]">
-                  Hyderabad, India · Working with teams in India, UK, US, Singapore, Dubai
+                  India · Working with teams in India, UK, US, Singapore, Dubai
                 </p>
               </div>
               <div className="text-sm font-mono text-[var(--text-2)] space-y-1">

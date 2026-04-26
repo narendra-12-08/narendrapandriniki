@@ -68,7 +68,7 @@ export default function Footer() {
               actually want to use.
             </p>
             <p className="mt-4 text-sm text-[var(--text-3)] leading-relaxed max-w-sm">
-              Based in Hyderabad, India. Working with teams across India, UK, US, Singapore, and Dubai.
+              Based in India. Working with teams across India, UK, US, Singapore, and Dubai.
             </p>
             <div className="mt-6 flex items-center gap-3">
               <span className="live-dot" />

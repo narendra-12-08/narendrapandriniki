@@ -88,7 +88,7 @@ export const faqs: FAQ[] = [
     category: "general",
     question: "Where are you based and where do you work?",
     answer:
-      "Based in Hyderabad, India, working with teams globally. Most of my work is remote, with occasional on-site sessions when they meaningfully help — usually for discovery weeks, game days, or significant launches. I overlap comfortably with India, UK, EU, Singapore, Dubai, and US East Coast working hours; for teams further west, we agree a sustainable schedule rather than pretending timezone doesn't matter.",
+      "Based in India, working with teams globally. Most of my work is remote, with occasional on-site sessions when they meaningfully help — usually for discovery weeks, game days, or significant launches. I overlap comfortably with India, UK, EU, Singapore, Dubai, and US East Coast working hours; for teams further west, we agree a sustainable schedule rather than pretending timezone doesn't matter.",
   },
   {
     id: "13",

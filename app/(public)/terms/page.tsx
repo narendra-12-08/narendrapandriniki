@@ -104,7 +104,7 @@ export default function TermsPage() {
             <p>
               These terms are governed by the laws of India. Any
               dispute arising from your use of the site is subject to the
-              exclusive jurisdiction of the courts of Hyderabad, Telangana, India.
+              exclusive jurisdiction of the competent courts of India.
             </p>
 
             <h2>Contact</h2>

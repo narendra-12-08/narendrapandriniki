@@ -53,7 +53,7 @@ const hiringFaqs: { question: string; answer: string }[] = [
   {
     question: "What timezone do you work in?",
     answer:
-      "Hyderabad, India (IST). I prefer engagements with at least four hours of overlap with my working day. That comfortably covers India, UK, EU, Singapore, Dubai, and US East. I've worked with US West and Australia teams; I structure those with explicit async expectations.",
+      "India (IST). I prefer engagements with at least four hours of overlap with my working day. That comfortably covers India, UK, EU, Singapore, Dubai, and US East. I've worked with US West and Australia teams; I structure those with explicit async expectations.",
   },
   {
     question: "What is the minimum contract length?",

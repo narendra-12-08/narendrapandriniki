@@ -44,7 +44,7 @@ export default async function AboutPage() {
           </Reveal>
           <HeroTitle className="mt-6 text-5xl md:text-7xl font-semibold tracking-tight leading-[1.05] text-[var(--text)] max-w-4xl">
             Independent DevOps engineer.{" "}
-            <span className="gradient-text">Hyderabad based.</span> Five years in.
+            <span className="gradient-text">India based.</span> Five years in.
           </HeroTitle>
         </div>
       </section>
@@ -70,7 +70,7 @@ export default async function AboutPage() {
                     <dt className="text-[var(--text-4)] font-mono text-xs uppercase tracking-wider">
                       Based
                     </dt>
-                    <dd className="text-[var(--text)] mt-1">Hyderabad, India · Working globally</dd>
+                    <dd className="text-[var(--text)] mt-1">India · Working globally</dd>
                   </div>
                   <div>
                     <dt className="text-[var(--text-4)] font-mono text-xs uppercase tracking-wider">

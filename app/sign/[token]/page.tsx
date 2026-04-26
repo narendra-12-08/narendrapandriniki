@@ -72,7 +72,7 @@ export default async function SignPage({
             <p className="font-semibold text-[#111]">{contract.sender_name}</p>
             <p className="text-[#444]">{contract.sender_email}</p>
             <p className="text-[#666] text-xs mt-1">
-              Hyderabad, India · narendrapandrinki.com
+              India · narendrapandrinki.com
             </p>
           </div>
           <div>

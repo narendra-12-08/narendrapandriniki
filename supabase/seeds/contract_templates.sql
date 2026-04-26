@@ -4,7 +4,7 @@
 INSERT INTO contract_templates (slug, name, body, category) VALUES
 ('master-services-agreement', 'Master Services Agreement', $MD$# Master Services Agreement
 
-This Master Services Agreement ("Agreement") is entered into as of {effective_date} by and between **Narendra Pandrinki**, an independent consultant based in Hyderabad, Telangana, India ("Consultant"), and **{client_company}** ("Client").
+This Master Services Agreement ("Agreement") is entered into as of {effective_date} by and between **Narendra Pandrinki**, an independent consultant based in India ("Consultant"), and **{client_company}** ("Client").
 
 ## 1. Engagement and Scope
 
@@ -62,7 +62,7 @@ During the term of this Agreement and for twelve (12) months thereafter, the Cli
 
 ## 12. Governing Law and Disputes
 
-This Agreement is governed by the laws of India, without regard to its conflict-of-laws provisions. The parties shall first attempt to resolve any dispute by good-faith negotiation. Unresolved disputes shall be finally settled by arbitration administered under the Arbitration and Conciliation Act, 1996, by a sole arbitrator seated in Hyderabad, India. The language of arbitration shall be English. Either party may seek interim relief from a competent court in Hyderabad pending arbitration.
+This Agreement is governed by the laws of India, without regard to its conflict-of-laws provisions. The parties shall first attempt to resolve any dispute by good-faith negotiation. Unresolved disputes shall be finally settled by arbitration administered under the Arbitration and Conciliation Act, 1996, by a sole arbitrator seated in India. The language of arbitration shall be English. Either party may seek interim relief from a competent court in India pending arbitration.
 
 ## 13. General
 
@@ -128,7 +128,7 @@ $MD$, 'sow'),
 
 ('nda-mutual', 'Mutual Non-Disclosure Agreement', $MD$# Mutual Non-Disclosure Agreement
 
-This Mutual Non-Disclosure Agreement ("Agreement") is entered into as of {effective_date} between **Narendra Pandrinki**, an independent consultant based in Hyderabad, India, and **{client_company}** (each a "Party" and together the "Parties").
+This Mutual Non-Disclosure Agreement ("Agreement") is entered into as of {effective_date} between **Narendra Pandrinki**, an independent consultant based in India, and **{client_company}** (each a "Party" and together the "Parties").
 
 ## 1. Purpose
 
@@ -164,7 +164,7 @@ Neither Party has any obligation under this Agreement to enter into any further 
 
 ## 8. Governing Law and Disputes
 
-This Agreement is governed by the laws of India. Any dispute shall be resolved by arbitration seated in Hyderabad under the Arbitration and Conciliation Act, 1996, by a sole arbitrator. Either Party may seek interim injunctive relief in the courts of Hyderabad.
+This Agreement is governed by the laws of India. Any dispute shall be resolved by arbitration seated in India under the Arbitration and Conciliation Act, 1996, by a sole arbitrator. Either Party may seek interim injunctive relief in the competent courts of India.
 
 ## 9. General
 
@@ -216,7 +216,7 @@ The Consultant is an independent contractor, not an employee, partner, or agent 
 
 ## 8. Governing Law
 
-This Agreement is governed by the laws of India, with disputes resolved by arbitration seated in Hyderabad as set out in the parties' Master Services Agreement.
+This Agreement is governed by the laws of India, with disputes resolved by arbitration seated in India as set out in the parties' Master Services Agreement.
 
 ## 9. Signatures
 
