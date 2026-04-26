@@ -41,7 +41,7 @@ export default function Icon() {
             display: "flex",
           }}
         >
-          Np
+          NP
         </div>
       </div>
     ),

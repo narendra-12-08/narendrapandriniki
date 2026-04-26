@@ -39,7 +39,7 @@ export default function AppleIcon() {
             display: "flex",
           }}
         >
-          Np
+          NP
         </div>
       </div>
     ),

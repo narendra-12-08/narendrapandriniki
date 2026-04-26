@@ -58,7 +58,7 @@ export default function Footer() {
             <Link href="/" className="inline-flex items-center gap-2">
               <span className="relative inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--border-2)] bg-[var(--surface)]">
                 <span className="absolute inset-0 rounded-lg opacity-70 blur-md bg-[radial-gradient(circle,var(--accent),transparent_70%)]" />
-                <span className="relative font-mono text-sm gradient-text">Np</span>
+                <span className="relative font-mono text-sm gradient-text">NP</span>
               </span>
               <span className="text-base font-semibold text-[var(--text)]">Narendra Pandrinki</span>
             </Link>
