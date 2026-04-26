@@ -34,6 +34,7 @@ import {
   BarChart3,
   FileSignature,
   FileCog,
+  MessageSquare,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
@@ -42,6 +43,7 @@ const navItems = [
   { href: "/control/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/control/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/control/inbox", label: "Inbox", icon: Inbox },
+  { href: "/control/chat-sessions", label: "Chat sessions", icon: MessageSquare },
   { href: "/control/email", label: "Compose email", icon: Mail },
   { href: "/control/clients", label: "Clients", icon: Users },
   { href: "/control/projects", label: "Projects", icon: FolderKanban },
