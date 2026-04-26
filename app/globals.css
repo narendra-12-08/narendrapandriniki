@@ -302,3 +302,17 @@ textarea:-webkit-autofill:focus {
     padding-bottom: 0;
   }
 }
+
+/* Chatbot typing indicator dots */
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+.typing-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--accent);
+  animation: typingBounce 1.2s ease-in-out infinite;
+}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { X, MessageSquare, Send, ChevronDown, Loader2 } from "lucide-react";
+import { X, MessageSquare, Send, ChevronDown } from "lucide-react";
 
 type Message = { role: "user" | "assistant"; content: string };
 type LeadState = { name: string; email: string; phone: string; company: string };
@@ -84,7 +84,7 @@ export default function Chatbot() {
           const data = await res.json();
           const reply =
             data.reply ??
-            "Sorry, I didn't catch that. Could you try again?";
+            "Hmm, didn't quite catch that — mind saying it differently?";
           setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
           break;
         } catch {
@@ -94,7 +94,7 @@ export default function Chatbot() {
               {
                 role: "assistant",
                 content:
-                  "I ran into a connection issue. You can reach Narendra directly at hello@narendrapandrinki.com.",
+                  "Sorry, my connection just dropped. Mind dropping me an email at hello@narendrapandrinki.com? I'll get back to you within 48 hours.",
               },
             ]);
           }
@@ -256,13 +256,13 @@ export default function Chatbot() {
             {loading && (
               <div className="flex justify-start">
                 <div
-                  className="rounded-2xl px-4 py-3"
+                  className="rounded-2xl px-4 py-3 inline-flex items-end gap-1"
                   style={{ background: "var(--surface-2)", border: "1px solid var(--border)" }}
+                  aria-label="typing"
                 >
-                  <Loader2
-                    className="w-4 h-4 animate-spin"
-                    style={{ color: "var(--accent)" }}
-                  />
+                  <span className="typing-dot" style={{ animationDelay: "0ms" }} />
+                  <span className="typing-dot" style={{ animationDelay: "180ms" }} />
+                  <span className="typing-dot" style={{ animationDelay: "360ms" }} />
                 </div>
               </div>
             )}
