@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Mail, Check, Clock, AlertTriangle } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
@@ -154,10 +155,17 @@ export default async function ComposeEmailPage({
     subject?: string;
     body?: string;
     reply_to?: string;
+    templateId?: string;
   }>;
 }) {
-  const { sent, err, to: prefillTo, subject: prefillSubject, body: prefillBody } =
-    await searchParams;
+  const {
+    sent,
+    err,
+    to: prefillTo,
+    subject: rawSubject,
+    body: rawBody,
+    templateId,
+  } = await searchParams;
 
   const supabase = await createClient();
   const { data: rows } = await supabase
@@ -167,6 +175,26 @@ export default async function ComposeEmailPage({
     .limit(25);
 
   const recent = (rows ?? []) as SentEmailRow[];
+
+  // Load templates for the picker.
+  const { data: tplRows } = await supabase
+    .from("email_templates")
+    .select("id, slug, name, subject, body_text, category")
+    .order("name", { ascending: true });
+  const templates = (tplRows ?? []) as Array<{
+    id: string;
+    slug: string;
+    name: string;
+    subject: string;
+    body_text: string;
+    category: string | null;
+  }>;
+
+  // If templateId is supplied, prefill from that template (querystring still wins
+  // when explicitly set, so admins can override after picking a template).
+  const tpl = templateId ? templates.find((t) => t.id === templateId) : undefined;
+  const prefillSubject = rawSubject ?? tpl?.subject;
+  const prefillBody = rawBody ?? tpl?.body_text;
 
   return (
     <div>
@@ -197,6 +225,36 @@ export default async function ComposeEmailPage({
       )}
 
       <Card className="p-6 md:p-8 mb-10">
+        {templates.length > 0 && (
+          <div className="mb-6 flex flex-wrap items-end gap-3 pb-5 border-b border-[var(--border)]">
+            <form method="GET" action="/control/email" className="flex flex-wrap items-end gap-3">
+              <Field label="Use template" htmlFor="templateId">
+                <select
+                  id="templateId"
+                  name="templateId"
+                  defaultValue={templateId ?? ""}
+                  className="px-3 py-2 rounded-md text-sm bg-[var(--surface-2)] border border-[var(--border)] text-[var(--text)]"
+                >
+                  <option value="">— pick a template —</option>
+                  {templates.map((t) => (
+                    <option key={t.id} value={t.id}>
+                      {t.name}
+                      {t.category ? ` · ${t.category}` : ""}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+              {prefillTo && <input type="hidden" name="to" value={prefillTo} />}
+              <PrimaryButton type="submit">Apply</PrimaryButton>
+            </form>
+            <Link
+              href="/control/email-templates"
+              className="text-sm text-[var(--text-3)] hover:text-[var(--text)] underline-offset-4 hover:underline ml-auto"
+            >
+              Manage templates →
+            </Link>
+          </div>
+        )}
         <form action={sendEmailAction} className="space-y-5">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <Field label="To" htmlFor="to">

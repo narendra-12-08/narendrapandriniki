@@ -14,6 +14,7 @@ const primary = [
   { href: "/blog", label: "Blog" },
   { href: "/compare", label: "Compare" },
   { href: "/hire", label: "Hire" },
+  { href: "/book", label: "Book a call" },
 ];
 
 export default function Nav() {

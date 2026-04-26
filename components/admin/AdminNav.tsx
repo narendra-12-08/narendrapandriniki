@@ -38,6 +38,10 @@ import {
   MessageSquare,
   UserPlus,
   Wand2,
+  Calendar,
+  CalendarDays,
+  MailPlus,
+  Globe2,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
@@ -46,34 +50,59 @@ const navGroups: {
   label: string | null; // null for top-level standalone
   items: { href: string; label: string; icon: typeof LayoutDashboard }[];
 }[] = [
+  // Always visible at the top
   {
     label: null,
     items: [
       { href: "/control/dashboard", label: "Dashboard", icon: LayoutDashboard },
-      { href: "/control/analytics", label: "Analytics", icon: BarChart3 },
     ],
   },
+  // 1. Anything inbound
   {
-    label: "Inbox & Leads",
+    label: "Inbox",
     items: [
-      { href: "/control/inbox", label: "Inbox", icon: Inbox },
+      { href: "/control/inbox", label: "Messages", icon: Inbox },
+      { href: "/control/email", label: "Compose email", icon: Mail },
+    ],
+  },
+  // 2. Lead pipeline + scheduling
+  {
+    label: "Leads & Bookings",
+    items: [
       { href: "/control/leads", label: "Leads", icon: UserPlus },
       { href: "/control/chat-sessions", label: "Chat sessions", icon: MessageSquare },
-      { href: "/control/email", label: "Compose email", icon: Mail },
+      { href: "/control/bookings", label: "Call bookings", icon: Calendar },
+      { href: "/control/availability", label: "Availability", icon: CalendarDays },
+    ],
+  },
+  // 3. AI tools
+  {
+    label: "AI Tools",
+    items: [
       { href: "/control/ai-assistant", label: "AI Assistant", icon: Wand2 },
     ],
   },
+  // 4. Sales & delivery — clients to cash
   {
-    label: "CRM",
+    label: "Sales & Delivery",
     items: [
       { href: "/control/clients", label: "Clients", icon: Users },
       { href: "/control/projects", label: "Projects", icon: FolderKanban },
-      { href: "/control/invoices", label: "Invoices", icon: FileText },
-      { href: "/control/payments", label: "Payments", icon: CreditCard },
       { href: "/control/contracts", label: "Contracts", icon: FileSignature },
       { href: "/control/contract-templates", label: "Contract templates", icon: FileCog },
+      { href: "/control/invoices", label: "Invoices", icon: FileText },
+      { href: "/control/payments", label: "Payments", icon: CreditCard },
     ],
   },
+  // 5. Analytics
+  {
+    label: "Analytics",
+    items: [
+      { href: "/control/analytics", label: "Business analytics", icon: BarChart3 },
+      { href: "/control/visitors", label: "Visitors", icon: Globe2 },
+    ],
+  },
+  // 6. Public site copy
   {
     label: "Site content",
     items: [
@@ -86,27 +115,33 @@ const navGroups: {
       { href: "/control/blog", label: "Blog", icon: PenLine },
     ],
   },
+  // 7. Personal pages
   {
     label: "About me",
     items: [
-      { href: "/control/about", label: "About", icon: User },
+      { href: "/control/about", label: "Bio", icon: User },
       { href: "/control/principles", label: "Principles", icon: Compass },
       { href: "/control/timeline", label: "Timeline", icon: History },
       { href: "/control/skills", label: "Skills", icon: TrendingUp },
       { href: "/control/certifications", label: "Certifications", icon: Award },
     ],
   },
+  // 8. Commercial pages
   {
-    label: "Pricing & process",
+    label: "Pricing & Process",
     items: [
-      { href: "/control/pricing", label: "Pricing", icon: BadgeIndianRupee },
-      { href: "/control/faqs", label: "FAQs", icon: HelpCircle },
+      { href: "/control/pricing", label: "Pricing tiers", icon: BadgeIndianRupee },
       { href: "/control/process", label: "Process", icon: ListOrdered },
+      { href: "/control/faqs", label: "FAQs", icon: HelpCircle },
     ],
   },
+  // 9. Templates + settings
   {
-    label: null,
-    items: [{ href: "/control/settings", label: "Settings", icon: Settings }],
+    label: "Settings",
+    items: [
+      { href: "/control/email-templates", label: "Email templates", icon: MailPlus },
+      { href: "/control/settings", label: "Site settings", icon: Settings },
+    ],
   },
 ];
 
