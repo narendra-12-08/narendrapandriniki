@@ -4,10 +4,10 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { X, MessageSquare, Send, ChevronDown, Loader2 } from "lucide-react";
 
 type Message = { role: "user" | "assistant"; content: string };
-type LeadState = { name: string; email: string; company: string };
+type LeadState = { name: string; email: string; phone: string; company: string };
 
 const GREETING =
-  "Hi! I'm Narendra's AI assistant. He's a senior DevOps & Cloud engineer with 5 years of experience helping teams across India, UK, US, Singapore, and Dubai ship reliable platforms. Whether you need cloud migration, Kubernetes, SRE, or AI infrastructure — I can help scope it. What brings you here today?";
+  "Hi! I handle project enquiries for Narendra. He's a senior DevOps & Cloud engineer — 5 years working with teams across India, UK, US, Singapore, and Dubai on cloud migrations, Kubernetes, SRE, and AI infrastructure. What brings you here today?";
 
 const QUICK_REPLIES = [
   "What services do you offer?",
@@ -29,7 +29,7 @@ export default function Chatbot() {
   const [loading, setLoading] = useState(false);
   const [sessionId] = useState(generateSessionId);
   const [showLead, setShowLead] = useState(false);
-  const [lead, setLead] = useState<LeadState>({ name: "", email: "", company: "" });
+  const [lead, setLead] = useState<LeadState>({ name: "", email: "", phone: "", company: "" });
   const [leadSubmitting, setLeadSubmitting] = useState(false);
   const [leadSent, setLeadSent] = useState(false);
   const [unread, setUnread] = useState(false);
@@ -74,30 +74,34 @@ export default function Chatbot() {
       setInput("");
       setLoading(true);
 
-      try {
-        const res = await fetch("/api/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            messages: next,
-            sessionId,
-          }),
-        });
-        const data = await res.json();
-        const reply = data.reply ?? "Something went wrong. Please try again.";
-        setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
-      } catch {
-        setMessages((prev) => [
-          ...prev,
-          {
-            role: "assistant",
-            content:
-              "I ran into a connection issue. You can reach Narendra directly at hello@narendrapandrinki.com.",
-          },
-        ]);
-      } finally {
-        setLoading(false);
+      for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+          const res = await fetch("/api/chat", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ messages: next, sessionId }),
+          });
+          const data = await res.json();
+          const reply =
+            data.reply ??
+            "Sorry, I didn't catch that. Could you try again?";
+          setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
+          break;
+        } catch {
+          if (attempt === 1) {
+            setMessages((prev) => [
+              ...prev,
+              {
+                role: "assistant",
+                content:
+                  "I ran into a connection issue. You can reach Narendra directly at hello@narendrapandrinki.com.",
+              },
+            ]);
+          }
+        }
       }
+
+      setLoading(false);
     },
     [messages, loading, sessionId]
   );
@@ -114,42 +118,48 @@ export default function Chatbot() {
         .join(" | ") || "Enquiry via site chatbot";
 
     const conversationSnippet = messages
-      .map((m) => `${m.role === "user" ? "Visitor" : "Assistant"}: ${m.content}`)
+      .map((m) => `${m.role === "user" ? "Visitor" : "Narendra's team"}: ${m.content}`)
       .join("\n");
 
-    try {
-      await fetch("/api/chat/lead", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          sessionId,
-          visitorName: lead.name,
-          visitorEmail: lead.email,
-          visitorCompany: lead.company || undefined,
-          projectSummary,
-          conversationSnippet,
-        }),
-      });
-      setLeadSent(true);
-      setShowLead(false);
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content: `Perfect, ${lead.name}. I've sent your details to Narendra — he'll be in touch within 1–2 business days. Check your inbox (${lead.email}) for a confirmation.`,
-        },
-      ]);
-    } catch {
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          content: `Something went wrong. Please email Narendra directly at hello@narendrapandrinki.com.`,
-        },
-      ]);
-    } finally {
-      setLeadSubmitting(false);
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        await fetch("/api/chat/lead", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            sessionId,
+            visitorName: lead.name,
+            visitorEmail: lead.email,
+            visitorPhone: lead.phone || undefined,
+            visitorCompany: lead.company || undefined,
+            projectSummary,
+            conversationSnippet,
+          }),
+        });
+        setLeadSent(true);
+        setShowLead(false);
+        setMessages((prev) => [
+          ...prev,
+          {
+            role: "assistant",
+            content: `Perfect, ${lead.name}. I've passed your details to Narendra — he'll be in touch within 1–2 business days. Check your inbox (${lead.email}) for a confirmation.`,
+          },
+        ]);
+        break;
+      } catch {
+        if (attempt === 1) {
+          setMessages((prev) => [
+            ...prev,
+            {
+              role: "assistant",
+              content: `Something went wrong on my end. Please email Narendra directly at hello@narendrapandrinki.com.`,
+            },
+          ]);
+        }
+      }
     }
+
+    setLeadSubmitting(false);
   }
 
   return (
@@ -157,9 +167,13 @@ export default function Chatbot() {
       {/* Floating button */}
       <button
         onClick={() => setOpen((v) => !v)}
-        aria-label="Chat with Narendra's AI assistant"
-        className="fixed bottom-6 right-6 z-50 flex items-center justify-center w-14 h-14 rounded-full shadow-2xl transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2 focus:ring-offset-[var(--bg)]"
-        style={{ background: "var(--accent)" }}
+        aria-label="Chat with Narendra's team"
+        className="fixed z-50 flex items-center justify-center w-14 h-14 rounded-full shadow-2xl transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2 focus:ring-offset-[var(--bg)]"
+        style={{
+          background: "var(--accent)",
+          bottom: "calc(1.5rem + env(safe-area-inset-bottom, 0px))",
+          right: "1.5rem",
+        }}
       >
         {open ? (
           <ChevronDown className="w-6 h-6 text-[var(--bg)]" />
@@ -174,10 +188,12 @@ export default function Chatbot() {
       {/* Chat window */}
       {open && (
         <div
-          className="fixed bottom-24 right-6 z-50 flex flex-col rounded-2xl shadow-2xl overflow-hidden"
+          className="fixed z-50 flex flex-col rounded-2xl shadow-2xl overflow-hidden"
           style={{
-            width: "min(380px, calc(100vw - 48px))",
-            height: "min(560px, calc(100vh - 120px))",
+            bottom: "calc(5.5rem + env(safe-area-inset-bottom, 0px))",
+            right: "1.5rem",
+            width: "min(380px, calc(100vw - 2rem))",
+            height: "min(560px, calc(100dvh - 9rem - env(safe-area-inset-top, 0px)))",
             background: "var(--surface)",
             border: "1px solid var(--border)",
           }}
@@ -202,7 +218,7 @@ export default function Chatbot() {
               </div>
               <div>
                 <p className="text-xs font-semibold" style={{ color: "var(--text)" }}>
-                  Narendra&apos;s AI Assistant
+                  Narendra&apos;s Team
                 </p>
                 <p className="text-[10px]" style={{ color: "var(--lime)" }}>
                   Online · Replies instantly
@@ -230,7 +246,11 @@ export default function Chatbot() {
                   style={
                     m.role === "user"
                       ? { background: "var(--accent)", color: "var(--bg)" }
-                      : { background: "var(--surface-2)", color: "var(--text-2)", border: "1px solid var(--border)" }
+                      : {
+                          background: "var(--surface-2)",
+                          color: "var(--text-2)",
+                          border: "1px solid var(--border)",
+                        }
                   }
                 >
                   {m.content}
@@ -279,8 +299,12 @@ export default function Chatbot() {
           {showLead && !leadSent && (
             <form
               onSubmit={handleLeadSubmit}
-              className="px-4 py-3 space-y-2 shrink-0"
-              style={{ borderTop: "1px solid var(--border)", background: "var(--surface-2)" }}
+              className="px-4 py-3 space-y-2 shrink-0 overflow-y-auto"
+              style={{
+                borderTop: "1px solid var(--border)",
+                background: "var(--surface-2)",
+                maxHeight: "60%",
+              }}
             >
               <p className="text-xs font-semibold" style={{ color: "var(--text-2)" }}>
                 Send your details to Narendra
@@ -304,6 +328,18 @@ export default function Chatbot() {
                 value={lead.email}
                 onChange={(e) => setLead((l) => ({ ...l, email: e.target.value }))}
                 required
+                className="w-full text-sm px-3 py-2 rounded-lg outline-none"
+                style={{
+                  background: "var(--bg)",
+                  border: "1px solid var(--border-2)",
+                  color: "var(--text)",
+                }}
+              />
+              <input
+                type="tel"
+                placeholder="Phone (optional)"
+                value={lead.phone}
+                onChange={(e) => setLead((l) => ({ ...l, phone: e.target.value }))}
                 className="w-full text-sm px-3 py-2 rounded-lg outline-none"
                 style={{
                   background: "var(--bg)",
