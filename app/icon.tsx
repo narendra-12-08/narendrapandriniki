@@ -30,10 +30,12 @@ export default function Icon() {
         <div
           style={{
             position: "relative",
-            fontFamily: "monospace",
-            fontWeight: 700,
-            fontSize: 36,
-            letterSpacing: -1,
+            fontFamily:
+              "Geist, Inter, ui-sans-serif, system-ui, -apple-system, sans-serif",
+            fontWeight: 800,
+            fontSize: 52,
+            letterSpacing: -3,
+            lineHeight: 1,
             backgroundImage:
               "linear-gradient(135deg,#22d3ee 0%, #a78bfa 50%, #f472b6 100%)",
             backgroundClip: "text",
@@ -41,7 +43,7 @@ export default function Icon() {
             display: "flex",
           }}
         >
-          NP
+          N
         </div>
       </div>
     ),

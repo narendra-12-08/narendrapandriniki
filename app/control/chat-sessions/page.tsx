@@ -1,8 +1,13 @@
 import type { Metadata } from "next";
 import { createServiceClient } from "@/lib/supabase/server";
-import { PageHeader, Card } from "@/components/admin/ui";
+import { PageHeader, Card, GhostButton, DangerButton } from "@/components/admin/ui";
 import { formatDistanceToNow } from "date-fns";
-import { MessageSquare, Mail, User, CheckCircle, Clock } from "lucide-react";
+import { MessageSquare, Mail, User, CheckCircle, Clock, Trash2, Filter } from "lucide-react";
+import {
+  deleteChatSession,
+  clearAbandonedChatSessions,
+  clearAllChatSessions,
+} from "./actions";
 
 export const metadata: Metadata = { title: "Chat Sessions" };
 export const dynamic = "force-dynamic";
@@ -40,6 +45,22 @@ export default async function ChatSessionsPage() {
         title="Chat Sessions"
         subtitle={`${total} total · ${leads} leads captured · ${withEmail} emails collected`}
       />
+
+      {/* Bulk actions */}
+      {total > 0 && (
+        <div className="flex flex-wrap items-center gap-2">
+          <form action={clearAbandonedChatSessions}>
+            <GhostButton type="submit">
+              <Filter size={14} /> Clear abandoned (no name/email)
+            </GhostButton>
+          </form>
+          <form action={clearAllChatSessions}>
+            <DangerButton type="submit">
+              <Trash2 size={14} /> Clear ALL sessions
+            </DangerButton>
+          </form>
+        </div>
+      )}
 
       {/* KPI row */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -129,10 +150,22 @@ export default async function ChatSessionsPage() {
                     )}
                   </div>
                 </div>
-                <div className="flex items-center gap-1 text-xs shrink-0 ml-4" style={{ color: "var(--text-4)" }}>
-                  <Clock className="w-3 h-3" />
-                  <span>{formatDistanceToNow(new Date(s.created_at), { addSuffix: true })}</span>
-                  <span className="ml-1">· {s.messages.length} msg</span>
+                <div className="flex items-start gap-3 shrink-0 ml-4">
+                  <div className="flex items-center gap-1 text-xs" style={{ color: "var(--text-4)" }}>
+                    <Clock className="w-3 h-3" />
+                    <span>{formatDistanceToNow(new Date(s.created_at), { addSuffix: true })}</span>
+                    <span className="ml-1">· {s.messages.length} msg</span>
+                  </div>
+                  <form action={deleteChatSession}>
+                    <input type="hidden" name="id" value={s.id} />
+                    <button
+                      type="submit"
+                      title="Delete this session"
+                      className="p-1.5 rounded-md text-[var(--text-4)] hover:text-[var(--rose)] hover:bg-[var(--rose)]/10"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </form>
                 </div>
               </div>
 

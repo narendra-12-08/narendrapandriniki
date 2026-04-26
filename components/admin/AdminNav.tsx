@@ -171,8 +171,9 @@ export default function AdminNav() {
           onClick={() => setOpen(false)}
           className="flex items-center gap-2 text-[var(--text)] font-semibold text-lg"
         >
-          <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[var(--accent)]/15 text-[var(--accent)] border border-[var(--accent)]/30 text-xs font-bold">
-            NP
+          <span className="relative inline-flex h-7 w-7 items-center justify-center rounded-md bg-[var(--surface-2)] border border-[var(--border-2)]">
+            <span className="absolute inset-0 rounded-md opacity-60 blur-sm bg-[radial-gradient(circle,var(--accent),transparent_70%)]" />
+            <span className="relative gradient-text text-sm font-bold leading-none">N</span>
           </span>
           <span>Control</span>
         </Link>
@@ -256,8 +257,9 @@ export default function AdminNav() {
           href="/control/dashboard"
           className="flex items-center gap-2 text-[var(--text)] font-semibold"
         >
-          <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-[var(--accent)]/15 text-[var(--accent)] border border-[var(--accent)]/30 text-xs font-bold">
-            NP
+          <span className="relative inline-flex h-7 w-7 items-center justify-center rounded-md bg-[var(--surface-2)] border border-[var(--border-2)]">
+            <span className="absolute inset-0 rounded-md opacity-60 blur-sm bg-[radial-gradient(circle,var(--accent),transparent_70%)]" />
+            <span className="relative gradient-text text-sm font-bold leading-none">N</span>
           </span>
           Control
         </Link>

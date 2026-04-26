@@ -55,12 +55,14 @@ export default function Footer() {
       <div className="container-page py-20">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
           <div className="md:col-span-4">
-            <Link href="/" className="inline-flex items-center gap-2">
-              <span className="relative inline-flex h-9 w-9 items-center justify-center rounded-lg border border-[var(--border-2)] bg-[var(--surface)]">
+            <Link href="/" className="inline-flex items-center gap-3">
+              <span className="relative inline-flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--border-2)] bg-[var(--surface)]">
                 <span className="absolute inset-0 rounded-lg opacity-70 blur-md bg-[radial-gradient(circle,var(--accent),transparent_70%)]" />
-                <span className="relative font-mono text-sm gradient-text">NP</span>
+                <span className="relative gradient-text font-bold text-lg leading-none -mt-0.5">N</span>
               </span>
-              <span className="text-base font-semibold text-[var(--text)]">Narendra Pandrinki</span>
+              <span className="gradient-text text-xl font-semibold tracking-tight leading-none">
+                Narendra Pandrinki
+              </span>
             </Link>
             <p className="mt-5 text-sm text-[var(--text-3)] leading-relaxed max-w-sm">
               Independent DevOps & Platform engineer. Building reliable cloud

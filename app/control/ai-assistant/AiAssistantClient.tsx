@@ -55,14 +55,24 @@ const MODES = [
 
 interface Props {
   leads: { id: string; label: string }[];
+  prefillLeadId?: string;
+  prefillMode?: (typeof MODES)[number]["id"];
+  prefillBrief?: string;
 }
 
-export default function AiAssistantClient({ leads }: Props) {
+export default function AiAssistantClient({
+  leads,
+  prefillLeadId,
+  prefillMode,
+  prefillBrief,
+}: Props) {
   const [state, formAction, pending] = useActionState<DraftFormState, FormData>(
     generateDraft,
     {} as DraftFormState
   );
-  const [mode, setMode] = useState<(typeof MODES)[number]["id"]>("contract");
+  const [mode, setMode] = useState<(typeof MODES)[number]["id"]>(
+    prefillMode && MODES.some((m) => m.id === prefillMode) ? prefillMode : "contract"
+  );
   const [editedOutput, setEditedOutput] = useState<string>("");
   const [copied, setCopied] = useState(false);
   const [, startTransition] = useTransition();
@@ -128,7 +138,7 @@ export default function AiAssistantClient({ leads }: Props) {
               htmlFor="leadId"
               hint="Select a recent lead — their project info will be passed to the AI."
             >
-              <Select id="leadId" name="leadId" defaultValue="">
+              <Select id="leadId" name="leadId" defaultValue={prefillLeadId ?? ""}>
                 <option value="">— None —</option>
                 {leads.map((l) => (
                   <option key={l.id} value={l.id}>
@@ -158,7 +168,7 @@ export default function AiAssistantClient({ leads }: Props) {
               rows={8}
               required
               placeholder="Tell the assistant what to draft. The more specific, the better the output."
-              defaultValue={state.brief ?? ""}
+              defaultValue={state.brief ?? prefillBrief ?? ""}
             />
           </Field>
 

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Archive, Check, MailOpen, NotebookPen, Reply, Trash2, UserPlus, X } from "lucide-react";
+import { Archive, Check, MailOpen, NotebookPen, Reply, Trash2, UserPlus, Wand2, X } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 
 interface Props {
@@ -138,6 +138,15 @@ export default function InboxActions({
           className={`${btn} bg-[var(--accent)]/15 border-[var(--accent)]/40 text-[var(--accent)] hover:bg-[var(--accent)]/25`}
         >
           <Reply size={12} /> Reply
+        </Link>
+        <Link
+          href={`/control/ai-assistant?mode=followup&brief=${encodeURIComponent(
+            `Reply to ${senderName ?? senderEmail} about: "${subject ?? ""}".\n\nTheir message:\n${body ?? ""}\n\nWrite a short, warm reply that moves the conversation forward.`
+          )}`}
+          className={`${btn} bg-[var(--violet)]/15 border-[var(--violet)]/40 text-[var(--violet)] hover:bg-[var(--violet)]/25`}
+          title="Draft a reply with AI"
+        >
+          <Wand2 size={12} /> AI draft
         </Link>
         {currentStatus === "unread" ? (
           <button

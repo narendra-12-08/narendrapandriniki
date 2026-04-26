@@ -44,11 +44,14 @@ export default function Nav() {
         <div className="flex items-center justify-between h-16">
           <Link
             href="/"
-            className="flex items-center gap-2 font-semibold tracking-tight text-[var(--text)] hover:opacity-90"
+            className="flex items-center gap-2.5 hover:opacity-90"
           >
             <span className="relative inline-flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border-2)] bg-[var(--surface)]">
               <span className="absolute inset-0 rounded-lg opacity-70 blur-md bg-[radial-gradient(circle,var(--accent),transparent_70%)]" />
-              <span className="relative font-mono text-sm gradient-text">NP</span>
+              <span className="relative gradient-text font-bold text-base leading-none -mt-0.5">N</span>
+            </span>
+            <span className="hidden sm:inline gradient-text text-lg font-semibold tracking-tight leading-none">
+              Narendra
             </span>
           </Link>
 

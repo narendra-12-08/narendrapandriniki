@@ -6,7 +6,12 @@ import { PageHeader } from "@/components/admin/ui";
 export const metadata: Metadata = { title: "AI Assistant" };
 export const dynamic = "force-dynamic";
 
-export default async function AiAssistantPage() {
+export default async function AiAssistantPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ leadId?: string; mode?: string; brief?: string }>;
+}) {
+  const { leadId, mode, brief } = await searchParams;
   const supabase = await createClient();
   const { data: leads } = await supabase
     .from("chatbot_leads")
@@ -28,6 +33,9 @@ export default async function AiAssistantPage() {
             (l.visitor_company ? ` · ${l.visitor_company}` : "") +
             (l.project_type ? ` · ${l.project_type}` : ""),
         }))}
+        prefillLeadId={leadId}
+        prefillMode={mode as never}
+        prefillBrief={brief}
       />
     </div>
   );

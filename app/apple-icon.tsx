@@ -28,10 +28,12 @@ export default function AppleIcon() {
         <div
           style={{
             position: "relative",
-            fontFamily: "monospace",
-            fontWeight: 700,
-            fontSize: 100,
-            letterSpacing: -3,
+            fontFamily:
+              "Geist, Inter, ui-sans-serif, system-ui, -apple-system, sans-serif",
+            fontWeight: 800,
+            fontSize: 150,
+            letterSpacing: -8,
+            lineHeight: 1,
             backgroundImage:
               "linear-gradient(135deg,#22d3ee 0%, #a78bfa 50%, #f472b6 100%)",
             backgroundClip: "text",
@@ -39,7 +41,7 @@ export default function AppleIcon() {
             display: "flex",
           }}
         >
-          NP
+          N
         </div>
       </div>
     ),

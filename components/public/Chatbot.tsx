@@ -7,13 +7,13 @@ type Message = { role: "user" | "assistant"; content: string };
 type LeadState = { name: string; email: string; phone: string; company: string };
 
 const GREETING =
-  "Hi! I handle project enquiries for Narendra. He's a senior DevOps & Cloud engineer — 5 years working with teams across India, UK, US, Singapore, and Dubai on cloud migrations, Kubernetes, SRE, and AI infrastructure. What brings you here today?";
+  "Hey 👋 I'm Narendra. Glad you stopped by — what are you working on?";
 
 const QUICK_REPLIES = [
-  "What services do you offer?",
-  "How does pricing work?",
-  "I have a project to discuss",
-  "Are you available now?",
+  "I have a project in mind",
+  "What do you typically build?",
+  "How do you price things?",
+  "Are you available right now?",
 ];
 
 function generateSessionId() {

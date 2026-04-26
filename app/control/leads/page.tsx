@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { Mail, Phone, Globe, MapPin, ExternalLink } from "lucide-react";
+import { Mail, Phone, Globe, MapPin, ExternalLink, Trash2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
-import { Badge, Card, Empty, PageHeader } from "@/components/admin/ui";
+import { Badge, Card, Empty, PageHeader, DangerButton } from "@/components/admin/ui";
+import { deleteLead, clearAllChatbotLeads } from "@/app/control/chat-sessions/actions";
 
 export const metadata: Metadata = { title: "Leads" };
 export const dynamic = "force-dynamic";
@@ -121,21 +122,30 @@ export default async function LeadsPage({
         ))}
       </div>
 
-      {/* Status filter */}
-      <div className="flex flex-wrap gap-2">
-        {filters.map((f) => (
-          <Link
-            key={f}
-            href={f === "all" ? "/control/leads" : `/control/leads?status=${f}`}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
-              activeFilter === f
-                ? "bg-[var(--accent)]/15 text-[var(--accent)] border-[var(--accent)]/40"
-                : "bg-[var(--surface-2)] text-[var(--text-3)] border-[var(--border)] hover:text-[var(--text)]"
-            }`}
-          >
-            {f}
-          </Link>
-        ))}
+      {/* Status filter + bulk action */}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap gap-2">
+          {filters.map((f) => (
+            <Link
+              key={f}
+              href={f === "all" ? "/control/leads" : `/control/leads?status=${f}`}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                activeFilter === f
+                  ? "bg-[var(--accent)]/15 text-[var(--accent)] border-[var(--accent)]/40"
+                  : "bg-[var(--surface-2)] text-[var(--text-3)] border-[var(--border)] hover:text-[var(--text)]"
+              }`}
+            >
+              {f}
+            </Link>
+          ))}
+        </div>
+        {leads.length > 0 && (
+          <form action={clearAllChatbotLeads}>
+            <DangerButton type="submit">
+              <Trash2 size={14} /> Clear all leads
+            </DangerButton>
+          </form>
+        )}
       </div>
 
       {/* Lead list */}
@@ -286,6 +296,18 @@ export default async function LeadsPage({
                       >
                         <Mail size={14} /> Email reply
                       </a>
+                      <Link
+                        href={`/control/ai-assistant?leadId=${l.id}&mode=proposal`}
+                        className="inline-flex items-center gap-2 px-3 py-2 rounded-md text-sm bg-[var(--violet)]/15 text-[var(--violet)] border border-[var(--violet)]/30 hover:bg-[var(--violet)]/25"
+                      >
+                        Draft proposal with AI
+                      </Link>
+                      <Link
+                        href={`/control/ai-assistant?leadId=${l.id}&mode=contract`}
+                        className="inline-flex items-center gap-2 px-3 py-2 rounded-md text-sm bg-[var(--lime)]/10 text-[var(--lime)] border border-[var(--lime)]/30 hover:bg-[var(--lime)]/20"
+                      >
+                        Draft contract with AI
+                      </Link>
                       {l.page_source && (
                         <a
                           href={l.page_source}
@@ -296,6 +318,16 @@ export default async function LeadsPage({
                           <ExternalLink size={14} /> Source page
                         </a>
                       )}
+                      <form action={deleteLead} className="ml-auto">
+                        <input type="hidden" name="id" value={l.id} />
+                        <button
+                          type="submit"
+                          title="Delete this lead"
+                          className="inline-flex items-center gap-2 px-3 py-2 rounded-md text-sm bg-[var(--rose)]/10 text-[var(--rose)] border border-[var(--rose)]/30 hover:bg-[var(--rose)]/20"
+                        >
+                          <Trash2 size={14} /> Delete
+                        </button>
+                      </form>
                     </div>
                   </div>
                 </details>
