@@ -185,17 +185,12 @@ export default function Chatbot() {
         )}
       </button>
 
-      {/* Chat window */}
+      {/* Chat window — fullscreen on mobile/tablet, floating card on desktop */}
       {open && (
         <div
-          className="fixed z-50 flex flex-col rounded-2xl shadow-2xl overflow-hidden"
+          className="fixed z-50 flex flex-col overflow-hidden chatbot-window"
           style={{
-            bottom: "calc(5.5rem + env(safe-area-inset-bottom, 0px))",
-            right: "1.5rem",
-            width: "min(380px, calc(100vw - 2rem))",
-            height: "min(560px, calc(100dvh - 9rem - env(safe-area-inset-top, 0px)))",
             background: "var(--surface)",
-            border: "1px solid var(--border)",
           }}
         >
           {/* Header */}

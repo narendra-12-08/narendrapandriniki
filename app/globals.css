@@ -277,3 +277,28 @@ textarea:-webkit-autofill:focus {
   caret-color: var(--text);
   transition: background-color 99999s ease-in-out 0s;
 }
+
+/* Chatbot widget — fullscreen on mobile/tablet, floating on desktop */
+.chatbot-window {
+  inset: 0;
+  border-radius: 0;
+  border: none;
+  box-shadow: 0 0 0 1px var(--border);
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+@media (min-width: 768px) {
+  .chatbot-window {
+    inset: auto;
+    bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+    right: 1.5rem;
+    width: 400px;
+    max-width: calc(100vw - 2rem);
+    height: min(640px, calc(100dvh - 9rem));
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.7), 0 0 0 1px var(--border);
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+}

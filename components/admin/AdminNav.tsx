@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { ChevronRight } from "lucide-react";
 import {
   LayoutDashboard,
   Inbox,
@@ -35,39 +36,77 @@ import {
   FileSignature,
   FileCog,
   MessageSquare,
+  UserPlus,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 
-const navItems = [
-  { href: "/control/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/control/analytics", label: "Analytics", icon: BarChart3 },
-  { href: "/control/inbox", label: "Inbox", icon: Inbox },
-  { href: "/control/chat-sessions", label: "Chat sessions", icon: MessageSquare },
-  { href: "/control/email", label: "Compose email", icon: Mail },
-  { href: "/control/clients", label: "Clients", icon: Users },
-  { href: "/control/projects", label: "Projects", icon: FolderKanban },
-  { href: "/control/invoices", label: "Invoices", icon: FileText },
-  { href: "/control/payments", label: "Payments", icon: CreditCard },
-  { href: "/control/contracts", label: "Contracts", icon: FileSignature },
-  { href: "/control/contract-templates", label: "Contract templates", icon: FileCog },
-  { href: "/control/services", label: "Services", icon: Sparkles },
-  { href: "/control/solutions", label: "Solutions", icon: Target },
-  { href: "/control/case-studies", label: "Case Studies", icon: Briefcase },
-  { href: "/control/industries", label: "Industries", icon: Building2 },
-  { href: "/control/technology", label: "Technology", icon: Cpu },
-  { href: "/control/testimonials", label: "Testimonials", icon: Quote },
-  { href: "/control/blog", label: "Blog", icon: PenLine },
-  { href: "/control/about", label: "About", icon: User },
-  { href: "/control/principles", label: "Principles", icon: Compass },
-  { href: "/control/timeline", label: "Timeline", icon: History },
-  { href: "/control/pricing", label: "Pricing", icon: BadgeIndianRupee },
-  { href: "/control/faqs", label: "FAQs", icon: HelpCircle },
-  { href: "/control/process", label: "Process", icon: ListOrdered },
-  { href: "/control/skills", label: "Skills", icon: TrendingUp },
-  { href: "/control/certifications", label: "Certifications", icon: Award },
-  { href: "/control/settings", label: "Settings", icon: Settings },
-] as const;
+const navGroups: {
+  label: string | null; // null for top-level standalone
+  items: { href: string; label: string; icon: typeof LayoutDashboard }[];
+}[] = [
+  {
+    label: null,
+    items: [
+      { href: "/control/dashboard", label: "Dashboard", icon: LayoutDashboard },
+      { href: "/control/analytics", label: "Analytics", icon: BarChart3 },
+    ],
+  },
+  {
+    label: "Inbox & Leads",
+    items: [
+      { href: "/control/inbox", label: "Inbox", icon: Inbox },
+      { href: "/control/leads", label: "Leads", icon: UserPlus },
+      { href: "/control/chat-sessions", label: "Chat sessions", icon: MessageSquare },
+      { href: "/control/email", label: "Compose email", icon: Mail },
+    ],
+  },
+  {
+    label: "CRM",
+    items: [
+      { href: "/control/clients", label: "Clients", icon: Users },
+      { href: "/control/projects", label: "Projects", icon: FolderKanban },
+      { href: "/control/invoices", label: "Invoices", icon: FileText },
+      { href: "/control/payments", label: "Payments", icon: CreditCard },
+      { href: "/control/contracts", label: "Contracts", icon: FileSignature },
+      { href: "/control/contract-templates", label: "Contract templates", icon: FileCog },
+    ],
+  },
+  {
+    label: "Site content",
+    items: [
+      { href: "/control/services", label: "Services", icon: Sparkles },
+      { href: "/control/solutions", label: "Solutions", icon: Target },
+      { href: "/control/case-studies", label: "Case Studies", icon: Briefcase },
+      { href: "/control/industries", label: "Industries", icon: Building2 },
+      { href: "/control/technology", label: "Technology", icon: Cpu },
+      { href: "/control/testimonials", label: "Testimonials", icon: Quote },
+      { href: "/control/blog", label: "Blog", icon: PenLine },
+    ],
+  },
+  {
+    label: "About me",
+    items: [
+      { href: "/control/about", label: "About", icon: User },
+      { href: "/control/principles", label: "Principles", icon: Compass },
+      { href: "/control/timeline", label: "Timeline", icon: History },
+      { href: "/control/skills", label: "Skills", icon: TrendingUp },
+      { href: "/control/certifications", label: "Certifications", icon: Award },
+    ],
+  },
+  {
+    label: "Pricing & process",
+    items: [
+      { href: "/control/pricing", label: "Pricing", icon: BadgeIndianRupee },
+      { href: "/control/faqs", label: "FAQs", icon: HelpCircle },
+      { href: "/control/process", label: "Process", icon: ListOrdered },
+    ],
+  },
+  {
+    label: null,
+    items: [{ href: "/control/settings", label: "Settings", icon: Settings }],
+  },
+];
 
 export default function AdminNav() {
   const pathname = usePathname();
@@ -83,6 +122,44 @@ export default function AdminNav() {
 
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(href + "/");
+
+  // Each named group's collapsed state. Auto-expand the group containing
+  // the current route so the active item is always visible on first load.
+  const isGroupActive = (items: { href: string }[]) =>
+    items.some((it) => isActive(it.href));
+  const [collapsed, setCollapsed] = useState<Record<string, boolean>>(() => {
+    const initial: Record<string, boolean> = {};
+    for (const g of navGroups) {
+      if (g.label) initial[g.label] = !isGroupActive(g.items);
+    }
+    return initial;
+  });
+  const toggle = (label: string) =>
+    setCollapsed((s) => ({ ...s, [label]: !s[label] }));
+
+  const renderItem = (
+    href: string,
+    label: string,
+    Icon: typeof LayoutDashboard
+  ) => {
+    const active = isActive(href);
+    return (
+      <Link
+        key={href}
+        href={href}
+        onClick={() => setOpen(false)}
+        className={cn(
+          "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors border",
+          active
+            ? "bg-[var(--accent)]/15 text-[var(--accent)] border-[var(--accent)]/30"
+            : "text-[var(--text-3)] border-transparent hover:bg-[var(--surface-2)] hover:text-[var(--text)]"
+        )}
+      >
+        <Icon size={16} strokeWidth={1.75} />
+        <span>{label}</span>
+      </Link>
+    );
+  };
 
   const SidebarContent = (
     <>
@@ -102,24 +179,49 @@ export default function AdminNav() {
         </p>
       </div>
 
-      <div className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
-        {navItems.map(({ href, label, icon: Icon }) => {
-          const active = isActive(href);
+      <div className="flex-1 px-3 py-4 overflow-y-auto">
+        {navGroups.map((group, i) => {
+          if (!group.label) {
+            return (
+              <div key={`top-${i}`} className="space-y-0.5 mb-3">
+                {group.items.map((it) =>
+                  renderItem(it.href, it.label, it.icon)
+                )}
+              </div>
+            );
+          }
+          const isCollapsed = collapsed[group.label];
+          const groupActive = isGroupActive(group.items);
           return (
-            <Link
-              key={href}
-              href={href}
-              onClick={() => setOpen(false)}
-              className={cn(
-                "flex items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-colors border",
-                active
-                  ? "bg-[var(--accent)]/15 text-[var(--accent)] border-[var(--accent)]/30"
-                  : "text-[var(--text-3)] border-transparent hover:bg-[var(--surface-2)] hover:text-[var(--text)]"
+            <div key={group.label} className="mb-3">
+              <button
+                type="button"
+                onClick={() => toggle(group.label!)}
+                className={cn(
+                  "w-full flex items-center justify-between px-3 py-2 rounded-md text-[10px] font-mono uppercase tracking-[0.16em] transition-colors",
+                  groupActive
+                    ? "text-[var(--text-2)]"
+                    : "text-[var(--text-4)] hover:text-[var(--text-3)]"
+                )}
+              >
+                <span>{group.label}</span>
+                <ChevronRight
+                  size={12}
+                  strokeWidth={2}
+                  className={cn(
+                    "transition-transform",
+                    !isCollapsed && "rotate-90"
+                  )}
+                />
+              </button>
+              {!isCollapsed && (
+                <div className="mt-1 space-y-0.5">
+                  {group.items.map((it) =>
+                    renderItem(it.href, it.label, it.icon)
+                  )}
+                </div>
               )}
-            >
-              <Icon size={16} strokeWidth={1.75} />
-              <span>{label}</span>
-            </Link>
+            </div>
           );
         })}
       </div>
