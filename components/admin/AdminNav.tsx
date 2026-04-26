@@ -37,6 +37,7 @@ import {
   FileCog,
   MessageSquare,
   UserPlus,
+  Wand2,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
@@ -59,6 +60,7 @@ const navGroups: {
       { href: "/control/leads", label: "Leads", icon: UserPlus },
       { href: "/control/chat-sessions", label: "Chat sessions", icon: MessageSquare },
       { href: "/control/email", label: "Compose email", icon: Mail },
+      { href: "/control/ai-assistant", label: "AI Assistant", icon: Wand2 },
     ],
   },
   {
